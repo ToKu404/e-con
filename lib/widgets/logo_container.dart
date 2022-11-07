@@ -18,19 +18,22 @@ class LogoContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: width,
+      height: height,
       padding: EdgeInsets.all(width / 8),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(AppSize.borderRadius),
-          color: Palette.background,
-          boxShadow: useShadow
-              ? [
-                  BoxShadow(
-                      offset: const Offset(0, 4),
-                      blurRadius: 4,
-                      spreadRadius: 0,
-                      color: Colors.black.withOpacity(.25))
-                ]
-              : null),
+        borderRadius: BorderRadius.circular(AppSize.borderRadius),
+        color: Colors.white,
+        boxShadow: useShadow
+            ? [
+                BoxShadow(
+                  offset: const Offset(0, 4),
+                  blurRadius: 4,
+                  color: Colors.black.withOpacity(.25),
+                )
+              ]
+            : null,
+      ),
       child: SvgPicture.asset(AssetPath.logoPath),
     );
   }

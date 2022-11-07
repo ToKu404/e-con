@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_classes_with_only_static_members
+
 import 'package:flutter/widgets.dart';
 
 class AppSize {
@@ -6,10 +8,31 @@ class AppSize {
       MediaQuery.of(context).size.width;
   static double getAppHeight(BuildContext context) =>
       MediaQuery.of(context).size.height;
-  static final List verticalSpace = [2.0, 4.0, 8.0, 12.0, 16.0, 20.0, 24.0]
-      .map((height) => SizedBox(height: height))
-      .toList();
-  static final List horizontalSpace = [2.0, 4.0, 8.0, 12.0, 16.0, 20.0, 24.0]
-      .map((height) => SizedBox(height: height))
-      .toList();
+  static final List<SizedBox> verticalSpace = [
+    2.0,
+    4.0,
+    8.0,
+    12.0,
+    16.0,
+    20.0,
+    24.0
+  ].map((height) => SizedBox(height: height)).toList();
+  static final List<SizedBox> horizontalSpace = [
+    2.0,
+    4.0,
+    8.0,
+    12.0,
+    16.0,
+    20.0,
+    24.0
+  ].map((height) => SizedBox(height: height)).toList();
+  static final List<double> padding = [
+    2.0,
+    4.0,
+    8.0,
+    12.0,
+    16.0,
+    20.0,
+    24.0,
+  ];
 }

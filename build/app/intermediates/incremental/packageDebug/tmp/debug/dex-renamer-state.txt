@@ -1,4 +1,4 @@
-#Tue Oct 18 12:59:26 WITA 2022
+#Mon Nov 07 18:03:18 WITA 2022
 base.0=/home/toku/Documents/npe/E-Con/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
 renamed.0=classes.dex
 path.0=classes.dex
