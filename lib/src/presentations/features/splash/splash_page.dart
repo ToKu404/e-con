@@ -1,8 +1,8 @@
 import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
-import 'package:e_con/widgets/gradient_bg.dart';
-import 'package:e_con/widgets/logo_container.dart';
+import 'package:e_con/src/presentations/widgets/gradient_bg.dart';
+import 'package:e_con/src/presentations/widgets/logo_container.dart';
 import 'package:flutter/material.dart';
 
 class SplashPage extends StatefulWidget {
@@ -44,8 +44,8 @@ class _SplashPageState extends State<SplashPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const LogoContainer(
-                    width: 200,
-                    height: 200,
+                    width: 180,
+                    height: 180,
                     useShadow: true,
                   ),
                   AppSize.verticalSpace[4],

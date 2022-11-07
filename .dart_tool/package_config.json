@@ -32,6 +32,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "convex_bottom_bar",
+      "rootUri": "file:///home/toku/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/convex_bottom_bar-3.1.0+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "fake_async",
       "rootUri": "file:///home/toku/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/fake_async-1.3.1",
       "packageUri": "lib/",
@@ -266,7 +272,7 @@
       "languageVersion": "2.18"
     }
   ],
-  "generated": "2022-11-05T15:49:48.244748Z",
+  "generated": "2022-11-07T11:00:31.941267Z",
   "generator": "pub",
   "generatorVersion": "2.18.1"
 }

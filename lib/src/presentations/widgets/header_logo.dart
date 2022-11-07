@@ -1,6 +1,6 @@
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/themes/text_theme.dart';
-import 'package:e_con/widgets/logo_container.dart';
+import 'package:e_con/src/presentations/widgets/logo_container.dart';
 import 'package:flutter/material.dart';
 
 class HeaderLogo extends StatelessWidget {

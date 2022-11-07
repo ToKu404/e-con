@@ -2,8 +2,9 @@ import 'package:e_con/core/app/settings.dart';
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/utils/observer.dart';
-import 'package:e_con/src/presentations/login/login_page.dart';
-import 'package:e_con/src/presentations/splash/splash_page.dart';
+import 'package:e_con/src/presentations/features/login/login_page.dart';
+import 'package:e_con/src/presentations/features/menu/student/main_student_page.dart';
+import 'package:e_con/src/presentations/features/splash/splash_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -38,6 +39,8 @@ class EconApp extends StatelessWidget {
             return MaterialPageRoute(builder: (_) => const LoginPage());
           case AppRoute.wrapper:
             return MaterialPageRoute(builder: (_) => const LoginPage());
+          case AppRoute.mainStudent:
+            return MaterialPageRoute(builder: (_) => const MainStudentPage());
         }
         return null;
       },

@@ -1,7 +1,8 @@
 import 'package:e_con/core/constants/color_const.dart';
+import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
-import 'package:e_con/widgets/custom_button.dart';
-import 'package:e_con/widgets/header_logo.dart';
+import 'package:e_con/src/presentations/widgets/custom_button.dart';
+import 'package:e_con/src/presentations/widgets/header_logo.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
@@ -66,7 +67,13 @@ class LoginPage extends StatelessWidget {
                         ),
                         CustomButton(
                           text: 'Lanjutkan',
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.pushNamedAndRemoveUntil(
+                              context,
+                              AppRoute.mainStudent,
+                              (route) => false,
+                            );
+                          },
                         ),
                       ],
                     ),
@@ -83,6 +90,7 @@ class LoginPage extends StatelessWidget {
                             ),
                           ),
                           RichText(
+                            textAlign: TextAlign.center,
                             text: TextSpan(
                               text: 'Silahkan hubungi',
                               style: kTextHeme.subtitle1?.copyWith(
