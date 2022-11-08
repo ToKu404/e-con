@@ -26,7 +26,7 @@ class AppSize {
     20.0,
     24.0
   ].map((height) => SizedBox(height: height)).toList();
-  static final List<double> padding = [
+  static final List<double> space = [
     2.0,
     4.0,
     8.0,

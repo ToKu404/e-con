@@ -34,8 +34,8 @@ class _SplashPageState extends State<SplashPage> {
       body: GradientBg(
         child: Padding(
           padding: EdgeInsets.symmetric(
-            vertical: AppSize.padding[6],
-            horizontal: AppSize.padding[5],
+            vertical: AppSize.space[6],
+            horizontal: AppSize.space[5],
           ),
           child: Stack(
             alignment: Alignment.center,

@@ -5,13 +5,27 @@ import 'package:e_con/src/presentations/widgets/custom_button.dart';
 import 'package:e_con/src/presentations/widgets/header_logo.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    usernameController.dispose();
+    passwordController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final TextEditingController usernameController = TextEditingController();
-    final TextEditingController passwordController = TextEditingController();
     return Scaffold(
       backgroundColor: Palette.background,
       body: SafeArea(
@@ -68,6 +82,7 @@ class LoginPage extends StatelessWidget {
                         CustomButton(
                           text: 'Lanjutkan',
                           onTap: () {
+                            
                             Navigator.pushNamedAndRemoveUntil(
                               context,
                               AppRoute.mainStudent,
@@ -172,39 +187,40 @@ class PasswordFieldState extends State<PasswordField> {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<bool>(
-        valueListenable: isHide,
-        builder: (context, data, _) {
-          return TextField(
-            controller: widget.controller,
-            cursorColor: Palette.primary,
-            obscureText: data,
-            style: kTextHeme.subtitle1?.copyWith(
-              color: Palette.onPrimary,
+      valueListenable: isHide,
+      builder: (context, data, _) {
+        return TextField(
+          controller: widget.controller,
+          cursorColor: Palette.primary,
+          obscureText: data,
+          style: kTextHeme.subtitle1?.copyWith(
+            color: Palette.onPrimary,
+          ),
+          decoration: InputDecoration(
+            hintText: 'Kata Sandi',
+            hintStyle: kTextHeme.subtitle1,
+            filled: true,
+            fillColor: Colors.white,
+            enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Palette.background),
+              borderRadius: BorderRadius.circular(12.0),
             ),
-            decoration: InputDecoration(
-              hintText: 'Kata Sandi',
-              hintStyle: kTextHeme.subtitle1,
-              filled: true,
-              fillColor: Colors.white,
-              enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Palette.background),
-                borderRadius: BorderRadius.circular(12.0),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Palette.primary),
-                borderRadius: BorderRadius.circular(12.0),
-              ),
-              suffixIcon: IconButton(
-                onPressed: () async {
-                  isHide.value = !data;
-                },
-                icon: Icon(
-                  isHide.value ? Icons.visibility_off : Icons.visibility,
-                  color: Palette.background,
-                ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Palette.primary),
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+            suffixIcon: IconButton(
+              onPressed: () async {
+                isHide.value = !data;
+              },
+              icon: Icon(
+                isHide.value ? Icons.visibility_off : Icons.visibility,
+                color: Palette.background,
               ),
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 }

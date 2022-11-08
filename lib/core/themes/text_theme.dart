@@ -13,5 +13,14 @@ const TextTheme kTextHeme = TextTheme(
     fontSize: 14,
     color: Palette.background,
   ),
-  
+  subtitle2: TextStyle(
+    fontFamily: 'Poppins',
+    fontSize: 12,
+    color: Palette.background,
+  ),
+  overline: TextStyle(
+    fontFamily: 'Poppins',
+    fontSize: 10,
+    color: Palette.background,
+  ),
 );

@@ -1,5 +1,6 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:e_con/core/constants/color_const.dart';
+import 'package:e_con/src/presentations/features/menu/student/home/student_home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -12,27 +13,26 @@ class MainStudentPage extends StatefulWidget {
 
 class _MainStudentPageState extends State<MainStudentPage> {
   int selectIndex = 0;
+  final listMenu = [
+    const StudentHomePage(),
+    Container(
+      child: const Text('Menu2'),
+    ),
+    Container(
+      child: const Text('Menu3'),
+    ),
+    Container(
+      child: const Text('Menu4'),
+    ),
+    Container(
+      child: const Text('Menu5'),
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
-    final listMenu = [
-      Container(
-        child: Text('Menu1'),
-      ),
-      Container(
-        child: Text('Menu2'),
-      ),
-      Container(
-        child: Text('Menu3'),
-      ),
-      Container(
-        child: Text('Menu4'),
-      ),
-      Container(
-        child: Text('Menu5'),
-      ),
-    ];
     return Scaffold(
+      backgroundColor: Palette.background,
       body: SafeArea(
         child: listMenu[selectIndex],
       ),

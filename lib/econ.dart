@@ -20,7 +20,7 @@ class EconApp extends StatelessWidget {
 
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
-        systemNavigationBarColor: Palette.background,
+        systemNavigationBarColor: Palette.primary,
         statusBarColor: Palette.primaryVariant,
       ),
     );
