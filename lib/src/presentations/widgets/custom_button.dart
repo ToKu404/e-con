@@ -2,13 +2,16 @@ import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class CustomButton extends StatelessWidget {
   final String text;
   final VoidCallback onTap;
-  const CustomButton({
+  double? height;
+  CustomButton({
     super.key,
     required this.text,
     required this.onTap,
+    this.height,
   });
 
   @override
@@ -17,7 +20,7 @@ class CustomButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: MediaQuery.of(context).size.width,
-        height: 60,
+        height: height ?? 60,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(
             12,

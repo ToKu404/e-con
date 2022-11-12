@@ -9,12 +9,21 @@ class StudentHistoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Stack(
       children: [
-        _AppBarSection(),
-        const Expanded(
-          child: _BodySection(),
+        Column(
+          children: [
+            _AppBarSection(),
+            const Expanded(
+              child: _BodySection(),
+            ),
+          ],
         ),
+        Positioned(
+          top: 0,
+          left: 0,
+          child: _AppBarSection(),
+        )
       ],
     );
   }
@@ -28,13 +37,15 @@ class _AppBarSection extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(AppSize.space[4]),
       width: AppSize.getAppWidth(context),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: Colors.white,
-        border: Border(
-          bottom: BorderSide(
-            color: Palette.disable,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(.15),
+            offset: const Offset(1, 0),
+            blurRadius: 6,
           ),
-        ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

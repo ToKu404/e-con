@@ -8,12 +8,21 @@ class StudentNotifPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: const [
-        _AppBarSection(),
-        Expanded(
-          child: _BodySection(),
+    return Stack(
+      children: [
+        Column(
+          children: const [
+            _AppBarSection(),
+            Expanded(
+              child: _BodySection(),
+            ),
+          ],
         ),
+        const Positioned(
+          left: 0,
+          top: 0,
+          child: _AppBarSection(),
+        )
       ],
     );
   }
@@ -27,14 +36,13 @@ class _AppBarSection extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(AppSize.space[4]),
       width: AppSize.getAppWidth(context),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        border: Border(
-          bottom: BorderSide(
-            color: Palette.disable,
-          ),
+      decoration: BoxDecoration(color: Colors.white, boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(.15),
+          offset: const Offset(1, 0),
+          blurRadius: 6,
         ),
-      ),
+      ]),
       child: Column(
         children: [
           Row(
