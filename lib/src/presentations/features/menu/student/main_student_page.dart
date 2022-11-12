@@ -132,8 +132,6 @@ class _MainStudentPageState extends State<MainStudentPage>
         ],
         onTap: (int i) async {
           if (i == 2) {
-            i = 0;
-            tabController!.index = 0;
             final status = await _getCameraPermission();
             if (!mounted) return;
             if (status.isGranted) {
@@ -142,6 +140,9 @@ class _MainStudentPageState extends State<MainStudentPage>
                 AppRoute.absentStudent,
               );
             }
+            tabController!.index = 0;
+
+            i = 0;
           }
           setState(() {
             selectIndex = i;
