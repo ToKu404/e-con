@@ -10,12 +10,18 @@ class CustomButton extends StatelessWidget {
   final VoidCallback onTap;
   double? height;
   String? iconPath;
+  IconData? icon;
+  Color? color;
+  Color? textColor;
   CustomButton({
     super.key,
     required this.text,
     required this.onTap,
     this.height,
     this.iconPath,
+    this.icon,
+    this.color,
+    this.textColor,
   });
 
   @override
@@ -29,9 +35,9 @@ class CustomButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(
             12,
           ),
-          color: Palette.primary,
+          color: color ?? Palette.primary,
           border: Border.all(
-            color: Colors.white,
+            color: textColor ?? Colors.white,
           ),
           boxShadow: [
             BoxShadow(
@@ -61,10 +67,15 @@ class CustomButton extends StatelessWidget {
               if (iconPath != null)
                 SvgPicture.asset(
                   iconPath ?? '',
-                  width: 24,
-                  height: 24,
+                  width: 20,
+                  height: 20,
                 ),
-              if (iconPath != null) AppSize.horizontalSpace[3],
+              if (icon != null)
+                Icon(
+                  icon,
+                  color: Colors.white,
+                ),
+              if (iconPath != null || icon != null) AppSize.horizontalSpace[2],
               Text(
                 text,
                 style: kTextHeme.subtitle1?.copyWith(

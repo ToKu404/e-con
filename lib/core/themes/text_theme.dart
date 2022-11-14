@@ -14,6 +14,12 @@ const TextTheme kTextHeme = TextTheme(
     fontSize: 20,
     color: Palette.background,
   ),
+  headline4: TextStyle(
+    fontFamily: 'Poppins',
+    fontWeight: FontWeight.w700,
+    fontSize: 18,
+    color: Palette.background,
+  ),
   headline5: TextStyle(
       fontFamily: 'Poppins',
       fontWeight: FontWeight.w700,

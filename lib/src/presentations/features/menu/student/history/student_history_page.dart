@@ -29,8 +29,20 @@ class StudentHistoryPage extends StatelessWidget {
   }
 }
 
-class _AppBarSection extends StatelessWidget {
+class _AppBarSection extends StatefulWidget {
+  @override
+  State<_AppBarSection> createState() => _AppBarSectionState();
+}
+
+class _AppBarSectionState extends State<_AppBarSection> {
   final TextEditingController searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    searchController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
