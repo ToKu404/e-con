@@ -3,9 +3,12 @@ import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/utils/observer.dart';
 import 'package:e_con/src/presentations/features/login/login_page.dart';
-import 'package:e_con/src/presentations/features/menu/student/main_student_page.dart';
+import 'package:e_con/src/presentations/features/menu/student/student_main_page.dart';
 import 'package:e_con/src/presentations/features/menu/student/scan_qr/student_absent_page.dart';
+import 'package:e_con/src/presentations/features/menu/teacher/absent/teacher_course_detail_page.dart';
+import 'package:e_con/src/presentations/features/menu/teacher/teacher_main_page.dart';
 import 'package:e_con/src/presentations/features/splash/splash_page.dart';
+import 'package:e_con/src/presentations/features/splash/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -39,11 +42,17 @@ class EconApp extends StatelessWidget {
           case AppRoute.login:
             return MaterialPageRoute(builder: (_) => const LoginPage());
           case AppRoute.wrapper:
-            return MaterialPageRoute(builder: (_) => const LoginPage());
+            return MaterialPageRoute(builder: (_) => const Wrapper());
           case AppRoute.mainStudent:
-            return MaterialPageRoute(builder: (_) => const MainStudentPage());
+            return MaterialPageRoute(builder: (_) => const StudentMainPage());
+          case AppRoute.mainTeacher:
+            return MaterialPageRoute(builder: (_) => const TeacherMainPage());
           case AppRoute.absentStudent:
             return MaterialPageRoute(builder: (_) => const StudentAbsentPage());
+          case AppRoute.detailCourse:
+            return MaterialPageRoute(
+              builder: (_) => const TeacherCourseDetailPage(),
+            );
         }
         return null;
       },

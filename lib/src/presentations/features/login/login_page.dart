@@ -82,10 +82,9 @@ class _LoginPageState extends State<LoginPage> {
                         CustomButton(
                           text: 'Lanjutkan',
                           onTap: () {
-                            
                             Navigator.pushNamedAndRemoveUntil(
                               context,
-                              AppRoute.mainStudent,
+                              AppRoute.mainTeacher,
                               (route) => false,
                             );
                           },

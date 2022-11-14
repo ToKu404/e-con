@@ -1,17 +1,21 @@
 import 'package:e_con/core/constants/color_const.dart';
+import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 // ignore: must_be_immutable
 class CustomButton extends StatelessWidget {
   final String text;
   final VoidCallback onTap;
   double? height;
+  String? iconPath;
   CustomButton({
     super.key,
     required this.text,
     required this.onTap,
     this.height,
+    this.iconPath,
   });
 
   @override
@@ -27,26 +31,22 @@ class CustomButton extends StatelessWidget {
           ),
           color: Palette.primary,
           border: Border.all(
-            width: 1,
             color: Colors.white,
           ),
           boxShadow: [
             BoxShadow(
-              offset: Offset(0, 0),
               blurRadius: 10,
               color: Palette.onPrimary.withOpacity(
                 .34,
               ),
             ),
             BoxShadow(
-              offset: Offset(0, 0),
               blurRadius: 3.19,
               color: Palette.onPrimary.withOpacity(
                 .20,
               ),
             ),
             BoxShadow(
-              offset: Offset(0, 0),
               blurRadius: 1,
               color: Palette.onPrimary.withOpacity(
                 .13,
@@ -55,11 +55,23 @@ class CustomButton extends StatelessWidget {
           ],
         ),
         child: Center(
-          child: Text(
-            text,
-            style: kTextHeme.subtitle1?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (iconPath != null)
+                SvgPicture.asset(
+                  iconPath ?? '',
+                  width: 24,
+                  height: 24,
+                ),
+              if (iconPath != null) AppSize.horizontalSpace[3],
+              Text(
+                text,
+                style: kTextHeme.subtitle1?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
           ),
         ),
       ),

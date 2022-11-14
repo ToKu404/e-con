@@ -1,23 +1,22 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/routes/app_routes.dart';
-import 'package:e_con/src/presentations/features/menu/student/home/student_history_page.dart';
+import 'package:e_con/src/presentations/features/menu/student/history/student_history_page.dart';
 import 'package:e_con/src/presentations/features/menu/student/home/student_home_page.dart';
-import 'package:e_con/src/presentations/features/menu/student/home/student_notif_page.dart';
-import 'package:e_con/src/presentations/features/menu/student/home/student_setting_page.dart';
-import 'package:e_con/src/presentations/features/menu/student/scan_qr/student_absent_page.dart';
+import 'package:e_con/src/presentations/features/menu/student/notif/student_notif_page.dart';
+import 'package:e_con/src/presentations/features/menu/student/setting/student_setting_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-class MainStudentPage extends StatefulWidget {
-  const MainStudentPage({super.key});
+class StudentMainPage extends StatefulWidget {
+  const StudentMainPage({super.key});
 
   @override
-  State<MainStudentPage> createState() => _MainStudentPageState();
+  State<StudentMainPage> createState() => _StudentMainPageState();
 }
 
-class _MainStudentPageState extends State<MainStudentPage>
+class _StudentMainPageState extends State<StudentMainPage>
     with TickerProviderStateMixin {
   int selectIndex = 0;
   TabController? tabController;

@@ -3,7 +3,7 @@
 import 'package:flutter/widgets.dart';
 
 class AppSize {
-  static const double borderRadius = 12.0;
+  static const double borderRadius = 8.0;
   static double getAppWidth(BuildContext context) =>
       MediaQuery.of(context).size.width;
   static double getAppHeight(BuildContext context) =>

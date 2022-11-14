@@ -1,4 +1,5 @@
 import 'package:e_con/core/constants/color_const.dart';
+import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/src/presentations/widgets/logo_container.dart';
 import 'package:flutter/material.dart';
@@ -16,9 +17,7 @@ class HeaderLogo extends StatelessWidget {
           width: 30,
           height: 30,
         ),
-        const SizedBox(
-          width: 4,
-        ),
+        AppSize.horizontalSpace[2],
         Text(
           'E-Con',
           style: kTextHeme.headline5?.copyWith(

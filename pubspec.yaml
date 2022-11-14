@@ -32,18 +32,23 @@ dev_dependencies:
   # dart_style: ^2.2.4
   # flutter_lints: ^2.0.1
 
-flutter:
+flutter: 
   uses-material-design: true
 
-  assets:
-    - assets/logo/
+  assets: 
     - assets/icons/
-
+    - assets/images/
+    - assets/logo/
+  
   fonts:
-    - family: Poppins
-      fonts:
-        - asset: fonts/poppins_reguler.ttf
-        - asset: fonts/poppins_medium.ttf
-          weight: 500
-        - asset: fonts/poppins_bold.ttf
-          weight: 700
+  - family: Poppins
+    fonts:
+      - asset: fonts/poppins_reguler.ttf
+      - asset: fonts/poppins_medium.ttf
+        weight: 500
+      - asset: fonts/poppins_bold.ttf
+        weight: 700
+
+
+
+

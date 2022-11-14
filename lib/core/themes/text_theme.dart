@@ -2,6 +2,12 @@ import 'package:e_con/core/constants/color_const.dart';
 import 'package:flutter/material.dart';
 
 const TextTheme kTextHeme = TextTheme(
+  headline1: TextStyle(
+    fontFamily: 'Poppins',
+    fontWeight: FontWeight.w700,
+    fontSize: 24,
+    color: Palette.background,
+  ),
   headline2: TextStyle(
     fontFamily: 'Poppins',
     fontWeight: FontWeight.w700,
