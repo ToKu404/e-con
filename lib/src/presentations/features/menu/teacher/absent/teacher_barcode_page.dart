@@ -1,5 +1,7 @@
 import 'package:e_con/core/constants/color_const.dart';
+import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/themes/text_theme.dart';
+import 'package:e_con/src/presentations/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 
 class TeacherBarcodePage extends StatelessWidget {
@@ -36,8 +38,84 @@ class TeacherBarcodePage extends StatelessWidget {
         ],
       ),
       backgroundColor: Palette.primary,
-      body: Column(
-        children: [Row()],
+      body: Padding(
+        padding: EdgeInsets.all(AppSize.space[3]),
+        child: Column(
+          children: [
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: AppSize.getAppWidth(context) * .75,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                        AppSize.space[2],
+                      ),
+                      color: Palette.background,
+                    ),
+                    padding: EdgeInsets.all(AppSize.space[4]),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Matematik Dasar',
+                          style: kTextHeme.headline5?.copyWith(
+                            color: Palette.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        AspectRatio(
+                          aspectRatio: 1,
+                          child: Container(
+                            margin: EdgeInsets.all(
+                              AppSize.space[3],
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                AppSize.space[2],
+                              ),
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        AppSize.verticalSpace[2],
+                        Text(
+                          'Berlaku Hingga',
+                          style: kTextHeme.subtitle1?.copyWith(
+                            color: Palette.onPrimary,
+                          ),
+                        ),
+                        Text(
+                          '09:00 12-02-2022',
+                          style: kTextHeme.subtitle1?.copyWith(
+                            color: Palette.primary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            CustomButton(
+              text: 'Bagikan',
+              onTap: () {},
+              textColor: Palette.primary,
+              icon: Icons.ios_share_rounded,
+              height: 54,
+              color: Colors.white,
+            ),
+            AppSize.verticalSpace[3],
+            CustomButton(
+              text: 'Unduh',
+              onTap: () {},
+              icon: Icons.download_rounded,
+              height: 54,
+              color: Palette.secondary,
+            )
+          ],
+        ),
       ),
     );
   }

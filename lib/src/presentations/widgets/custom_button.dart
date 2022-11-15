@@ -69,17 +69,19 @@ class CustomButton extends StatelessWidget {
                   iconPath ?? '',
                   width: 20,
                   height: 20,
+                  color: textColor ?? Colors.white,
                 ),
               if (icon != null)
                 Icon(
                   icon,
-                  color: Colors.white,
+                  color: textColor ?? Colors.white,
                 ),
               if (iconPath != null || icon != null) AppSize.horizontalSpace[2],
               Text(
                 text,
                 style: kTextHeme.subtitle1?.copyWith(
                   fontWeight: FontWeight.bold,
+                  color: textColor ?? Colors.white,
                 ),
               ),
             ],
