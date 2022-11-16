@@ -3,6 +3,7 @@ import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/absent/widgets/teacher_meet_card.dart';
+import 'package:e_con/src/presentations/widgets/choice_absent_modal.dart';
 import 'package:e_con/src/presentations/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -99,72 +100,83 @@ class TeacherMeetDetailPage extends StatelessWidget {
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate(childCount: 10,
                       (context, index) {
-                    return Column(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 8),
-                          width: AppSize.getAppWidth(context),
-                          padding: EdgeInsets.all(AppSize.space[3]),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(
-                              AppSize.space[3],
+                    return InkWell(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return const ChoiceAbsentModal();
+                          },
+                        );
+                      },
+                      child: Column(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 8),
+                            width: AppSize.getAppWidth(context),
+                            padding: EdgeInsets.all(AppSize.space[3]),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(
+                                AppSize.space[3],
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Austin',
+                                        style: kTextHeme.subtitle2?.copyWith(
+                                          color: Palette.primaryVariant,
+                                        ),
+                                      ),
+                                      Text(
+                                        'H071191049',
+                                        style: kTextHeme.subtitle1?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          color: Palette.primary,
+                                        ),
+                                      ),
+                                      Text(
+                                        '05:30 08-02-2022',
+                                        style: kTextHeme.subtitle2,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: AppSize.space[2],
+                                  ),
+                                  child: Container(
+                                    padding: EdgeInsets.all(
+                                      AppSize.space[0],
+                                    ),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Palette.success,
+                                      ),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Center(
+                                      child: SvgPicture.asset(
+                                          'assets/icons/smile.svg'),
+                                    ),
+                                  ),
+                                )
+                              ],
                             ),
                           ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Austin',
-                                      style: kTextHeme.subtitle2?.copyWith(
-                                        color: Palette.primaryVariant,
-                                      ),
-                                    ),
-                                    Text(
-                                      'H071191049',
-                                      style: kTextHeme.subtitle1?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        color: Palette.primary,
-                                      ),
-                                    ),
-                                    Text(
-                                      '05:30 08-02-2022',
-                                      style: kTextHeme.subtitle2,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: AppSize.space[2],
-                                ),
-                                child: Container(
-                                  padding: EdgeInsets.all(
-                                    AppSize.space[0],
-                                  ),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Palette.success,
-                                    ),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: Center(
-                                    child: SvgPicture.asset(
-                                        'assets/icons/smile.svg'),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        if (index == 9)
-                          const SizedBox(
-                            height: 58,
-                          )
-                      ],
+                          if (index == 9)
+                            const SizedBox(
+                              height: 58,
+                            )
+                        ],
+                      ),
                     );
                   }),
                 ),

@@ -1,5 +1,6 @@
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
+import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/absent/widgets/teacher_meet_card.dart';
 import 'package:e_con/src/presentations/widgets/custom_button.dart';
@@ -120,7 +121,9 @@ class TitleSection extends StatelessWidget {
                 AppSize.verticalSpace[4],
                 CustomButton(
                   text: '54 Mahasiswa',
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(context, AppRoute.listStudent);
+                  },
                   height: 50,
                   iconPath: 'assets/icons/user.svg',
                 )

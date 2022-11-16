@@ -1,5 +1,6 @@
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
+import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/absent/teacher_absent_page.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/activity/teacher_activity_page.dart';
@@ -97,14 +98,15 @@ class _AppBarSectionState extends State<_AppBarSection> {
           ),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, AppRoute.teacherProfile);
+          },
           icon: const Icon(
             Icons.settings_outlined,
             color: Palette.primary,
           ),
         )
       ],
-      
       bottom: PreferredSize(
         preferredSize: _tabBar.preferredSize,
         child: ColoredBox(

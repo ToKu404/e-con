@@ -7,8 +7,10 @@ import 'package:e_con/src/presentations/features/menu/student/student_main_page.
 import 'package:e_con/src/presentations/features/menu/student/scan_qr/student_absent_page.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/absent/teacher_barcode_page.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/absent/teacher_course_detail_page.dart';
+import 'package:e_con/src/presentations/features/menu/teacher/absent/teacher_course_member.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/absent/teacher_gen_barcode_page.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/absent/teacher_meet_page.dart';
+import 'package:e_con/src/presentations/features/menu/teacher/setting/teacher_setting_page.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/teacher_main_page.dart';
 import 'package:e_con/src/presentations/features/splash/splash_page.dart';
 import 'package:e_con/src/presentations/features/splash/wrapper.dart';
@@ -67,6 +69,14 @@ class EconApp extends StatelessWidget {
           case AppRoute.barcodeAbsent:
             return MaterialPageRoute(
               builder: (_) => const TeacherBarcodePage(),
+            );
+          case AppRoute.listStudent:
+            return MaterialPageRoute(
+              builder: (_) => const TeacherCourseMember(),
+            );
+          case AppRoute.teacherProfile:
+            return MaterialPageRoute(
+              builder: (_) => const TeacherSettingPage(),
             );
         }
         return null;

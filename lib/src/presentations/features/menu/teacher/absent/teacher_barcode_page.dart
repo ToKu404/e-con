@@ -13,11 +13,14 @@ class TeacherBarcodePage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Palette.primary,
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.close_rounded,
             color: Colors.white,
           ),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            Navigator.pop(context);
+            Navigator.pop(context);
+          },
         ),
         centerTitle: true,
         title: Text(
