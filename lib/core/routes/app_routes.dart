@@ -10,6 +10,4 @@ class AppRoute {
   static const String barcodeAbsent = '/barcode-absent';
   static const String listStudent = '/list-student';
   static const String teacherProfile = '/teacher-profile';
-
-
 }

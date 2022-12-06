@@ -1,9 +1,14 @@
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
+import 'package:e_con/core/utils/request_state.dart';
+import 'package:e_con/src/data/models/user_role.dart';
+import 'package:e_con/src/presentations/features/login/provider/login_notifier.dart';
 import 'package:e_con/src/presentations/widgets/custom_button.dart';
 import 'package:e_con/src/presentations/widgets/header_logo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -26,6 +31,11 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<LoginNotifier>();
+
+    if (provider.state == RequestState.loading) {
+      return SpinKitCircle();
+    }
     return Scaffold(
       backgroundColor: Palette.background,
       body: SafeArea(
@@ -82,11 +92,24 @@ class _LoginPageState extends State<LoginPage> {
                         CustomButton(
                           text: 'Lanjutkan',
                           onTap: () {
-                            Navigator.pushNamedAndRemoveUntil(
-                              context,
-                              AppRoute.mainTeacher,
-                              (route) => false,
-                            );
+                            provider.signIn(usernameController.text,
+                                passwordController.text);
+                            if (provider.user != null) {
+                              if (provider.user!.role == UserRole.student) {
+                                Navigator.pushNamedAndRemoveUntil(
+                                  context,
+                                  AppRoute.mainStudent,
+                                  (route) => false,
+                                );
+                              } else if (provider.user!.role ==
+                                  UserRole.teacher) {
+                                Navigator.pushNamedAndRemoveUntil(
+                                  context,
+                                  AppRoute.mainTeacher,
+                                  (route) => false,
+                                );
+                              }
+                            }
                           },
                         ),
                       ],
