@@ -2,8 +2,10 @@ import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
+import 'package:e_con/src/presentations/features/login/provider/auth_notifier.dart';
 import 'package:e_con/src/presentations/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class StudentSettingPage extends StatelessWidget {
   const StudentSettingPage({super.key});
@@ -164,7 +166,9 @@ class _ProfileCard extends StatelessWidget {
           AppSize.verticalSpace[4],
           CustomButton(
             text: 'Keluar',
-            onTap: () {
+            onTap: () async {
+              await context.read<AuthNotifier>()
+                ..logOut();
               Navigator.pushNamedAndRemoveUntil(
                 context,
                 AppRoute.login,

@@ -7,4 +7,9 @@ abstract class AuthRepository {
     String username,
     String password,
   );
+
+  Future<Either<Failure, UserCredential?>> getUser();
+
+  Future<Either<Failure, bool>> logOut();
+
 }

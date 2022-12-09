@@ -12,11 +12,12 @@ class UserCredential extends Equatable {
   factory UserCredential.fromJson(Map<String, dynamic> json) => UserCredential(
       role: (json['role']) == 7
           ? UserRole.student
-          : (json['role']) == 8
+          : (json['role']) == 6
               ? UserRole.teacher
-              : null,
+              : null, 
       token: json['token'] as String);
 
   @override
   List<Object?> get props => [role, token];
 }
+ 

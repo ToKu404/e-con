@@ -3,7 +3,8 @@ import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/routes/route_handler.dart';
 import 'package:e_con/core/utils/observer.dart';
 import 'package:e_con/injection.dart' as di;
-import 'package:e_con/src/presentations/features/login/provider/login_notifier.dart';
+import 'package:e_con/src/presentations/features/login/provider/auth_notifier.dart';
+import 'package:e_con/src/presentations/features/login/provider/get_user_notifier.dart';
 import 'package:e_con/src/presentations/features/splash/splash_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,7 +29,10 @@ class EconApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => di.locator<LoginNotifier>(),
+          create: (_) => di.locator<GetUserNotifier>(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => di.locator<AuthNotifier>(),
         ),
       ],
       child: MaterialApp(

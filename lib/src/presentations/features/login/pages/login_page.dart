@@ -1,12 +1,16 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/data/models/user_role.dart';
-import 'package:e_con/src/presentations/features/login/provider/login_notifier.dart';
+import 'package:e_con/src/presentations/features/login/provider/auth_notifier.dart';
+import 'package:e_con/src/presentations/features/login/provider/error_field_checker.dart';
+import 'package:e_con/src/presentations/features/login/provider/get_user_notifier.dart';
 import 'package:e_con/src/presentations/widgets/custom_button.dart';
 import 'package:e_con/src/presentations/widgets/header_logo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
@@ -23,7 +27,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     usernameController.dispose();
     passwordController.dispose();
@@ -31,144 +34,201 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<LoginNotifier>();
+    final authNotifier = context.watch<AuthNotifier>();
 
-    if (provider.state == RequestState.loading) {
-      return SpinKitCircle();
-    }
-    return Scaffold(
-      backgroundColor: Palette.background,
-      body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            SliverFillRemaining(
-              hasScrollBody: false,
-              child: Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Center(
-                      child: HeaderLogo(
-                        bgColor: Palette.primaryVariant.withOpacity(
-                          .07,
-                        ),
-                      ),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        RichText(
-                          text: TextSpan(
-                            text: 'Selamat',
-                            style: kTextHeme.headline2?.copyWith(
-                              color: Palette.onPrimary,
-                            ),
-                            children: [
-                              TextSpan(
-                                text: ' Datang',
-                                style: kTextHeme.headline2?.copyWith(
-                                  color: Palette.primary,
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      if (authNotifier.loginState == RequestState.error) {
+        Navigator.pop(context);
+        AwesomeDialog(
+          context: context,
+          animType: AnimType.scale,
+          dialogType: DialogType.error,
+          autoHide: Duration(seconds: 2, milliseconds: 500),
+          body: Center(
+            child: Text(
+              authNotifier.error,
+            ),
+          ),
+          title: 'Gagal Login',
+          btnOkColor: Palette.primary,
+          btnOkText: 'Kembali',
+          btnOkOnPress: () {},
+        ).show();
+      } else if (authNotifier.loginState == RequestState.loading) {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) {
+            return SpinKitFadingCircle(
+              itemBuilder: (_, int index) {
+                return DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: index.isEven ? Palette.primary : Palette.secondary,
+                  ),
+                );
+              },
+              size: 50.0,
+            );
+          },
+        );
+      } else if (authNotifier.loginState == RequestState.success) {
+        Navigator.pop(context);
+        if (authNotifier.user != null) {
+          if (authNotifier.user!.role == UserRole.student) {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              AppRoute.mainStudent,
+              (route) => false,
+            );
+          } else if (authNotifier.user!.role == UserRole.teacher) {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              AppRoute.mainTeacher,
+              (route) => false,
+            );
+          }
+        }
+      }
+    });
+
+    return ChangeNotifierProvider(
+        create: (_) => ErrorFieldChecker(),
+        builder: (context, _) {
+          return Scaffold(
+            backgroundColor: Palette.background,
+            body: SafeArea(
+              child: CustomScrollView(
+                slivers: [
+                  SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: Builder(builder: (context) {
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Center(
+                              child: HeaderLogo(
+                                bgColor: Palette.primaryVariant.withOpacity(
+                                  .07,
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        UsernameField(
-                          controller: usernameController,
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        PasswordField(
-                          controller: passwordController,
-                        ),
-                        const SizedBox(
-                          height: 24,
-                        ),
-                        CustomButton(
-                          text: 'Lanjutkan',
-                          onTap: () {
-                            provider.signIn(usernameController.text,
-                                passwordController.text);
-                            if (provider.user != null) {
-                              if (provider.user!.role == UserRole.student) {
-                                Navigator.pushNamedAndRemoveUntil(
-                                  context,
-                                  AppRoute.mainStudent,
-                                  (route) => false,
-                                );
-                              } else if (provider.user!.role ==
-                                  UserRole.teacher) {
-                                Navigator.pushNamedAndRemoveUntil(
-                                  context,
-                                  AppRoute.mainTeacher,
-                                  (route) => false,
-                                );
-                              }
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        bottom: 24,
-                      ),
-                      child: Column(
-                        children: [
-                          Text(
-                            'Lupa kata sandi?',
-                            style: kTextHeme.subtitle1?.copyWith(
-                              color: Palette.disable,
                             ),
-                          ),
-                          RichText(
-                            textAlign: TextAlign.center,
-                            text: TextSpan(
-                              text: 'Silahkan hubungi',
-                              style: kTextHeme.subtitle1?.copyWith(
-                                color: Palette.disable,
-                              ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                TextSpan(
-                                  text: ' Administrator',
-                                  style: kTextHeme.subtitle1?.copyWith(
-                                    color: Palette.primary,
+                                RichText(
+                                  text: TextSpan(
+                                    text: 'Selamat',
+                                    style: kTextHeme.headline2?.copyWith(
+                                      color: Palette.onPrimary,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text: ' Datang',
+                                        style: kTextHeme.headline2?.copyWith(
+                                          color: Palette.primary,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                UsernameField(
+                                  controller: usernameController,
+                                ),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                PasswordField(
+                                  controller: passwordController,
+                                ),
+                                const SizedBox(
+                                  height: 24,
+                                ),
+                                Builder(builder: (context) {
+                                  return CustomButton(
+                                    text: 'Lanjutkan',
+                                    onTap: () =>
+                                        _onPressedSignInButton(context),
+                                  );
+                                }),
                               ],
                             ),
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                bottom: 24,
+                              ),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    'Lupa kata sandi?',
+                                    style: kTextHeme.subtitle1?.copyWith(
+                                      color: Palette.disable,
+                                    ),
+                                  ),
+                                  RichText(
+                                    textAlign: TextAlign.center,
+                                    text: TextSpan(
+                                      text: 'Silahkan hubungi',
+                                      style: kTextHeme.subtitle1?.copyWith(
+                                        color: Palette.disable,
+                                      ),
+                                      children: [
+                                        TextSpan(
+                                          text: ' Administrator',
+                                          style: kTextHeme.subtitle1?.copyWith(
+                                            color: Palette.primary,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        );
+                      }),
+                    ),
+                  )
+                ],
               ),
-            )
-          ],
-        ),
-      ),
-    );
+            ),
+          );
+        });
+  }
+
+  void _onPressedSignInButton(BuildContext context) {
+    FocusScope.of(context).unfocus();
+
+    final fieldProvider = context.read<ErrorFieldChecker>();
+    fieldProvider.startChecker(
+        usernameController.text, passwordController.text);
+
+    if (!fieldProvider.isUsernameError && !fieldProvider.isPasswordError) {
+      final authNotifier = context.read<AuthNotifier>();
+
+      authNotifier.signIn(usernameController.text, passwordController.text);
+    }
   }
 }
 
 class UsernameField extends StatelessWidget {
   final TextEditingController controller;
-  const UsernameField({
-    super.key,
-    required this.controller,
-  });
+
+  const UsernameField({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
+    final fieldNotifer = context.watch<ErrorFieldChecker>();
     return TextField(
       controller: controller,
-      onChanged: (value) {},
+      onTap: () {
+        fieldNotifer.usernameActive();
+      },
       keyboardType: TextInputType.text,
       style: kTextHeme.subtitle1?.copyWith(
         color: Palette.onPrimary,
@@ -187,10 +247,16 @@ class UsernameField extends StatelessWidget {
           borderSide: const BorderSide(color: Palette.primary),
           borderRadius: BorderRadius.circular(12.0),
         ),
-        // errorText: !state.isEmailValid
-        //     ? 'Please ensure the email entered is valid'
-        //     : null,
-        // labelText: 'Email',
+        errorText:
+            fieldNotifer.isUsernameError ? 'Username tidak boleh kosong' : null,
+        focusedErrorBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: Colors.red),
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: Colors.red),
+          borderRadius: BorderRadius.circular(12.0),
+        ),
       ),
     );
   }
@@ -198,7 +264,10 @@ class UsernameField extends StatelessWidget {
 
 class PasswordField extends StatefulWidget {
   final TextEditingController controller;
-  const PasswordField({super.key, required this.controller});
+  const PasswordField({
+    super.key,
+    required this.controller,
+  });
 
   @override
   State<PasswordField> createState() => PasswordFieldState();
@@ -208,6 +277,8 @@ class PasswordFieldState extends State<PasswordField> {
   ValueNotifier<bool> isHide = ValueNotifier(true);
   @override
   Widget build(BuildContext context) {
+    final fieldNotifer = context.watch<ErrorFieldChecker>();
+
     return ValueListenableBuilder<bool>(
       valueListenable: isHide,
       builder: (context, data, _) {
@@ -215,6 +286,9 @@ class PasswordFieldState extends State<PasswordField> {
           controller: widget.controller,
           cursorColor: Palette.primary,
           obscureText: data,
+          onTap: () {
+            fieldNotifer.passwordActive();
+          },
           style: kTextHeme.subtitle1?.copyWith(
             color: Palette.onPrimary,
           ),
@@ -239,6 +313,17 @@ class PasswordFieldState extends State<PasswordField> {
                 isHide.value ? Icons.visibility_off : Icons.visibility,
                 color: Palette.background,
               ),
+            ),
+            errorText: fieldNotifer.isPasswordError
+                ? 'Password tidak boleh kosong'
+                : null,
+            focusedErrorBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.red),
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.red),
+              borderRadius: BorderRadius.circular(12.0),
             ),
           ),
         );

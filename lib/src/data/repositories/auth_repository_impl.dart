@@ -18,8 +18,36 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final result = await authDataSource.signIn(username, password);
       return Right(result);
+    } on UnauthenticateException {
+      return const Left(AuthFailure('Username atau Password salah'));
+    } on UserNotFoundException {
+      return const Left(AuthFailure('User tidak ditemukan'));
     } on AuthException {
-      return const Left(AuthFailure('Gagal login'));
+      return const Left(AuthFailure('Proses login gagal'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, UserCredential?>> getUser() async {
+    try {
+      final result = await authDataSource.getUser();
+      return Right(result);
+    } on LocalDatabaseException {
+      return const Left(AuthFailure('Terdapat masalah pada data user'));
+    } on AuthException {
+      return const Left(AuthFailure('Proses login bermasalah'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> logOut() async {
+    try {
+      final result = await authDataSource.logOut();
+      return Right(result);
+    } on LocalDatabaseException {
+      return const Left(AuthFailure('Terdapat masalah pada data user'));
+    } on AuthException {
+      return const Left(AuthFailure('Proses login bermasalah'));
     }
   }
 }
