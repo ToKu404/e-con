@@ -1,5 +1,5 @@
 import 'package:e_con/core/utils/request_state.dart';
-import 'package:e_con/src/data/models/user_credential.dart';
+import 'package:e_con/src/data/models/user/user_credential.dart';
 import 'package:e_con/src/domain/usecases/user_usecases/log_out.dart';
 import 'package:e_con/src/domain/usecases/user_usecases/sign_in.dart';
 import 'package:flutter/widgets.dart';

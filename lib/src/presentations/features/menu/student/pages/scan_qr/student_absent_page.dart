@@ -1,9 +1,9 @@
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/themes/text_theme.dart';
-import 'package:e_con/src/presentations/features/menu/student/scan_qr/provider/qr_notifier.dart';
-import 'package:e_con/src/presentations/features/menu/student/scan_qr/widgets/ripple_location.dart';
-import 'package:e_con/src/presentations/features/menu/student/scan_qr/widgets/scan_qr_section.dart';
+import 'package:e_con/src/presentations/features/menu/student/pages/scan_qr/provider/qr_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/student/pages/scan_qr/widgets/ripple_location.dart';
+import 'package:e_con/src/presentations/features/menu/student/pages/scan_qr/widgets/scan_qr_section.dart';
 import 'package:e_con/src/presentations/widgets/custom_button.dart';
 import 'package:e_con/src/presentations/widgets/success_modal.dart';
 import 'package:flutter/material.dart';

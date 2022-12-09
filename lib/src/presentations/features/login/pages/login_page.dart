@@ -3,15 +3,14 @@ import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
-import 'package:e_con/src/data/models/user_role.dart';
+import 'package:e_con/src/data/models/user/user_role.dart';
 import 'package:e_con/src/presentations/features/login/provider/auth_notifier.dart';
 import 'package:e_con/src/presentations/features/login/provider/error_field_checker.dart';
-import 'package:e_con/src/presentations/features/login/provider/get_user_notifier.dart';
 import 'package:e_con/src/presentations/widgets/custom_button.dart';
+import 'package:e_con/src/presentations/widgets/econ_loading.dart';
 import 'package:e_con/src/presentations/widgets/header_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
@@ -59,16 +58,7 @@ class _LoginPageState extends State<LoginPage> {
           context: context,
           barrierDismissible: false,
           builder: (context) {
-            return SpinKitFadingCircle(
-              itemBuilder: (_, int index) {
-                return DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: index.isEven ? Palette.primary : Palette.secondary,
-                  ),
-                );
-              },
-              size: 50.0,
-            );
+            return EconLoading();
           },
         );
       } else if (authNotifier.loginState == RequestState.success) {

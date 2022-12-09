@@ -1,4 +1,4 @@
-import 'package:e_con/src/data/models/user_role.dart';
+import 'package:e_con/src/data/models/user/user_role.dart';
 import 'package:equatable/equatable.dart';
 
 class UserCredential extends Equatable {

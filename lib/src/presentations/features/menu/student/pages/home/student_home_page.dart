@@ -1,7 +1,7 @@
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/themes/text_theme.dart';
-import 'package:e_con/src/presentations/features/menu/student/home/widgets/student_task_card.dart';
+import 'package:e_con/src/presentations/features/menu/student/pages/home/widgets/student_task_card.dart';
 import 'package:e_con/src/presentations/widgets/header_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:sliver_tools/sliver_tools.dart';

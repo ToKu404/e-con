@@ -5,6 +5,8 @@ import 'package:e_con/core/utils/observer.dart';
 import 'package:e_con/injection.dart' as di;
 import 'package:e_con/src/presentations/features/login/provider/auth_notifier.dart';
 import 'package:e_con/src/presentations/features/login/provider/get_user_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/student/providers/student_profile_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/teacher/providers/lecture_profile_notifier.dart';
 import 'package:e_con/src/presentations/features/splash/splash_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -33,6 +35,12 @@ class EconApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => di.locator<AuthNotifier>(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => di.locator<StudentProfileNotifier>(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => di.locator<LectureProfileNotifier>(),
         ),
       ],
       child: MaterialApp(

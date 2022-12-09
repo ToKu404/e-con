@@ -1,13 +1,15 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/routes/app_routes.dart';
-import 'package:e_con/src/presentations/features/menu/student/history/student_history_page.dart';
-import 'package:e_con/src/presentations/features/menu/student/home/student_home_page.dart';
-import 'package:e_con/src/presentations/features/menu/student/notif/student_notif_page.dart';
-import 'package:e_con/src/presentations/features/menu/student/setting/student_setting_page.dart';
+import 'package:e_con/src/presentations/features/menu/student/pages/history/student_history_page.dart';
+import 'package:e_con/src/presentations/features/menu/student/pages/home/student_home_page.dart';
+import 'package:e_con/src/presentations/features/menu/student/pages/notif/student_notif_page.dart';
+import 'package:e_con/src/presentations/features/menu/student/pages/setting/student_setting_page.dart';
+import 'package:e_con/src/presentations/features/menu/student/providers/student_profile_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 
 class StudentMainPage extends StatefulWidget {
   const StudentMainPage({super.key});
@@ -30,7 +32,7 @@ class _StudentMainPageState extends State<StudentMainPage>
 
   @override
   void initState() {
-    // TODO: implement initState
+    Provider.of<StudentProfileNotifier>(context, listen: false);
     tabController = TabController(length: 5, vsync: this);
     super.initState();
   }

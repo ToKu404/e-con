@@ -1,6 +1,6 @@
 import 'package:e_con/core/common/exception.dart';
 import 'package:e_con/src/data/datasources/auth_datasource.dart';
-import 'package:e_con/src/data/models/user_credential.dart';
+import 'package:e_con/src/data/models/user/user_credential.dart';
 import 'package:e_con/core/common/failure.dart';
 import 'package:dartz/dartz.dart';
 import 'package:e_con/src/domain/repositories/auth_repository.dart';
@@ -34,8 +34,8 @@ class AuthRepositoryImpl implements AuthRepository {
       return Right(result);
     } on LocalDatabaseException {
       return const Left(AuthFailure('Terdapat masalah pada data user'));
-    } on AuthException {
-      return const Left(AuthFailure('Proses login bermasalah'));
+    } on UserNotFoundException {
+      return const Left(AuthFailure('Data user tidak ditemukan'));
     }
   }
 

@@ -2,8 +2,11 @@ import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
+import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/presentations/features/login/provider/auth_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/student/providers/student_profile_notifier.dart';
 import 'package:e_con/src/presentations/widgets/custom_button.dart';
+import 'package:e_con/src/presentations/widgets/econ_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -65,6 +68,16 @@ class _AppBarSection extends StatelessWidget {
 class _ProfileCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final profileProvider = context.read<StudentProfileNotifier>();
+
+    if (profileProvider.state == RequestState.loading) {
+      return EconLoading();
+    } else if (profileProvider.state == RequestState.error) {
+      return Text(profileProvider.error);
+    }
+
+    final studentData = profileProvider.studentData!;
+
     return Container(
       width: AppSize.getAppWidth(context) * 0.8,
       padding: EdgeInsets.symmetric(
@@ -120,17 +133,32 @@ class _ProfileCard extends StatelessWidget {
           AppSize.verticalSpace[1],
           Center(
             child: Text(
-              'John Doe',
+              studentData.studentName ?? '',
               style: kTextHeme.headline5,
             ),
           ),
           Center(
             child: Text(
-              'H071191049',
+              studentData.studentId ?? '',
               style: kTextHeme.subtitle1?.copyWith(
                 color: Palette.disable,
                 height: 1,
               ),
+            ),
+          ),
+          AppSize.verticalSpace[3],
+          Text(
+            'Jenis Kelamin',
+            style: kTextHeme.subtitle2?.copyWith(
+              color: Palette.disable,
+            ),
+          ),
+          Text(
+            studentData.studentGender ?? '',
+            style: kTextHeme.subtitle1?.copyWith(
+              color: Palette.primary,
+              height: 1.2,
+              fontWeight: FontWeight.bold,
             ),
           ),
           AppSize.verticalSpace[4],
@@ -141,22 +169,9 @@ class _ProfileCard extends StatelessWidget {
             ),
           ),
           Text(
-            'Sistem Informasi',
-            style: kTextHeme.subtitle1?.copyWith(
-              color: Palette.primary,
-              height: 1.2,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          AppSize.verticalSpace[3],
-          Text(
-            'Angkatan',
-            style: kTextHeme.subtitle2?.copyWith(
-              color: Palette.disable,
-            ),
-          ),
-          Text(
-            '2019',
+            studentData.studyProgram != null
+                ? studentData.studyProgram!.name!
+                : '',
             style: kTextHeme.subtitle1?.copyWith(
               color: Palette.primary,
               height: 1.2,

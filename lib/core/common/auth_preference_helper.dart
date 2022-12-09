@@ -1,5 +1,5 @@
-import 'package:e_con/src/data/models/user_credential.dart';
-import 'package:e_con/src/data/models/user_role.dart';
+import 'package:e_con/src/data/models/user/user_credential.dart';
+import 'package:e_con/src/data/models/user/user_role.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthPreferenceHelper {

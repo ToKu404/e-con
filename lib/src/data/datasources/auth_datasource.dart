@@ -6,7 +6,7 @@ import 'package:e_con/core/common/auth_preference_helper.dart';
 import 'package:e_con/core/common/exception.dart';
 import 'package:e_con/core/responses/data_response.dart';
 import 'package:e_con/core/services/api_service.dart';
-import 'package:e_con/src/data/models/user_credential.dart';
+import 'package:e_con/src/data/models/user/user_credential.dart';
 import 'package:http/http.dart' as http;
 
 abstract class AuthDataSource {
@@ -68,6 +68,4 @@ class AuthDataSourceImpl implements AuthDataSource {
       throw LocalDatabaseException();
     }
   }
-
-  
 }

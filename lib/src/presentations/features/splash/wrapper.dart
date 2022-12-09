@@ -1,7 +1,7 @@
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/utils/request_state.dart';
-import 'package:e_con/src/data/models/user_credential.dart';
-import 'package:e_con/src/data/models/user_role.dart';
+import 'package:e_con/src/data/models/user/user_credential.dart';
+import 'package:e_con/src/data/models/user/user_role.dart';
 import 'package:e_con/src/presentations/features/login/pages/login_page.dart';
 import 'package:e_con/src/presentations/features/login/provider/get_user_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/student/student_main_page.dart';

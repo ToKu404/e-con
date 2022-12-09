@@ -1,5 +1,5 @@
 import 'package:e_con/core/constants/size_const.dart';
-import 'package:e_con/src/presentations/features/menu/teacher/activity/widgets/teacher_task_card.dart';
+import 'package:e_con/src/presentations/features/menu/teacher/pages/activity/widgets/teacher_task_card.dart';
 import 'package:flutter/widgets.dart';
 
 class TeacherActivityPage extends StatelessWidget {

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:e_con/core/constants/color_const.dart';
-import 'package:e_con/src/presentations/features/menu/student/scan_qr/provider/qr_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/student/pages/scan_qr/provider/qr_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';

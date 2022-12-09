@@ -2,13 +2,27 @@ import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
-import 'package:e_con/src/presentations/features/menu/teacher/absent/teacher_absent_page.dart';
-import 'package:e_con/src/presentations/features/menu/teacher/activity/teacher_activity_page.dart';
+import 'package:e_con/src/presentations/features/menu/teacher/pages/absent/teacher_absent_page.dart';
+import 'package:e_con/src/presentations/features/menu/teacher/pages/activity/teacher_activity_page.dart';
+import 'package:e_con/src/presentations/features/menu/teacher/providers/lecture_profile_notifier.dart';
 import 'package:e_con/src/presentations/widgets/header_logo.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class TeacherMainPage extends StatelessWidget {
+class TeacherMainPage extends StatefulWidget {
   const TeacherMainPage({super.key});
+
+  @override
+  State<TeacherMainPage> createState() => _TeacherMainPageState();
+}
+
+class _TeacherMainPageState extends State<TeacherMainPage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Provider.of<LectureProfileNotifier>(context, listen: false);
+  }
 
   @override
   Widget build(BuildContext context) {
