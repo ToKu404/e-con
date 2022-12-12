@@ -27,6 +27,8 @@ class AuthNotifier extends ChangeNotifier {
       },
       (user) {
         _logOutState = RequestState.success;
+        _user = null;
+        _loginState = RequestState.init;
       },
     );
 

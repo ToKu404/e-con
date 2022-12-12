@@ -26,39 +26,45 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        height: height ?? 60,
-        decoration: BoxDecoration(
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: height ?? 60,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(
+          12,
+        ),
+        color: color ?? Palette.primary,
+        border: Border.all(
+          color: textColor ?? Colors.white,
+        ),
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 10,
+            color: Palette.onPrimary.withOpacity(
+              .34,
+            ),
+          ),
+          BoxShadow(
+            blurRadius: 3.19,
+            color: Palette.onPrimary.withOpacity(
+              .20,
+            ),
+          ),
+          BoxShadow(
+            blurRadius: 1,
+            color: Palette.onPrimary.withOpacity(
+              .13,
+            ),
+          ),
+        ],
+      ),
+      child: MaterialButton(
+        onPressed: onTap,
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(
             12,
           ),
-          color: color ?? Palette.primary,
-          border: Border.all(
-            color: textColor ?? Colors.white,
-          ),
-          boxShadow: [
-            BoxShadow(
-              blurRadius: 10,
-              color: Palette.onPrimary.withOpacity(
-                .34,
-              ),
-            ),
-            BoxShadow(
-              blurRadius: 3.19,
-              color: Palette.onPrimary.withOpacity(
-                .20,
-              ),
-            ),
-            BoxShadow(
-              blurRadius: 1,
-              color: Palette.onPrimary.withOpacity(
-                .13,
-              ),
-            ),
-          ],
         ),
         child: Center(
           child: Row(

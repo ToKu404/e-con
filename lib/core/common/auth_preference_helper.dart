@@ -1,5 +1,5 @@
 import 'package:e_con/src/data/models/user/user_credential.dart';
-import 'package:e_con/src/data/models/user/user_role.dart';
+import 'package:e_con/src/data/models/user/helper/user_role_type.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthPreferenceHelper {
@@ -25,6 +25,7 @@ class AuthPreferenceHelper {
   }
 
   static const userTokenKey = 'USER_TOKEN';
+  static const userSessionKey = 'USER_SESSION';
   static const userRoleKey = 'USER_ROLE';
 
   Future<bool> isUserTokenExist() async {
@@ -32,10 +33,12 @@ class AuthPreferenceHelper {
     return pr!.containsKey(userTokenKey) ? true : false;
   }
 
-  Future<bool> setUserData(String userToken, UserRole userRole) async {
+  Future<bool> setUserData(
+      String userToken, String userSession, UserRole userRole) async {
     final pr = await preferences;
     try {
       pr!.setString(userTokenKey, userToken);
+      pr.setString(userSessionKey, userSession);
       pr.setInt(userRoleKey, userRole == UserRole.student ? 7 : 6);
       return true;
     } catch (e) {
@@ -47,9 +50,11 @@ class AuthPreferenceHelper {
     final pr = await preferences;
     if (pr!.containsKey(userTokenKey)) {
       String? token = pr.getString(userTokenKey);
+      String? session = pr.getString(userSessionKey);
       UserRole role =
           pr.getInt(userRoleKey) == 7 ? UserRole.student : UserRole.teacher;
-      return UserCredential(role: role, token: token);
+      print(token);
+      return UserCredential(role: role, token: token, session: session);
     } else {
       return null;
     }
@@ -59,6 +64,7 @@ class AuthPreferenceHelper {
     final pr = await preferences;
     try {
       pr!.remove(userTokenKey);
+      pr.remove(userSessionKey);
       pr.remove(userRoleKey);
       return true;
     } catch (e) {

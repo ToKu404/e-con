@@ -25,6 +25,7 @@ class GetUserNotifier extends ChangeNotifier {
     result.fold(
       (failure) {
         _error = failure.message;
+        _user = null;
         _state = RequestState.error;
       },
       (user) {

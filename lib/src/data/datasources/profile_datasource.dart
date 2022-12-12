@@ -35,9 +35,9 @@ class ProfileDataSourceImpl implements ProfileDataSource {
 
     Map<String, dynamic> payload = Jwt.parseJwt(token);
 
-
     final response = await client.get(
-      Uri.parse('${ApiService.baseUrl}/lecturers/${payload['username']}'),
+      Uri.parse(
+          '${ApiService.baseUrlFinalExam}/lecturers/${payload['username']}'),
       headers: {
         "Authorization": "Bearer $token",
       },
@@ -69,7 +69,8 @@ class ProfileDataSourceImpl implements ProfileDataSource {
 
     Map<String, dynamic> payload = Jwt.parseJwt(token);
     final response = await client.get(
-      Uri.parse('${ApiService.baseUrl}/students/${payload['username']}'),
+      Uri.parse(
+          '${ApiService.baseUrlFinalExam}/students/${payload['username']}'),
       headers: {
         "Authorization": "Bearer $token",
       },

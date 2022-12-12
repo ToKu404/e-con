@@ -3,7 +3,7 @@ import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
-import 'package:e_con/src/data/models/user/user_role.dart';
+import 'package:e_con/src/data/models/user/helper/user_role_type.dart';
 import 'package:e_con/src/presentations/features/login/provider/auth_notifier.dart';
 import 'package:e_con/src/presentations/features/login/provider/error_field_checker.dart';
 import 'package:e_con/src/presentations/widgets/custom_button.dart';

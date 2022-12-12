@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:e_con/core/common/auth_preference_helper.dart';
 import 'package:e_con/core/common/exception.dart';
 import 'package:e_con/core/responses/data_response.dart';
+import 'package:e_con/core/responses/session.dart';
 import 'package:e_con/core/services/api_service.dart';
 import 'package:e_con/src/data/models/user/user_credential.dart';
 import 'package:http/http.dart' as http;
@@ -26,25 +27,39 @@ class AuthDataSourceImpl implements AuthDataSource {
   Future<UserCredential> signIn(String username, String password) async {
     final String basicAuth =
         'Basic ${base64.encode(utf8.encode('$username:$password'))}';
-    final response = await client.post(
-      Uri.parse('${ApiService.baseUrl}/users/login'),
+
+    final responseFE = await client.post(
+      Uri.parse('${ApiService.baseUrlFinalExam}/users/login'),
       headers: {
         "Authorization": basicAuth,
       },
     );
 
-    if (response.statusCode == 200) {
-      print(response.body);
-      final dataResponse =
-          DataResponse<Map<String, dynamic>>.fromJson(jsonDecode(response.body))
-              .data;
-      final userCredential = UserCredential.fromJson(dataResponse);
+    final responseCPL = await client.post(
+      Uri.parse('${ApiService.baseUrlCPL}/login'),
+      headers: {
+        "Authorization": basicAuth,
+      },
+    );
+
+    String? cookie = Session.getCookie(responseCPL.headers);
+
+    print(responseCPL.statusCode);
+    print(responseFE.statusCode);
+
+    if (responseFE.statusCode == 200 && responseCPL.statusCode == 200) {
+      print(responseFE.body);
+      final dataResponse = DataResponse<Map<String, dynamic>>.fromJson(
+              jsonDecode(responseFE.body))
+          .data;
+      final userCredential =
+          UserCredential.fromJson(dataResponse, cookie ?? '');
       authPreferenceHelper.setUserData(
-          userCredential.token!, userCredential.role!);
+          userCredential.token!, userCredential.token!, userCredential.role!);
       return userCredential;
-    } else if (response.statusCode == 401) {
+    } else if (responseFE.statusCode == 401 && responseCPL.statusCode == 401) {
       throw UnauthenticateException();
-    } else if (response.statusCode == 404) {
+    } else if (responseFE.statusCode == 404 && responseCPL.statusCode == 404) {
       throw UserNotFoundException();
     } else {
       throw AuthException();
