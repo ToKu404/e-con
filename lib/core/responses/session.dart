@@ -4,7 +4,7 @@ class Session {
     if (rawCookie != null) {
       int index = rawCookie.indexOf(';');
       String cookie = (index == -1) ? rawCookie : rawCookie.substring(0, index);
-      return cookie.split('=').last;
+      return cookie;
     }
     return null;
   }
