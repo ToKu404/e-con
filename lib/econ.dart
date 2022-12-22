@@ -7,10 +7,14 @@ import 'package:e_con/src/presentations/features/login/provider/auth_notifier.da
 import 'package:e_con/src/presentations/features/login/provider/get_user_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/student/providers/student_profile_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/providers/lecture_profile_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/teacher/providers/meeting_course_notifier.dart';
 import 'package:e_con/src/presentations/features/splash/splash_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+
+import 'src/presentations/features/menu/teacher/providers/course_student_notifier.dart';
+import 'src/presentations/features/menu/teacher/providers/lecture_courses_notifier.dart';
 
 class EconApp extends StatelessWidget {
   const EconApp({super.key});
@@ -41,6 +45,15 @@ class EconApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => di.locator<LectureProfileNotifier>(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => di.locator<LectureCourseNotifier>(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => di.locator<MeetingCourseNotifier>(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => di.locator<CourseStudentNotifier>(),
         ),
       ],
       child: MaterialApp(

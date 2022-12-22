@@ -33,13 +33,12 @@ class AuthPreferenceHelper {
     return pr!.containsKey(userTokenKey) ? true : false;
   }
 
-  Future<bool> setUserData(
-      String userToken, String userSession, UserRole userRole) async {
+  Future<bool> setUserData(UserCredential user) async {
     final pr = await preferences;
     try {
-      pr!.setString(userTokenKey, userToken);
-      pr.setString(userSessionKey, userSession);
-      pr.setInt(userRoleKey, userRole == UserRole.student ? 7 : 6);
+      pr!.setString(userTokenKey, user.token ?? '');
+      pr.setString(userSessionKey, user.session ?? '');
+      pr.setInt(userRoleKey, user.role == UserRole.student ? 7 : 6);
       return true;
     } catch (e) {
       return false;
@@ -53,7 +52,7 @@ class AuthPreferenceHelper {
       String? session = pr.getString(userSessionKey);
       UserRole role =
           pr.getInt(userRoleKey) == 7 ? UserRole.student : UserRole.teacher;
-      print(token);
+
       return UserCredential(role: role, token: token, session: session);
     } else {
       return null;
@@ -66,6 +65,7 @@ class AuthPreferenceHelper {
       pr!.remove(userTokenKey);
       pr.remove(userSessionKey);
       pr.remove(userRoleKey);
+
       return true;
     } catch (e) {
       return false;

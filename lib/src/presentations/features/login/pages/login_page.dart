@@ -7,7 +7,7 @@ import 'package:e_con/src/data/models/user/helper/user_role_type.dart';
 import 'package:e_con/src/presentations/features/login/provider/auth_notifier.dart';
 import 'package:e_con/src/presentations/features/login/provider/error_field_checker.dart';
 import 'package:e_con/src/presentations/widgets/custom_button.dart';
-import 'package:e_con/src/presentations/widgets/econ_loading.dart';
+import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
 import 'package:e_con/src/presentations/widgets/header_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';

@@ -19,7 +19,6 @@ class TeacherMainPage extends StatefulWidget {
 class _TeacherMainPageState extends State<TeacherMainPage> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Provider.of<LectureProfileNotifier>(context, listen: false);
   }
@@ -105,7 +104,9 @@ class _AppBarSectionState extends State<_AppBarSection> {
       title: const HeaderLogo(),
       actions: [
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, AppRoute.cplWebview);
+          },
           icon: const Icon(
             Icons.badge_rounded,
             color: Palette.primary,

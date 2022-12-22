@@ -2,8 +2,8 @@
 
 import 'dart:convert';
 
-import 'package:e_con/core/common/auth_preference_helper.dart';
-import 'package:e_con/core/common/exception.dart';
+import 'package:e_con/core/helpers/auth_preference_helper.dart';
+import 'package:e_con/core/utils/exception.dart';
 import 'package:e_con/core/responses/data_response.dart';
 import 'package:e_con/core/responses/session.dart';
 import 'package:e_con/core/services/api_service.dart';
@@ -57,10 +57,12 @@ class AuthDataSourceImpl implements AuthDataSource {
         final dataResponse = DataResponse<Map<String, dynamic>>.fromJson(
                 jsonDecode(responseFE.body))
             .data;
-        final userCredential =
-            UserCredential.fromJson(dataResponse, cookie ?? '');
-        authPreferenceHelper.setUserData(
-            userCredential.token!, userCredential.token!, userCredential.role!);
+
+        final userCredential = UserCredential.fromJson(
+          dataResponse,
+          cookie ?? '',
+        );
+        authPreferenceHelper.setUserData(userCredential);
         return userCredential;
       } else if (responseFE.statusCode == 401 &&
           responseCPL.statusCode == 401) {
@@ -72,16 +74,25 @@ class AuthDataSourceImpl implements AuthDataSource {
         throw AuthException();
       }
     } catch (e) {
-      debugPrint('testing');
-
       throw AuthException();
     }
   }
 
   @override
-  Future<UserCredential?> getUser() {
+  Future<UserCredential?> getUser() async {
     try {
-      return authPreferenceHelper.getUser();
+      final credential = await authPreferenceHelper.getUser();
+      final responseData = await client.get(
+        Uri.parse('${ApiService.baseUrlCPL}/credential'),
+        headers: {
+          "Cookie": credential!.session ?? '',
+        },
+      );
+      if (responseData.statusCode == 200) {
+        return credential;
+      } else {
+        throw UnauthenticateException();
+      }
     } catch (e) {
       throw LocalDatabaseException();
     }

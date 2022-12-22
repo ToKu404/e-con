@@ -5,9 +5,12 @@ class UserCredential extends Equatable {
   final UserRole? role;
   final String? token;
   final String? session;
-  const UserCredential(
-      {required this.role, required this.token, required this.session})
-      : super();
+
+  const UserCredential({
+    required this.role,
+    required this.token,
+    required this.session,
+  }) : super();
 
   factory UserCredential.fromJson(Map<String, dynamic> json, String session) =>
       UserCredential(

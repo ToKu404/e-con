@@ -7,7 +7,7 @@ import 'package:e_con/src/presentations/features/login/provider/auth_notifier.da
 import 'package:e_con/src/presentations/features/menu/student/providers/student_profile_notifier.dart';
 import 'package:e_con/src/presentations/widgets/custom_button.dart';
 import 'package:e_con/src/presentations/widgets/dialog/confirm_logout.dart';
-import 'package:e_con/src/presentations/widgets/econ_loading.dart';
+import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

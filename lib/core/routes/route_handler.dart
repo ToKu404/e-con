@@ -10,6 +10,7 @@ import 'package:e_con/src/presentations/features/menu/teacher/pages/absent/teach
 import 'package:e_con/src/presentations/features/menu/teacher/pages/setting/teacher_setting_page.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/teacher_main_page.dart';
 import 'package:e_con/src/presentations/features/splash/wrapper.dart';
+import 'package:e_con/src/presentations/features/webview/web_view_page.dart';
 import 'package:flutter/material.dart';
 
 Route? routesHandler(RouteSettings settings) {
@@ -47,6 +48,10 @@ Route? routesHandler(RouteSettings settings) {
     case AppRoute.teacherProfile:
       return MaterialPageRoute(
         builder: (_) => const TeacherSettingPage(),
+      );
+    case AppRoute.cplWebview:
+      return MaterialPageRoute(
+        builder: (_) => const WebViewPage(),
       );
   }
   return null;

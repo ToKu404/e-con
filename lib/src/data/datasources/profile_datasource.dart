@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:e_con/core/common/auth_preference_helper.dart';
-import 'package:e_con/core/common/exception.dart';
+import 'package:e_con/core/helpers/auth_preference_helper.dart';
+import 'package:e_con/core/utils/exception.dart';
 import 'package:e_con/core/responses/data_response.dart';
 import 'package:e_con/core/services/api_service.dart';
 import 'package:e_con/src/data/models/profile/lecture_data.dart';
@@ -42,7 +42,6 @@ class ProfileDataSourceImpl implements ProfileDataSource {
         "Authorization": "Bearer $token",
       },
     );
-    print(response.body);
 
     if (response.statusCode == 200) {
       final dataResponse =

@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:e_con/core/common/failure.dart';
+import 'package:e_con/core/utils/failure.dart';
 import 'package:e_con/src/data/models/profile/lecture_data.dart';
 import 'package:e_con/src/data/models/profile/student_data.dart';
 
