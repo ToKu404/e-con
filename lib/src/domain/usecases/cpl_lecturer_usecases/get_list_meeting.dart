@@ -8,7 +8,7 @@ class GetListMeeting {
 
   GetListMeeting({required this.cplLecturerRepository});
 
-  Future<Either<Failure, List<MeetingData>?>> execute(String id) async {
+  Future<Either<Failure, List<MeetingData>?>> execute(int id) async {
     return cplLecturerRepository.getListMeeting(id);
   }
 }

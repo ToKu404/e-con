@@ -1,24 +1,34 @@
 import 'package:e_con/core/constants/color_const.dart';
-
-import 'package:flutter/widgets.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class EconError extends StatelessWidget {
   final String errorMessage;
-  const EconError({super.key, required this.errorMessage});
+  final bool withScaffold;
+  const EconError(
+      {super.key, required this.errorMessage, this.withScaffold = false});
 
   @override
   Widget build(BuildContext context) {
+    return withScaffold
+        ? Scaffold(
+            backgroundColor: Palette.background,
+            body: content(),
+          )
+        : content();
+  }
+
+  Widget content() {
     return Center(
         child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(
-          height: 250,
+          height: 200,
           width: 250,
           child: SvgPicture.asset(
             'assets/illustrations/error_vector.svg',
-            fit: BoxFit.fitWidth,
+            fit: BoxFit.contain,
           ),
         ),
         Text(

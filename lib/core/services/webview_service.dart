@@ -1,3 +1,3 @@
 class WebViewService {
-  static String url = 'https://www.google.com/';
+  static String url = 'https://cpl.npedigihouse.tech/';
 }

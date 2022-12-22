@@ -47,14 +47,29 @@ class TeacherSettingPage extends StatelessWidget {
   }
 }
 
-class _ProfileCard extends StatelessWidget {
+class _ProfileCard extends StatefulWidget {
+  @override
+  State<_ProfileCard> createState() => _ProfileCardState();
+}
+
+class _ProfileCardState extends State<_ProfileCard> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      Provider.of<LectureProfileNotifier>(context, listen: false)
+        ..getStudentData();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final profileProvider = context.read<LectureProfileNotifier>();
 
     if (profileProvider.state == RequestState.loading) {
       return EconLoading();
-    } else if (profileProvider.state == RequestState.error) {
+    } else if (profileProvider.state == RequestState.error ||
+        profileProvider.lectureData == null) {
       return EconError(errorMessage: profileProvider.error);
     }
 
@@ -102,16 +117,17 @@ class _ProfileCard extends StatelessWidget {
                     width: 100,
                     height: 100,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(AppSize.space[2]),
-                      image: const DecorationImage(
-                        image: NetworkImage(
-                          'https://images.unsplash.com/photo-1614436163996-25cee5f54290?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=742&q=80',
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          width: 2,
+                          color: Palette.disable,
                         ),
-                        fit: BoxFit.cover,
-                      ),
-                      border: Border.all(
-                        width: 2,
-                        color: Palette.primary,
+                        color: Palette.disable),
+                    child: Center(
+                      child: Icon(
+                        Icons.person,
+                        size: 36,
+                        color: Palette.background,
                       ),
                     ),
                   ),
@@ -121,9 +137,8 @@ class _ProfileCard extends StatelessWidget {
                   child: Text(
                     lectureData.lectureName ?? '',
                     textAlign: TextAlign.center,
-                    style: kTextHeme.headline5?.copyWith(
-                      height: 1,
-                    ),
+                    style: kTextHeme.headline5
+                        ?.copyWith(height: 1, color: Palette.onPrimary),
                   ),
                 ),
                 AppSize.verticalSpace[3],

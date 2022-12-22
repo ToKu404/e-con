@@ -3,9 +3,10 @@ import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/pages/absent/widgets/teacher_absent_card.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/providers/lecture_courses_notifier.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_error.dart';
+import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
 import 'package:e_con/src/presentations/widgets/custom_shimmer.dart';
 import 'package:e_con/src/presentations/widgets/placeholders/card_placeholder.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 class TeacherAbsentPage extends StatelessWidget {
@@ -37,7 +38,6 @@ class TeacherAbsentPage extends StatelessWidget {
         itemCount: courseProvider.listCourse?.length,
         itemBuilder: (context, index) {
           final data = courseProvider.listCourse!.elementAt(index);
-
           return TeacherAbsentCard(
             courseData: data,
           );

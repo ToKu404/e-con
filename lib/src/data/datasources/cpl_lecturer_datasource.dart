@@ -12,7 +12,7 @@ import 'package:http/http.dart' as http;
 
 abstract class CplLecturerDataSource {
   Future<CourseContent> getListCourse();
-  Future<List<MeetingData>> getListMeeting(String classId);
+  Future<List<MeetingData>> getListMeeting(int classId);
   Future<List<CourseStudentData>> getListStudent(int classId);
 }
 
@@ -50,7 +50,7 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
   }
 
   @override
-  Future<List<MeetingData>> getListMeeting(String classId) async {
+  Future<List<MeetingData>> getListMeeting(int classId) async {
     final credential = await authPreferenceHelper.getUser();
     final responseData = await client.get(
       Uri.parse(

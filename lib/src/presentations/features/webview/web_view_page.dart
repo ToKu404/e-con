@@ -1,5 +1,6 @@
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/services/webview_service.dart';
+import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -12,6 +13,7 @@ class WebViewPage extends StatefulWidget {
 
 class _WebViewPageState extends State<WebViewPage> {
   late WebViewController controller;
+  final ValueNotifier<bool> isLoading = ValueNotifier(false);
 
   @override
   void initState() {
@@ -22,7 +24,11 @@ class _WebViewPageState extends State<WebViewPage> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onProgress: (int progress) {
-            // Update loading bar.
+            if (progress < 100) {
+              isLoading.value = true;
+            } else {
+              isLoading.value = false;
+            }
           },
           onPageStarted: (String url) {},
           onPageFinished: (String url) {},
@@ -52,27 +58,36 @@ class _WebViewPageState extends State<WebViewPage> {
       onWillPop: () => _exitApp(context),
       child: Scaffold(
         body: SafeArea(
-            child: Stack(
-          children: [
-            WebViewWidget(controller: controller),
-            Positioned(
-              top: 8,
-              left: 8,
-              child: IconButton(
-                style: IconButton.styleFrom(
-                  backgroundColor: Palette.onPrimary.withOpacity(.5),
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: Icon(
-                  Icons.close,
-                  color: Palette.background,
-                ),
-              ),
-            ),
-          ],
-        )),
+            child: ValueListenableBuilder(
+                valueListenable: isLoading,
+                builder: (context, state, _) {
+                  return Stack(
+                    children: [
+                      WebViewWidget(controller: controller),
+                      Positioned(
+                        bottom: 8,
+                        left: 16,
+                        child: ElevatedButton.icon(
+                          style: IconButton.styleFrom(
+                            backgroundColor: Palette.onPrimary.withOpacity(.5),
+                          ),
+                          label: Text(
+                            'Keluar',
+                            style: TextStyle(color: Palette.background),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(
+                            Icons.close,
+                            color: Palette.background,
+                          ),
+                        ),
+                      ),
+                      if (state) EconLoading()
+                    ],
+                  );
+                })),
       ),
     );
   }

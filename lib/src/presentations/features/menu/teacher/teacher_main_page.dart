@@ -4,10 +4,8 @@ import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/pages/absent/teacher_absent_page.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/pages/activity/teacher_activity_page.dart';
-import 'package:e_con/src/presentations/features/menu/teacher/providers/lecture_profile_notifier.dart';
 import 'package:e_con/src/presentations/widgets/header_logo.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class TeacherMainPage extends StatefulWidget {
   const TeacherMainPage({super.key});
@@ -20,7 +18,6 @@ class _TeacherMainPageState extends State<TeacherMainPage> {
   @override
   void initState() {
     super.initState();
-    Provider.of<LectureProfileNotifier>(context, listen: false);
   }
 
   @override
@@ -125,7 +122,7 @@ class _AppBarSectionState extends State<_AppBarSection> {
       bottom: PreferredSize(
         preferredSize: _tabBar.preferredSize,
         child: ColoredBox(
-          color: Palette.background.withOpacity(.8),
+          color: Palette.disable.withOpacity(.5),
           child: _tabBar,
         ),
       ),

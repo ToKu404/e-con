@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
@@ -17,7 +19,7 @@ class _SplashPageState extends State<SplashPage> {
   void didChangeDependencies() {
     // Will change page after two second
     super.didChangeDependencies();
-    Future.delayed(
+    Timer(
       const Duration(seconds: 5),
       () => Navigator.pushNamedAndRemoveUntil(
         context,

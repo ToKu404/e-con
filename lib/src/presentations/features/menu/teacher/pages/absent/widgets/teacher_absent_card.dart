@@ -1,43 +1,19 @@
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
-import 'package:e_con/core/helpers/reusable_function_helper.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/course_data.dart';
-import 'package:e_con/src/presentations/features/menu/teacher/providers/course_student_notifier.dart';
-import 'package:e_con/src/presentations/features/menu/teacher/providers/meeting_course_notifier.dart';
-import 'package:e_con/src/presentations/widgets/custom_shimmer.dart';
-import 'package:e_con/src/presentations/widgets/placeholders/card_placeholder.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class TeacherAbsentCard extends StatelessWidget {
   final CourseData courseData;
-
   const TeacherAbsentCard({super.key, required this.courseData});
 
   @override
   Widget build(BuildContext context) {
-    String courseTime = '-';
-    int courseStudentCount = 0;
-    final meetingProvider = context.read<MeetingCourseNotifier>();
-    final studentProvider = context.read<CourseStudentNotifier>();
-    studentProvider.getListStudent(courseData.classId!);
-
-    if (meetingProvider.listMeeting != null &&
-        studentProvider.listStudent != null) {
-      courseStudentCount = studentProvider.listStudent!.length;
-      final sampleMeetingData = meetingProvider.listMeeting!.first;
-      courseTime = ReusableFuntionHelper.datetimeGenerator(
-          sampleMeetingData.date!,
-          sampleMeetingData.startTime!,
-          sampleMeetingData.endTime!);
-    } else {
-      return CustomShimmer(child: CardPlaceholder());
-    }
-
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, AppRoute.detailCourse),
+      onTap: () => Navigator.pushNamed(context, AppRoute.detailCourse,
+          arguments: courseData),
       child: Container(
         width: AppSize.getAppWidth(context),
         margin: EdgeInsets.only(
@@ -79,7 +55,7 @@ class TeacherAbsentCard extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            courseTime,
+                            'Senin 10:00 - 12:00 WITA',
                             style: kTextHeme.subtitle1?.copyWith(
                               color: Palette.onPrimary,
                             ),
@@ -130,7 +106,7 @@ class TeacherAbsentCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          '${courseStudentCount}',
+                          '45',
                           style: kTextHeme.headline1,
                         ),
                         Text(

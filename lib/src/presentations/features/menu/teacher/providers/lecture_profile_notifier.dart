@@ -8,9 +8,7 @@ class LectureProfileNotifier extends ChangeNotifier {
 
   LectureProfileNotifier({
     required this.getLectureDataUsecase,
-  }) {
-    getStudentData();
-  }
+  });
 
   String _error = '';
   String get error => _error;

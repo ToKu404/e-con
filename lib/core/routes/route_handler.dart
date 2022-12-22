@@ -1,4 +1,5 @@
 import 'package:e_con/core/routes/app_routes.dart';
+import 'package:e_con/src/data/models/cpl_lecturer/course_data.dart';
 import 'package:e_con/src/presentations/features/login/pages/login_page.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/scan_qr/student_absent_page.dart';
 import 'package:e_con/src/presentations/features/menu/student/student_main_page.dart';
@@ -27,7 +28,9 @@ Route? routesHandler(RouteSettings settings) {
       return MaterialPageRoute(builder: (_) => const StudentAbsentPage());
     case AppRoute.detailCourse:
       return MaterialPageRoute(
-        builder: (_) => const TeacherCourseDetailPage(),
+        builder: (_) => TeacherCourseDetailPage(
+          courseData: settings.arguments as CourseData,
+        ),
       );
     case AppRoute.detailMeet:
       return MaterialPageRoute(

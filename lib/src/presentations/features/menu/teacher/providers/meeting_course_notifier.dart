@@ -19,10 +19,10 @@ class MeetingCourseNotifier extends ChangeNotifier {
   List<MeetingData>? _listMeeting;
   List<MeetingData>? get listMeeting => _listMeeting;
 
-  Future<void> getListMeeting(String meetingId) async {
+  Future<void> getListMeeting({required int classId}) async {
     _state = RequestState.loading;
     notifyListeners();
-    final result = await getListMeetingUsecase.execute(meetingId);
+    final result = await getListMeetingUsecase.execute(classId);
 
     result.fold((l) {
       _error = l.message;

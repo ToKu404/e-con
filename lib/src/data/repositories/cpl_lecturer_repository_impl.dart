@@ -29,7 +29,7 @@ class CplLecturerRepositoryImpl implements CplLecturerRepository {
 
   @override
   Future<Either<Failure, List<MeetingData>?>> getListMeeting(
-      String classId) async {
+      int classId) async {
     try {
       final result = await cplLecturerDataSource.getListMeeting(classId);
       return Right(result);
