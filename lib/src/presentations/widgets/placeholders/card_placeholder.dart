@@ -10,7 +10,7 @@ class CardPlaceholder extends StatelessWidget {
       width: AppSize.getAppWidth(context),
       height: 150,
       margin: EdgeInsets.only(
-        bottom: AppSize.space[3],
+    
         left: AppSize.space[4],
         right: AppSize.space[4],
       ),

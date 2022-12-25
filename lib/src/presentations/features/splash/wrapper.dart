@@ -9,7 +9,6 @@ import 'package:e_con/src/presentations/features/menu/teacher/teacher_main_page.
 import 'package:e_con/src/presentations/reusable_pages/econ_error.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
 class Wrapper extends StatelessWidget {

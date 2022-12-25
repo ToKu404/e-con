@@ -3,7 +3,6 @@ import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/pages/absent/widgets/teacher_absent_card.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/providers/lecture_courses_notifier.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_error.dart';
-import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
 import 'package:e_con/src/presentations/widgets/custom_shimmer.dart';
 import 'package:e_con/src/presentations/widgets/placeholders/card_placeholder.dart';
 import 'package:flutter/widgets.dart';
@@ -20,10 +19,11 @@ class TeacherAbsentPage extends StatelessWidget {
       return CustomShimmer(
           child: Column(
         children: [
+          AppSize.verticalSpace[4],
           CardPlaceholder(),
-          AppSize.verticalSpace[3],
+          AppSize.verticalSpace[4],
           CardPlaceholder(),
-          AppSize.verticalSpace[3],
+          AppSize.verticalSpace[4],
           CardPlaceholder()
         ],
       ));

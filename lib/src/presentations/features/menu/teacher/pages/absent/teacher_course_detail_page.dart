@@ -4,7 +4,7 @@ import 'package:e_con/core/helpers/reusable_function_helper.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
-import 'package:e_con/src/data/models/cpl_lecturer/course_data.dart';
+import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/course_student_data.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/pages/absent/widgets/teacher_meet_card.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/providers/course_student_notifier.dart';
@@ -17,8 +17,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 class TeacherCourseDetailPage extends StatefulWidget {
-  final CourseData courseData;
-  const TeacherCourseDetailPage({super.key, required this.courseData});
+  final ClazzData clazzData;
+  const TeacherCourseDetailPage({super.key, required this.clazzData});
 
   @override
   State<TeacherCourseDetailPage> createState() =>
@@ -32,9 +32,9 @@ class _TeacherCourseDetailPageState extends State<TeacherCourseDetailPage> {
     super.initState();
     Future.microtask(() {
       Provider.of<CourseStudentNotifier>(context, listen: false)
-        ..getListStudent(widget.courseData.classId!);
+        ..getListStudent(widget.clazzData.id!);
       Provider.of<MeetingCourseNotifier>(context, listen: false)
-        ..getListMeeting(classId: widget.courseData.classId!);
+        ..getListMeeting(classId: widget.clazzData.id!);
     });
   }
 
@@ -57,18 +57,16 @@ class _TeacherCourseDetailPageState extends State<TeacherCourseDetailPage> {
     }
 
     if (meetingProvider.listMeeting == null ||
-        studentCourseProvider.listStudent == null ||
-        meetingProvider.listMeeting!.isEmpty ||
-        studentCourseProvider.listStudent!.isEmpty) {
+        studentCourseProvider.listStudent == null) {
       return EconError(
         errorMessage: 'Data Kosong',
         withScaffold: true,
       );
     }
 
-    final sampleMeeting = meetingProvider.listMeeting!.first;
-    final courseDate = ReusableFuntionHelper.datetimeGenerator(
-        sampleMeeting.date!, sampleMeeting.startTime!, sampleMeeting.endTime!);
+    // final sampleMeeting = meetingProvider.listMeeting!.first;
+    final courseDate =
+        '${widget.clazzData.startTime}-${widget.clazzData.endTime}';
 
     return Scaffold(
       backgroundColor: Palette.background,
@@ -78,8 +76,8 @@ class _TeacherCourseDetailPageState extends State<TeacherCourseDetailPage> {
             Column(
               children: [
                 TitleSection(
-                  className: widget.courseData.className ?? '',
-                  courseName: widget.courseData.courseName ?? '',
+                  className: widget.clazzData.name ?? '',
+                  courseName: widget.clazzData.courseData!.courseName ?? '',
                   semesterName: '',
                   totalStudent: studentCourseProvider.listStudent!.length,
                   courseDate: courseDate,
@@ -100,8 +98,8 @@ class _TeacherCourseDetailPageState extends State<TeacherCourseDetailPage> {
             Column(
               children: [
                 TitleSection(
-                  className: widget.courseData.className ?? '',
-                  courseName: widget.courseData.courseName ?? '',
+                  className: widget.clazzData.name ?? '',
+                  courseName: widget.clazzData.courseData!.courseName ?? '',
                   semesterName: '',
                   totalStudent: studentCourseProvider.listStudent!.length,
                   courseDate: courseDate,

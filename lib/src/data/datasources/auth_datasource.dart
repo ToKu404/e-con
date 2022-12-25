@@ -8,7 +8,6 @@ import 'package:e_con/core/responses/data_response.dart';
 import 'package:e_con/core/responses/session.dart';
 import 'package:e_con/core/services/api_service.dart';
 import 'package:e_con/src/data/models/user/user_credential.dart';
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 abstract class AuthDataSource {
@@ -46,12 +45,7 @@ class AuthDataSourceImpl implements AuthDataSource {
 
       String? cookie = Session.getCookie(responseCPL.headers);
 
-      // final responseData = await client.get(
-      //   Uri.parse('${ApiService.baseUrlCPL}/dosen-authority/daftar-kelas'),
-      //   headers: {
-      //     "Cookie": cookie ?? '',
-      //   },
-      // );
+      print(responseFE.body);
 
       if (responseFE.statusCode == 200 && responseCPL.statusCode == 200) {
         final dataResponse = DataResponse<Map<String, dynamic>>.fromJson(
@@ -82,16 +76,20 @@ class AuthDataSourceImpl implements AuthDataSource {
   Future<UserCredential?> getUser() async {
     try {
       final credential = await authPreferenceHelper.getUser();
-      final responseData = await client.get(
-        Uri.parse('${ApiService.baseUrlCPL}/credential'),
-        headers: {
-          "Cookie": credential!.session ?? '',
-        },
-      );
-      if (responseData.statusCode == 200) {
-        return credential;
+      if (credential != null) {
+        final responseData = await client.get(
+          Uri.parse('${ApiService.baseUrlCPL}/credential'),
+          headers: {
+            "Cookie": credential.session ?? '',
+          },
+        );
+        if (responseData.statusCode == 200) {
+          return credential;
+        } else {
+          throw UnauthenticateException();
+        }
       } else {
-        throw UnauthenticateException();
+        return null;
       }
     } catch (e) {
       throw LocalDatabaseException();

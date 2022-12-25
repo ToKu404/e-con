@@ -2,11 +2,11 @@ import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
-import 'package:e_con/src/data/models/cpl_lecturer/course_data.dart';
+import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
 import 'package:flutter/material.dart';
 
 class TeacherAbsentCard extends StatelessWidget {
-  final CourseData courseData;
+  final ClazzData courseData;
   const TeacherAbsentCard({super.key, required this.courseData});
 
   @override
@@ -42,14 +42,14 @@ class TeacherAbsentCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            courseData.courseName ?? '',
+                            courseData.courseData!.courseName ?? '',
                             style: kTextHeme.subtitle1?.copyWith(
                               color: Palette.primary,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           Text(
-                            courseData.className ?? '',
+                            courseData.name ?? '',
                             style: kTextHeme.subtitle1?.copyWith(
                               color: Palette.disable,
                             ),

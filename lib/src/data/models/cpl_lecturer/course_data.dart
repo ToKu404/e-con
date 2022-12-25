@@ -1,34 +1,26 @@
 import 'package:equatable/equatable.dart';
 
 class CourseData extends Equatable {
-  CourseData({
-    this.classId,
-    this.className,
-    this.courseId,
-    this.courseName,
-    this.semesterId,
-  });
-
-  final int? classId;
-  final String? className;
-  final int? courseId;
+  final int? id;
   final String? courseName;
-  final int? semesterId;
+  final int? givenSemester;
+
+  CourseData(
+      {required this.courseName,
+      required this.givenSemester,
+      required this.id});
 
   factory CourseData.fromJson(Map<String, dynamic> json) => CourseData(
-        classId: json["classId"],
-        className: json["className"],
-        courseId: json["courseId"],
-        courseName: json["courseName"],
-        semesterId: json["semesterId"],
+        id: json["id"],
+        courseName: json['name'],
+        givenSemester: json['givenSemester'],
       );
 
   @override
+  // TODO: implement props
   List<Object?> get props => [
-        classId,
-        className,
-        courseId,
+        id,
         courseName,
-        semesterId,
+        givenSemester,
       ];
 }

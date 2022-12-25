@@ -4,14 +4,14 @@ import 'package:e_con/core/helpers/auth_preference_helper.dart';
 import 'package:e_con/core/utils/exception.dart';
 import 'package:e_con/core/responses/data_response.dart';
 import 'package:e_con/core/services/api_service.dart';
-import 'package:e_con/src/data/models/cpl_lecturer/course_content.dart';
+import 'package:e_con/src/data/models/cpl_lecturer/classs_content.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/course_student_data.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
 import 'package:e_con/src/data/models/profile/student_data.dart';
 import 'package:http/http.dart' as http;
 
 abstract class CplLecturerDataSource {
-  Future<CourseContent> getListCourse();
+  Future<ClazzContent> getListClazz();
   Future<List<MeetingData>> getListMeeting(int classId);
   Future<List<CourseStudentData>> getListStudent(int classId);
 }
@@ -24,21 +24,23 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
       {required this.client, required this.authPreferenceHelper});
 
   @override
-  Future<CourseContent> getListCourse() async {
+  Future<ClazzContent> getListClazz() async {
     final credential = await authPreferenceHelper.getUser();
     final responseData = await client.get(
-      Uri.parse('${ApiService.baseUrlCPL}/dosen-authority/daftar-kelas'),
+      Uri.parse('${ApiService.baseUrlCPL}/class-record/classes'),
       headers: {
         "Cookie": credential!.session ?? '',
       },
     );
+
+    print(responseData.body);
 
     if (responseData.statusCode == 200) {
       final dataResponse = DataResponse<Map<String, dynamic>>.fromJson(
               jsonDecode(responseData.body))
           .data;
 
-      final userCredential = CourseContent.fromJson(dataResponse);
+      final userCredential = ClazzContent.fromJson(dataResponse);
       return userCredential;
     } else if (responseData.statusCode == 401) {
       throw UnauthenticateException();

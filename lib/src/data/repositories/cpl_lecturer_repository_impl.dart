@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:e_con/core/utils/exception.dart';
 import 'package:e_con/core/utils/failure.dart';
 import 'package:e_con/src/data/datasources/cpl_lecturer_datasource.dart';
-import 'package:e_con/src/data/models/cpl_lecturer/course_data.dart';
+import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/course_student_data.dart';
 import 'package:e_con/src/data/models/profile/student_data.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
@@ -14,10 +14,10 @@ class CplLecturerRepositoryImpl implements CplLecturerRepository {
   CplLecturerRepositoryImpl({required this.cplLecturerDataSource});
 
   @override
-  Future<Either<Failure, List<CourseData>?>> getListCourse() async {
+  Future<Either<Failure, List<ClazzData>?>> getListCourse() async {
     try {
-      final result = await cplLecturerDataSource.getListCourse();
-      return Right(result.listCourse);
+      final result = await cplLecturerDataSource.getListClazz();
+      return Right(result.listClazz);
     } on UnauthenticateException {
       return const Left(AuthFailure('Username atau Password salah'));
     } on UserNotFoundException {
