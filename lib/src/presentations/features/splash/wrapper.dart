@@ -18,7 +18,8 @@ class Wrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     // Wrapper to check if user is login or not
     final userNotifier = context.watch<GetUserNotifier>();
-    if (userNotifier.state == RequestState.loading) {
+    if (userNotifier.state == RequestState.loading ||
+        userNotifier.state == RequestState.init) {
       return EconLoading(
         withScaffold: true,
       );
@@ -31,7 +32,7 @@ class Wrapper extends StatelessWidget {
               : TeacherMainPage();
     } else {
       return EconError(
-        errorMessage: userNotifier.error,
+        errorMessage: 'Tertinggal',
         withScaffold: true,
       );
     }

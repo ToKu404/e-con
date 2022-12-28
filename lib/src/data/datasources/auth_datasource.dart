@@ -7,8 +7,10 @@ import 'package:e_con/core/utils/exception.dart';
 import 'package:e_con/core/responses/data_response.dart';
 import 'package:e_con/core/responses/session.dart';
 import 'package:e_con/core/services/api_service.dart';
+import 'package:e_con/src/data/models/user/helper/user_role_type.dart';
 import 'package:e_con/src/data/models/user/user_credential.dart';
 import 'package:http/http.dart' as http;
+import 'package:jwt_decode/jwt_decode.dart';
 
 abstract class AuthDataSource {
   Future<UserCredential> signIn(String username, String password);
@@ -36,6 +38,8 @@ class AuthDataSourceImpl implements AuthDataSource {
         },
       );
 
+      print(responseFE.body);
+
       final responseCPL = await client.post(
         Uri.parse('${ApiService.baseUrlCPL}/login'),
         headers: {
@@ -44,8 +48,6 @@ class AuthDataSourceImpl implements AuthDataSource {
       );
 
       String? cookie = Session.getCookie(responseCPL.headers);
-
-      print(responseFE.body);
 
       if (responseFE.statusCode == 200 && responseCPL.statusCode == 200) {
         final dataResponse = DataResponse<Map<String, dynamic>>.fromJson(
@@ -83,7 +85,28 @@ class AuthDataSourceImpl implements AuthDataSource {
             "Cookie": credential.session ?? '',
           },
         );
-        if (responseData.statusCode == 200) {
+        Map<String, dynamic> payload = Jwt.parseJwt(credential.token!);
+
+        late dynamic response;
+        if (credential.role == UserRole.teacher) {
+          response = await client.get(
+            Uri.parse(
+                '${ApiService.baseUrlFinalExam}/lecturers/${payload['username']}'),
+            headers: {
+              "Authorization": "Bearer ${credential.token}",
+            },
+          );
+        } else {
+          response = await client.get(
+            Uri.parse(
+                '${ApiService.baseUrlFinalExam}/students/${payload['username']}'),
+            headers: {
+              "Authorization": "Bearer ${credential.token}",
+            },
+          );
+        }
+
+        if (responseData.statusCode == 200 && response.statusCode == 200) {
           return credential;
         } else {
           throw UnauthenticateException();
