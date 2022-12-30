@@ -10,6 +10,7 @@ import 'package:e_con/src/data/repositories/profile_repository_impl.dart';
 import 'package:e_con/src/domain/repositories/auth_repository.dart';
 import 'package:e_con/src/domain/repositories/cpl_lecturer_repository.dart';
 import 'package:e_con/src/domain/repositories/profile_repository.dart';
+import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/create_new_meeting.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/get_list_course.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/get_list_meeting.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/get_list_student.dart';
@@ -110,6 +111,11 @@ void init() {
       cplLecturerRepository: locator(),
     ),
   );
+  locator.registerLazySingleton(
+    () => CreateNewMeeting(
+      cplLecturerRepository: locator(),
+    ),
+  );
 
   // Provider
   locator.registerFactory(
@@ -145,8 +151,7 @@ void init() {
   );
   locator.registerFactory(
     () => MeetingCourseNotifier(
-      getListMeetingUsecase: locator(),
-    ),
+        getListMeetingUsecase: locator(), createNewMeetingUsecase: locator()),
   );
 
   // client w/ SSL pinning certified

@@ -8,4 +8,9 @@ abstract class CplLecturerRepository {
   Future<Either<Failure, List<ClazzData>?>> getListCourse();
   Future<Either<Failure, List<MeetingData>?>> getListMeeting(int classId);
   Future<Either<Failure, List<CourseStudentData>?>> getListStudent(int classId);
+  Future<Either<Failure, bool>> createNewMeeting({
+    required int classId,
+    required String topic,
+    required DateTime meetingDate,
+  });
 }

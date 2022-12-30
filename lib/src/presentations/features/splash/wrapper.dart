@@ -32,7 +32,7 @@ class Wrapper extends StatelessWidget {
               : TeacherMainPage();
     } else {
       return EconError(
-        errorMessage: 'Tertinggal',
+        errorMessage: userNotifier.error,
         withScaffold: true,
       );
     }

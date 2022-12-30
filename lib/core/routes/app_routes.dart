@@ -11,4 +11,5 @@ class AppRoute {
   static const String listStudent = '/list-student';
   static const String teacherProfile = '/teacher-profile';
   static const String cplWebview = '/cpl-webview';
+  static const String addNewMeeting = '/new-meeting';
 }

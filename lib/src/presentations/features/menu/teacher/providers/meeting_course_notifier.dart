@@ -1,13 +1,16 @@
 import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
+import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/create_new_meeting.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/get_list_meeting.dart';
 import 'package:flutter/material.dart';
 
 class MeetingCourseNotifier extends ChangeNotifier {
   final GetListMeeting getListMeetingUsecase;
+  final CreateNewMeeting createNewMeetingUsecase;
 
   MeetingCourseNotifier({
     required this.getListMeetingUsecase,
+    required this.createNewMeetingUsecase,
   });
 
   String _error = '';
@@ -30,6 +33,31 @@ class MeetingCourseNotifier extends ChangeNotifier {
     }, (r) {
       _listMeeting = r;
       _state = RequestState.success;
+    });
+    notifyListeners();
+  }
+
+  RequestState _createState = RequestState.init;
+  RequestState get createState => _createState;
+
+  Future<void> createNewMeeting({
+    required int classId,
+    required String topic,
+    required DateTime meetingDate,
+  }) async {
+    _createState = RequestState.loading;
+    notifyListeners();
+
+    final res =
+        await createNewMeetingUsecase.execute(classId, topic, meetingDate);
+    res.fold((l) {
+      _createState = RequestState.error;
+    }, (r) {
+      if (r) {
+        _createState = RequestState.success;
+      } else {
+        _createState = RequestState.error;
+      }
     });
     notifyListeners();
   }

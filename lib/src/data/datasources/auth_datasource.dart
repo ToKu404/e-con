@@ -106,8 +106,15 @@ class AuthDataSourceImpl implements AuthDataSource {
           );
         }
 
+        print(responseData.body);
+        print(response.body);
+
         if (responseData.statusCode == 200 && response.statusCode == 200) {
           return credential;
+        } else if (responseData.statusCode == 401 ||
+            response.statusCode == 401) {
+          logOut();
+          return null;
         } else {
           throw UnauthenticateException();
         }

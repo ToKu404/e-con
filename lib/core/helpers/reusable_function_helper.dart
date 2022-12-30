@@ -22,3 +22,4 @@ class ReusableFuntionHelper {
     return '$dayName $startTime - $endTime';
   }
 }
+

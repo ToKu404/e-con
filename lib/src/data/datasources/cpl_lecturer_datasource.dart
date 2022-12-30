@@ -9,11 +9,17 @@ import 'package:e_con/src/data/models/cpl_lecturer/course_student_data.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
 import 'package:e_con/src/data/models/profile/student_data.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 abstract class CplLecturerDataSource {
   Future<ClazzContent> getListClazz();
   Future<List<MeetingData>> getListMeeting(int classId);
   Future<List<CourseStudentData>> getListStudent(int classId);
+  Future<bool> createNewMeeting({
+    required int classId,
+    required String topic,
+    required DateTime meetingDate,
+  });
 }
 
 class CplLecturerDataSourceImpl implements CplLecturerDataSource {
@@ -108,5 +114,31 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
     } else {
       throw AuthException();
     }
+  }
+
+  @override
+  Future<bool> createNewMeeting(
+      {required int classId,
+      required String topic,
+      required DateTime meetingDate}) async {
+    final credential = await authPreferenceHelper.getUser();
+
+    final map = {
+      'date': DateFormat('yyyy-MM-dd').format(meetingDate),
+      'topics': topic,
+      'clazzId': classId,
+    };
+    print(DateFormat('yyyy-MM-dd').format(meetingDate));
+    final response = await client.post(
+      Uri.parse('${ApiService.baseUrlCPL}/class-record/meeting'),
+      headers: {
+        'Content-Type': 'application/json',
+        'charset': 'utf-8',
+        "Cookie": credential!.session ?? '',
+      },
+      body: json.encode(map),
+    );
+    print(response.body);
+    return response.statusCode == 200;
   }
 }

@@ -62,6 +62,10 @@ class EconApp extends StatelessWidget {
         theme: ThemeData(
           useMaterial3: true,
           fontFamily: 'Poppins',
+          primaryColor: Palette.primary,
+          colorScheme: ColorScheme.light(
+            primary: Palette.primary,
+          ),
         ),
         home: const SplashPage(),
         navigatorObservers: [routeObserver],

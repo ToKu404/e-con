@@ -70,6 +70,18 @@ class _TeacherCourseDetailPageState extends State<TeacherCourseDetailPage> {
 
     return Scaffold(
       backgroundColor: Palette.background,
+      floatingActionButton: ElevatedButton.icon(
+        icon: Icon(Icons.add),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Palette.primary,
+          foregroundColor: Palette.white,
+        ),
+        label: Text('Tambah Pertemuan'),
+        onPressed: () {
+          Navigator.pushNamed(context, AppRoute.addNewMeeting,
+              arguments: widget.clazzData.id);
+        },
+      ),
       body: SafeArea(
         child: Stack(
           children: [

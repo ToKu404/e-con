@@ -3,6 +3,7 @@ import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
 import 'package:e_con/src/presentations/features/login/pages/login_page.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/scan_qr/student_absent_page.dart';
 import 'package:e_con/src/presentations/features/menu/student/student_main_page.dart';
+import 'package:e_con/src/presentations/features/menu/teacher/pages/absent/teacher_add_meeting_page.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/pages/absent/teacher_barcode_page.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/pages/absent/teacher_course_detail_page.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/pages/absent/teacher_course_member.dart';
@@ -51,6 +52,12 @@ Route? routesHandler(RouteSettings settings) {
     case AppRoute.teacherProfile:
       return MaterialPageRoute(
         builder: (_) => const TeacherSettingPage(),
+      );
+    case AppRoute.addNewMeeting:
+      return MaterialPageRoute(
+        builder: (_) => TeacherAddMeetingPage(
+          classId: settings.arguments as int,
+        ),
       );
     case AppRoute.cplWebview:
       return MaterialPageRoute(

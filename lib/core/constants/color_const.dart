@@ -8,6 +8,7 @@ class Palette {
   static const Color teritory = Color(0xFF7C7ADA);
   static const Color disable = Color(0xFFB9BED0);
   static const Color background = Color(0xFFE9E9F5);
+  static const Color white = Color(0xFFFFFFFF);
   static const Color success = Color(0xFF57BAA8);
   static const Color warning = Color(0xFFF3D688);
   static const Color danger = Color(0xFFFFACB2);
