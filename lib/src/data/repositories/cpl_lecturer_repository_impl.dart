@@ -65,4 +65,34 @@ class CplLecturerRepositoryImpl implements CplLecturerRepository {
       return Left(ServerFailure('Masalah Server'));
     }
   }
+
+  @override
+  Future<Either<Failure, bool>> deleteMeeting({required int meetingId}) async {
+    try {
+      final result =
+          await cplLecturerDataSource.deleteMeeting(meetingId: meetingId);
+      return Right(result);
+    } catch (e) {
+      return Left(ServerFailure('Masalah Server'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateMeeting(
+      {int? classId,
+      String? topic,
+      DateTime? meetingDate,
+      required meetingId}) async {
+    try {
+      final result = await cplLecturerDataSource.updateMeeting(
+        classId: classId,
+        topic: topic,
+        meetingDate: meetingDate,
+        meetingId: meetingId,
+      );
+      return Right(result);
+    } catch (e) {
+      return Left(ServerFailure('Masalah Server'));
+    }
+  }
 }

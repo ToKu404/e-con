@@ -1,10 +1,12 @@
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
+import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
+import 'package:e_con/src/presentations/features/login/provider/auth_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/student/providers/student_profile_notifier.dart';
 import 'package:e_con/src/presentations/widgets/custom_button.dart';
-import 'package:e_con/src/presentations/widgets/dialog/confirm_logout.dart';
+import 'package:e_con/src/presentations/widgets/dialog/show_confirmation.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -181,7 +183,18 @@ class _ProfileCard extends StatelessWidget {
           CustomButton(
             text: 'Keluar',
             onTap: () async {
-              showConfirmLogout(context);
+              final logoutConfirmation = await showConfirmation(
+                  context: context, title: 'Apakah anda serius ingin keluar?');
+
+              if (logoutConfirmation) {
+                await context.read<AuthNotifier>()
+                  ..logOut();
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  AppRoute.login,
+                  (route) => false,
+                );
+              }
             },
           )
         ],

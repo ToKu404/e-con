@@ -11,9 +11,11 @@ import 'package:e_con/src/domain/repositories/auth_repository.dart';
 import 'package:e_con/src/domain/repositories/cpl_lecturer_repository.dart';
 import 'package:e_con/src/domain/repositories/profile_repository.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/create_new_meeting.dart';
+import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/delete_meeting.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/get_list_course.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/get_list_meeting.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/get_list_student.dart';
+import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/update_meeting.dart';
 import 'package:e_con/src/domain/usecases/profile_usecases/get_lecture_data.dart';
 import 'package:e_con/src/domain/usecases/profile_usecases/get_student_data.dart';
 import 'package:e_con/src/domain/usecases/user_usecases/get_user.dart';
@@ -117,6 +119,17 @@ void init() {
     ),
   );
 
+  locator.registerLazySingleton(
+    () => DeleteMeeting(
+      cplLecturerRepository: locator(),
+    ),
+  );
+  locator.registerLazySingleton(
+    () => UpdateMeeting(
+      cplLecturerRepository: locator(),
+    ),
+  );
+
   // Provider
   locator.registerFactory(
     () => GetUserNotifier(
@@ -151,7 +164,10 @@ void init() {
   );
   locator.registerFactory(
     () => MeetingCourseNotifier(
-        getListMeetingUsecase: locator(), createNewMeetingUsecase: locator()),
+        getListMeetingUsecase: locator(),
+        createNewMeetingUsecase: locator(),
+        deleteMeetingUsecase: locator(),
+        updateMeetingUsecase: locator()),
   );
 
   // client w/ SSL pinning certified

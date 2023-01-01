@@ -21,7 +21,7 @@ class HeaderLogo extends StatelessWidget {
         Text(
           'E-Con',
           style: kTextHeme.headline5?.copyWith(
-            color: Palette.primaryVariant,
+            color: Palette.primary,
             fontWeight: FontWeight.bold,
           ),
         )

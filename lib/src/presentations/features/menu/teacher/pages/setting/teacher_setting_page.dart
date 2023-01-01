@@ -7,7 +7,7 @@ import 'package:e_con/src/presentations/features/login/provider/auth_notifier.da
 import 'package:e_con/src/presentations/features/menu/teacher/providers/lecture_profile_notifier.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_error.dart';
 import 'package:e_con/src/presentations/widgets/custom_button.dart';
-import 'package:e_con/src/presentations/widgets/dialog/confirm_logout.dart';
+import 'package:e_con/src/presentations/widgets/dialog/show_confirmation.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -160,7 +160,19 @@ class _ProfileCardState extends State<_ProfileCard> {
             CustomButton(
               text: 'Keluar',
               onTap: () async {
-                showConfirmLogout(context);
+                final logoutConfirmation = await showConfirmation(
+                    context: context,
+                    title: 'Apakah anda serius ingin keluar?');
+
+                if (logoutConfirmation) {
+                  await context.read<AuthNotifier>()
+                    ..logOut();
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    AppRoute.login,
+                    (route) => false,
+                  );
+                }
               },
             )
           ],

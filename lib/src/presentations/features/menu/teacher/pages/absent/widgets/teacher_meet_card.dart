@@ -16,10 +16,8 @@ class TeacherMeetCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Navigator.pushNamed(
-        context,
-        AppRoute.detailMeet,
-      ),
+      onTap: () => Navigator.pushNamed(context, AppRoute.detailMeet,
+          arguments: meetingData.id),
       child: Container(
         margin: EdgeInsets.only(
           bottom: AppSize.space[2],
@@ -71,7 +69,7 @@ class TeacherMeetCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(
                       AppSize.space[5],
                     ),
-                    color: Palette.primaryVariant,
+                    color: Palette.primary,
                   ),
                   padding: EdgeInsets.symmetric(
                     horizontal: AppSize.space[3],

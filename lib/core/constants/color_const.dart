@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Palette {
-  static const Color primary = Color(0xFF5F5AF7);
-  static const Color primaryVariant = Color(0xFF6A65FF);
+  static const Color primary = Color(0xFF142996);
+  static const Color primaryVariant = Color(0xFF4959C8);
   static const Color onPrimary = Color(0xFF24234F);
   static const Color secondary = Color(0xFFDDD6FE);
   static const Color teritory = Color(0xFF7C7ADA);

@@ -20,6 +20,13 @@ abstract class CplLecturerDataSource {
     required String topic,
     required DateTime meetingDate,
   });
+  Future<bool> deleteMeeting({required int meetingId});
+  Future<bool> updateMeeting({
+    int? classId,
+    String? topic,
+    DateTime? meetingDate,
+    required meetingId,
+  });
 }
 
 class CplLecturerDataSourceImpl implements CplLecturerDataSource {
@@ -69,7 +76,6 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
     print(responseData.body);
 
     if (responseData.statusCode == 200) {
-      
       Iterable dataResponse =
           DataResponse<List<dynamic>>.fromJson(jsonDecode(responseData.body))
               .data;
@@ -129,7 +135,6 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
       'topics': topic,
       'clazzId': classId,
     };
-    print(DateFormat('yyyy-MM-dd').format(meetingDate));
     final response = await client.post(
       Uri.parse('${ApiService.baseUrlCPL}/class-record/meeting'),
       headers: {
@@ -139,7 +144,47 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
       },
       body: json.encode(map),
     );
+    return response.statusCode == 200;
+  }
+
+  @override
+  Future<bool> deleteMeeting({required int meetingId}) async {
+    final credential = await authPreferenceHelper.getUser();
+    final response = await client.delete(
+      Uri.parse('${ApiService.baseUrlCPL}/class-record/meeting/$meetingId'),
+      headers: {
+        'Content-Type': 'application/json',
+        'charset': 'utf-8',
+        "Cookie": credential!.session ?? '',
+      },
+    );
     print(response.body);
+    return response.statusCode == 200;
+  }
+
+  @override
+  Future<bool> updateMeeting(
+      {int? classId,
+      String? topic,
+      DateTime? meetingDate,
+      required meetingId}) async {
+    final credential = await authPreferenceHelper.getUser();
+
+    final map = {
+      if (meetingDate != null)
+        'date': DateFormat('yyyy-MM-dd').format(meetingDate),
+      if (topic != null) 'topics': topic,
+      if (classId != null) 'clazzId': classId,
+    };
+    final response = await client.put(
+      Uri.parse('${ApiService.baseUrlCPL}/class-record/meeting/$meetingId'),
+      headers: {
+        'Content-Type': 'application/json',
+        'charset': 'utf-8',
+        "Cookie": credential!.session ?? '',
+      },
+      body: json.encode(map),
+    );
     return response.statusCode == 200;
   }
 }

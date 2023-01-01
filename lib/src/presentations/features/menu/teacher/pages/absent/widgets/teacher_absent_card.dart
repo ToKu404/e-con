@@ -70,7 +70,7 @@ class TeacherAbsentCard extends StatelessWidget {
                               borderRadius: BorderRadius.circular(
                                 AppSize.space[5],
                               ),
-                              color: Palette.primaryVariant,
+                              color: Palette.primary,
                             ),
                             child: Text(
                               'Berjalan',

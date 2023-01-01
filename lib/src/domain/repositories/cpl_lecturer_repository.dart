@@ -13,4 +13,11 @@ abstract class CplLecturerRepository {
     required String topic,
     required DateTime meetingDate,
   });
+  Future<Either<Failure, bool>> deleteMeeting({required int meetingId});
+  Future<Either<Failure, bool>> updateMeeting({
+    int? classId,
+    String? topic,
+    DateTime? meetingDate,
+    required meetingId,
+  });
 }

@@ -1,16 +1,24 @@
+import 'dart:async';
+
 import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/create_new_meeting.dart';
+import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/delete_meeting.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/get_list_meeting.dart';
+import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/update_meeting.dart';
 import 'package:flutter/material.dart';
 
 class MeetingCourseNotifier extends ChangeNotifier {
   final GetListMeeting getListMeetingUsecase;
   final CreateNewMeeting createNewMeetingUsecase;
+  final DeleteMeeting deleteMeetingUsecase;
+  final UpdateMeeting updateMeetingUsecase;
 
   MeetingCourseNotifier({
     required this.getListMeetingUsecase,
     required this.createNewMeetingUsecase,
+    required this.updateMeetingUsecase,
+    required this.deleteMeetingUsecase,
   });
 
   String _error = '';
@@ -57,6 +65,47 @@ class MeetingCourseNotifier extends ChangeNotifier {
         _createState = RequestState.success;
       } else {
         _createState = RequestState.error;
+      }
+    });
+    notifyListeners();
+  }
+
+  Future<bool?> deleteMeeting({
+    required int meetingId,
+  }) async {
+    final res = await deleteMeetingUsecase.execute(meetingId);
+    res.fold((l) {
+      return false;
+    }, (r) {
+      return res;
+    });
+    return null;
+  }
+
+  RequestState _editState = RequestState.init;
+  RequestState get editState => _editState;
+
+  Future<void> editMeeting({
+    required int meetingId,
+    int? classId,
+    String? topic,
+    DateTime? meetingDate,
+  }) async {
+    _editState = RequestState.loading;
+    notifyListeners();
+
+    final res = await updateMeetingUsecase.execute(
+        meetingId: meetingId,
+        classId: classId,
+        meetingDate: meetingDate,
+        topic: topic);
+    res.fold((l) {
+      _editState = RequestState.error;
+    }, (r) {
+      if (r) {
+        _editState = RequestState.success;
+      } else {
+        _editState = RequestState.error;
       }
     });
     notifyListeners();

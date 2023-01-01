@@ -60,7 +60,7 @@ class SuccessModal extends StatelessWidget {
           Text(
             'Absen Berhasil',
             style: kTextHeme.subtitle1?.copyWith(
-              color: Palette.primaryVariant,
+              color: Palette.primary,
             ),
           ),
           AppSize.verticalSpace[0],

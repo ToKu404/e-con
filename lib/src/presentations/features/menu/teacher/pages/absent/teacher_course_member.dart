@@ -58,7 +58,7 @@ class TeacherCourseMember extends StatelessWidget {
                       Text(
                         'H071191049',
                         style: kTextHeme.subtitle1?.copyWith(
-                          color: Palette.primaryVariant,
+                          color: Palette.primary,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

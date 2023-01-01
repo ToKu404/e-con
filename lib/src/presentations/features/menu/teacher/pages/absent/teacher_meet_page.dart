@@ -2,18 +2,44 @@ import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
+import 'package:e_con/core/utils/request_state.dart';
+import 'package:e_con/src/data/models/cpl_lecturer/course_student_data.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/pages/absent/widgets/teacher_meet_card.dart';
+import 'package:e_con/src/presentations/features/menu/teacher/providers/course_student_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/teacher/providers/meeting_course_notifier.dart';
+import 'package:e_con/src/presentations/reusable_pages/econ_error.dart';
+import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
 import 'package:e_con/src/presentations/widgets/choice_absent_modal.dart';
 import 'package:e_con/src/presentations/widgets/custom_button.dart';
+import 'package:e_con/src/presentations/widgets/dialog/show_confirmation.dart';
+import 'package:e_con/src/presentations/widgets/dialog/show_loading_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 class TeacherMeetDetailPage extends StatelessWidget {
-  const TeacherMeetDetailPage({super.key});
+  final int meetingId;
+  const TeacherMeetDetailPage({super.key, required this.meetingId});
 
   @override
   Widget build(BuildContext context) {
+    final studentCourseProvider = context.watch<CourseStudentNotifier>();
+    final meetingProvider = context.watch<MeetingCourseNotifier>();
+
+    if (studentCourseProvider.state == RequestState.loading) {
+      return EconLoading(
+        withScaffold: true,
+      );
+    } else if (studentCourseProvider.state == RequestState.error) {
+      return EconError(
+        errorMessage: studentCourseProvider.error,
+        withScaffold: true,
+      );
+    }
+
+    final listStudent = studentCourseProvider.listStudent!;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Palette.background,
@@ -33,6 +59,65 @@ class TeacherMeetDetailPage extends StatelessWidget {
             color: Palette.primary,
           ),
         ),
+        actions: [
+          PopupMenuButton<Function>(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 4,
+              vertical: 8.0,
+            ),
+            onSelected: (val) {
+              // Navigator.pop(context);
+              val.call();
+            },
+            itemBuilder: (ctx) {
+              return [
+                PopupMenuItem(
+                  value: () async {},
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.edit,
+                      ),
+                      const SizedBox(
+                        width: 4,
+                      ),
+                      Text('Edit')
+                    ],
+                  ),
+                ),
+                PopupMenuItem(
+                  value: () async {
+                    final deleteConfirmation = await showConfirmation(
+                        context: ctx,
+                        title: 'Yakin ingin menghapus pertemuan ini?');
+                    if (deleteConfirmation) {
+                      // Todo: fix delete refresh
+                      bool? res = await meetingProvider.deleteMeeting(
+                          meetingId: meetingId);
+                      await showLoadingDialog(context: context);
+
+                      if (res != null) {
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      }
+                    }
+                  },
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.delete_rounded,
+                      ),
+                      const SizedBox(
+                        width: 4,
+                      ),
+                      Text('Hapus')
+                    ],
+                  ),
+                ),
+              ];
+            },
+          ),
+        ],
       ),
       body: Stack(
         children: [
@@ -98,85 +183,17 @@ class TeacherMeetDetailPage extends StatelessWidget {
                   horizontal: AppSize.space[3],
                 ),
                 sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(childCount: 10,
-                      (context, index) {
-                    return InkWell(
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return const ChoiceAbsentModal();
-                          },
-                        );
-                      },
-                      child: Column(
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.only(bottom: 8),
-                            width: AppSize.getAppWidth(context),
-                            padding: EdgeInsets.all(AppSize.space[3]),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(
-                                AppSize.space[3],
-                              ),
-                            ),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Austin',
-                                        style: kTextHeme.subtitle2?.copyWith(
-                                          color: Palette.primaryVariant,
-                                        ),
-                                      ),
-                                      Text(
-                                        'H071191049',
-                                        style: kTextHeme.subtitle1?.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          color: Palette.primary,
-                                        ),
-                                      ),
-                                      Text(
-                                        '05:30 08-02-2022',
-                                        style: kTextHeme.subtitle2,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: AppSize.space[2],
-                                  ),
-                                  child: Container(
-                                    padding: EdgeInsets.all(
-                                      AppSize.space[0],
-                                    ),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: Palette.success,
-                                      ),
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: Center(
-                                      child: SvgPicture.asset(
-                                          'assets/icons/smile.svg'),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                          if (index == 9)
-                            const SizedBox(
-                              height: 58,
-                            )
-                        ],
-                      ),
+                  delegate: SliverChildBuilderDelegate(
+                      childCount: listStudent.length, (context, index) {
+                    return Column(
+                      children: [
+                        AttedanceStudentCard(
+                          studentData: listStudent[index],
+                        ),
+                        SizedBox(
+                          height: (index == 9) ? 66 : 8,
+                        )
+                      ],
                     );
                   }),
                 ),
@@ -211,6 +228,85 @@ class TeacherMeetDetailPage extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class AttedanceStudentCard extends StatelessWidget {
+  final CourseStudentData studentData;
+  const AttedanceStudentCard({
+    super.key,
+    required this.studentData,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return const ChoiceAbsentModal();
+          },
+        );
+      },
+      child: Container(
+        width: AppSize.getAppWidth(context),
+        padding: EdgeInsets.all(AppSize.space[3]),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(
+            AppSize.space[3],
+          ),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    studentData.name ?? '-',
+                    style: kTextHeme.subtitle2?.copyWith(
+                      color: Palette.primary,
+                    ),
+                  ),
+                  Text(
+                    studentData.id ?? '-',
+                    style: kTextHeme.subtitle1?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Palette.primary,
+                    ),
+                  ),
+                  Text(
+                    '05:30 08-02-2022',
+                    style: kTextHeme.subtitle2,
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: AppSize.space[2],
+              ),
+              child: Container(
+                padding: EdgeInsets.all(
+                  AppSize.space[0],
+                ),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Palette.success,
+                  ),
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: SvgPicture.asset('assets/icons/smile.svg'),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
