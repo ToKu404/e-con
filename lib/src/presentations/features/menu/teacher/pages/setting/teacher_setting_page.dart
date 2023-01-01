@@ -66,10 +66,10 @@ class _ProfileCardState extends State<_ProfileCard> {
   Widget build(BuildContext context) {
     final profileProvider = context.read<LectureProfileNotifier>();
 
-    if (profileProvider.state == RequestState.loading) {
-      return EconLoading();
-    } else if (profileProvider.state == RequestState.error ||
+    if (profileProvider.state == RequestState.loading ||
         profileProvider.lectureData == null) {
+      return EconLoading();
+    } else if (profileProvider.state == RequestState.error) {
       return EconError(errorMessage: profileProvider.error);
     }
 

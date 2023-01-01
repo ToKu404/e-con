@@ -8,9 +8,15 @@ import 'package:e_con/src/presentations/widgets/placeholders/card_placeholder.da
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
-class TeacherAbsentPage extends StatelessWidget {
+class TeacherAbsentPage extends StatefulWidget {
   const TeacherAbsentPage({super.key});
 
+  @override
+  State<TeacherAbsentPage> createState() => _TeacherAbsentPageState();
+}
+
+class _TeacherAbsentPageState extends State<TeacherAbsentPage> {
+  
   @override
   Widget build(BuildContext context) {
     final courseProvider = context.watch<LectureCourseNotifier>();

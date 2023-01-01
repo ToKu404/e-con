@@ -39,8 +39,6 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
       },
     );
 
-    print(responseData.body);
-
     if (responseData.statusCode == 200) {
       final dataResponse = DataResponse<Map<String, dynamic>>.fromJson(
               jsonDecode(responseData.body))
@@ -68,7 +66,10 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
       },
     );
 
+    print(responseData.body);
+
     if (responseData.statusCode == 200) {
+      
       Iterable dataResponse =
           DataResponse<List<dynamic>>.fromJson(jsonDecode(responseData.body))
               .data;

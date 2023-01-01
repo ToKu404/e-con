@@ -1,27 +1,26 @@
-import 'package:e_con/src/data/models/cpl_lecturer/semester_data.dart';
-import 'package:e_con/src/data/models/cpl_lecturer/time_data.dart';
 import 'package:equatable/equatable.dart';
 
 class MeetingData extends Equatable {
   MeetingData({
-    
-    this.semester,
     this.date,
+    required this.id,
+    this.topics,
   });
 
-  
   final DateTime? date;
-  final SemesterData? semester;
+  final int id;
+  final String? topics;
 
   factory MeetingData.fromJson(Map<String, dynamic> json) => MeetingData(
-      
-      date: DateTime.parse(json['date']),
-      semester: SemesterData.fromJson(json['semester']));
+        date: DateTime.parse(json['date']),
+        id: json['id'],
+        topics: json['topics'],
+      );
 
   @override
   List<Object?> get props => [
-        
         date,
-        semester,
+        id,
+        topics,
       ];
 }

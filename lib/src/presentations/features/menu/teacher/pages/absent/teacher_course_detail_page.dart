@@ -1,11 +1,9 @@
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
-import 'package:e_con/core/helpers/reusable_function_helper.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
-import 'package:e_con/src/data/models/cpl_lecturer/course_student_data.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/pages/absent/widgets/teacher_meet_card.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/providers/course_student_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/providers/meeting_course_notifier.dart';
@@ -64,64 +62,124 @@ class _TeacherCourseDetailPageState extends State<TeacherCourseDetailPage> {
       );
     }
 
-    // final sampleMeeting = meetingProvider.listMeeting!.first;
+    final listMeeting = meetingProvider.listMeeting!;
+
     final courseDate =
         '${widget.clazzData.startTime}-${widget.clazzData.endTime}';
 
-    return Scaffold(
-      backgroundColor: Palette.background,
-      floatingActionButton: ElevatedButton.icon(
-        icon: Icon(Icons.add),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Palette.primary,
-          foregroundColor: Palette.white,
-        ),
-        label: Text('Tambah Pertemuan'),
-        onPressed: () {
-          Navigator.pushNamed(context, AppRoute.addNewMeeting,
-              arguments: widget.clazzData.id);
-        },
-      ),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Column(
-              children: [
-                TitleSection(
-                  className: widget.clazzData.name ?? '',
-                  courseName: widget.clazzData.courseData!.courseName ?? '',
-                  semesterName: '',
-                  totalStudent: studentCourseProvider.listStudent!.length,
-                  courseDate: courseDate,
+    final ValueNotifier<bool> isShowDetail = ValueNotifier(false);
+
+    return ValueListenableBuilder(
+        valueListenable: isShowDetail,
+        builder: (context, state, _) {
+          return Scaffold(
+            backgroundColor: Palette.background,
+            floatingActionButton: ElevatedButton.icon(
+              icon: Icon(Icons.add),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Palette.primary,
+                foregroundColor: Palette.white,
+              ),
+              label: Text('Tambah Pertemuan'),
+              onPressed: () {
+                Navigator.pushNamed(context, AppRoute.addNewMeeting,
+                        arguments: widget.clazzData.id)
+                    .then((value) {
+                  meetingProvider.getListMeeting(classId: widget.clazzData.id!);
+                  setState(() {});
+                });
+              },
+            ),
+            appBar: AppBar(
+              backgroundColor: Palette.white,
+              shadowColor: state ? null : Colors.black38,
+              surfaceTintColor: Palette.white,
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(
+                  Icons.arrow_back_rounded,
                 ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: 10,
-                    padding: EdgeInsets.all(
-                      AppSize.space[3],
-                    ),
-                    itemBuilder: (context, index) {
-                      return const TeacherMeetCard();
-                    },
+              ),
+              title: Text(
+                widget.clazzData.courseData!.courseName ?? '',
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: kTextHeme.headline5?.copyWith(
+                  color: Palette.primary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              centerTitle: true,
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    isShowDetail.value = !isShowDetail.value;
+                  },
+                  icon: const Icon(
+                    Icons.keyboard_arrow_down_rounded,
                   ),
                 ),
               ],
             ),
-            Column(
-              children: [
-                TitleSection(
-                  className: widget.clazzData.name ?? '',
-                  courseName: widget.clazzData.courseData!.courseName ?? '',
-                  semesterName: '',
-                  totalStudent: studentCourseProvider.listStudent!.length,
-                  courseDate: courseDate,
-                ),
-              ],
-            )
-          ],
-        ),
-      ),
-    );
+            body: SafeArea(
+              child: ValueListenableBuilder(
+                  valueListenable: isShowDetail,
+                  builder: (context, state, _) {
+                    return Stack(
+                      children: [
+                        Column(
+                          children: [
+                            state
+                                ? TitleSection(
+                                    className: widget.clazzData.name ?? '',
+                                    courseName: widget
+                                            .clazzData.courseData!.courseName ??
+                                        '',
+                                    semesterName: '',
+                                    totalStudent: studentCourseProvider
+                                        .listStudent!.length,
+                                    courseDate: courseDate,
+                                  )
+                                : SizedBox.shrink(),
+                            Expanded(
+                              child: ListView.builder(
+                                itemCount: listMeeting.length,
+                                padding: EdgeInsets.all(
+                                  AppSize.space[3],
+                                ),
+                                itemBuilder: (context, index) {
+                                  return TeacherMeetCard(
+                                      meetingData: listMeeting[index]);
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            state
+                                ? TitleSection(
+                                    className: widget.clazzData.name ?? '',
+                                    courseName: widget
+                                            .clazzData.courseData!.courseName ??
+                                        '',
+                                    semesterName: '',
+                                    totalStudent: studentCourseProvider
+                                        .listStudent!.length,
+                                    courseDate: courseDate,
+                                  )
+                                : SizedBox.shrink(),
+                          ],
+                        )
+                      ],
+                    );
+                  }),
+            ),
+          );
+        });
   }
 }
 
@@ -143,12 +201,8 @@ class TitleSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(
-        vertical: AppSize.space[4],
-        horizontal: AppSize.space[2],
-      ),
       decoration: const BoxDecoration(
-        color: Colors.white,
+        color: Palette.white,
         boxShadow: [
           BoxShadow(
             offset: Offset(2, 0),
@@ -157,69 +211,36 @@ class TitleSection extends StatelessWidget {
           )
         ],
       ),
+      padding: EdgeInsets.only(
+          left: AppSize.space[6],
+          right: AppSize.space[6],
+          bottom: AppSize.space[4]),
       child: Column(
         children: [
-          Row(
-            children: [
-              IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: const Icon(
-                  Icons.arrow_back_rounded,
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  courseName,
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: kTextHeme.headline5?.copyWith(
-                    color: Palette.primary,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.keyboard_arrow_down_rounded,
-                ),
-              ),
-            ],
+          AppSize.verticalSpace[4],
+          _BuildCourseTile(
+            iconPath: 'assets/icons/class.svg',
+            title: className,
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: AppSize.space[4]),
-            child: Column(
-              children: [
-                AppSize.verticalSpace[4],
-                _BuildCourseTile(
-                  iconPath: 'assets/icons/class.svg',
-                  title: className,
-                ),
-                AppSize.verticalSpace[2],
-                _BuildCourseTile(
-                  iconPath: 'assets/icons/school.svg',
-                  title: semesterName,
-                ),
-                AppSize.verticalSpace[2],
-                _BuildCourseTile(
-                  iconPath: 'assets/icons/schedule.svg',
-                  title: courseDate,
-                ),
-                AppSize.verticalSpace[4],
-                CustomButton(
-                  text: '$totalStudent Mahasiswa',
-                  onTap: () {
-                    Navigator.pushNamed(context, AppRoute.listStudent);
-                  },
-                  height: 50,
-                  iconPath: 'assets/icons/user.svg',
-                )
-              ],
-            ),
+          AppSize.verticalSpace[2],
+          _BuildCourseTile(
+            iconPath: 'assets/icons/school.svg',
+            title: semesterName,
           ),
+          AppSize.verticalSpace[2],
+          _BuildCourseTile(
+            iconPath: 'assets/icons/schedule.svg',
+            title: courseDate,
+          ),
+          AppSize.verticalSpace[4],
+          CustomButton(
+            text: '$totalStudent Mahasiswa',
+            onTap: () {
+              Navigator.pushNamed(context, AppRoute.listStudent);
+            },
+            height: 50,
+            iconPath: 'assets/icons/user.svg',
+          )
         ],
       ),
     );

@@ -2,11 +2,15 @@ import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
+import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class TeacherMeetCard extends StatelessWidget {
+  final MeetingData meetingData;
   const TeacherMeetCard({
     super.key,
+    required this.meetingData,
   });
 
   @override
@@ -39,20 +43,21 @@ class TeacherMeetCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Senin, 12 Januari 2023',
+                        DateFormat('EEEE, dd MMMM yyyy', "id_ID")
+                            .format(meetingData.date!),
                         style: kTextHeme.overline?.copyWith(
                           color: Palette.disable,
                         ),
                       ),
                       Text(
-                        'Pertemuan 1',
+                        'Pertemuan ${meetingData.id}',
                         style: kTextHeme.subtitle1?.copyWith(
                           color: Palette.primary,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
-                        'Matematika Dasar',
+                        meetingData.topics ?? '-',
                         style: kTextHeme.overline?.copyWith(
                           color: Palette.disable,
                           height: 1,

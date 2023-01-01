@@ -55,7 +55,7 @@ class TeacherAbsentCard extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            'Senin 10:00 - 12:00 WITA',
+                            'Senin ${courseData.startTime}-${courseData.endTime} WITA',
                             style: kTextHeme.subtitle1?.copyWith(
                               color: Palette.onPrimary,
                             ),
@@ -106,7 +106,7 @@ class TeacherAbsentCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          '45',
+                          '14',
                           style: kTextHeme.headline1,
                         ),
                         Text(

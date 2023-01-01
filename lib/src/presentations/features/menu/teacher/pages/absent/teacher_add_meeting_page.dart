@@ -115,6 +115,9 @@ class _TeacherAddMeetingPageState extends State<TeacherAddMeetingPage> {
                                   classId: widget.classId,
                                   topic: topicController.text,
                                   meetingDate: meetingDate!);
+                              if (mounted) {
+                                Navigator.pop(context);
+                              }
                             }
                           },
                           height: 54,
