@@ -83,11 +83,7 @@ class _TeacherCourseDetailPageState extends State<TeacherCourseDetailPage> {
               label: Text('Tambah Pertemuan'),
               onPressed: () {
                 Navigator.pushNamed(context, AppRoute.addNewMeeting,
-                        arguments: widget.clazzData.id)
-                    .then((value) {
-                  meetingProvider.getListMeeting(classId: widget.clazzData.id!);
-                  setState(() {});
-                });
+                    arguments: widget.clazzData.id);
               },
             ),
             appBar: AppBar(
@@ -152,7 +148,9 @@ class _TeacherCourseDetailPageState extends State<TeacherCourseDetailPage> {
                                 ),
                                 itemBuilder: (context, index) {
                                   return TeacherMeetCard(
-                                      meetingData: listMeeting[index]);
+                                    meetingData: listMeeting[index],
+                                    classId: widget.clazzData.id!,
+                                  );
                                 },
                               ),
                             ),

@@ -8,16 +8,21 @@ import 'package:intl/intl.dart';
 
 class TeacherMeetCard extends StatelessWidget {
   final MeetingData meetingData;
+  final int classId;
   const TeacherMeetCard({
     super.key,
     required this.meetingData,
+    required this.classId,
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Navigator.pushNamed(context, AppRoute.detailMeet,
-          arguments: meetingData.id),
+      onTap: () =>
+          Navigator.pushNamed(context, AppRoute.detailMeet, arguments: {
+        'id': meetingData.id,
+        'classId': classId,
+      }),
       child: Container(
         margin: EdgeInsets.only(
           bottom: AppSize.space[2],

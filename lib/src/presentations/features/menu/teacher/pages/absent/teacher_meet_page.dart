@@ -12,18 +12,20 @@ import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
 import 'package:e_con/src/presentations/widgets/choice_absent_modal.dart';
 import 'package:e_con/src/presentations/widgets/custom_button.dart';
 import 'package:e_con/src/presentations/widgets/dialog/show_confirmation.dart';
-import 'package:e_con/src/presentations/widgets/dialog/show_loading_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 class TeacherMeetDetailPage extends StatelessWidget {
-  final int meetingId;
-  const TeacherMeetDetailPage({super.key, required this.meetingId});
+  final Map args;
+  const TeacherMeetDetailPage({super.key, required this.args});
 
   @override
   Widget build(BuildContext context) {
+    final int meetingId = args['id'];
+    final int classId = args['classId'];
+
     final studentCourseProvider = context.watch<CourseStudentNotifier>();
     final meetingProvider = context.watch<MeetingCourseNotifier>();
 
@@ -66,7 +68,6 @@ class TeacherMeetDetailPage extends StatelessWidget {
               vertical: 8.0,
             ),
             onSelected: (val) {
-              
               // Navigator.pop(context);
               val.call();
             },
@@ -92,15 +93,9 @@ class TeacherMeetDetailPage extends StatelessWidget {
                         context: ctx,
                         title: 'Yakin ingin menghapus pertemuan ini?');
                     if (deleteConfirmation) {
-                      // Todo: fix delete refresh
-                      bool? res = await meetingProvider.deleteMeeting(
-                          meetingId: meetingId);
-                      await showLoadingDialog(context: context);
-
-                      if (res != null) {
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                      }
+                      await meetingProvider.deleteMeeting(meetingId: meetingId);
+                      await meetingProvider.getListMeeting(classId: classId);
+                      Navigator.pop(context);
                     }
                   },
                   child: Row(

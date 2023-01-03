@@ -70,16 +70,25 @@ class MeetingCourseNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool?> deleteMeeting({
+  RequestState _deleteState = RequestState.init;
+  RequestState get deleteState => _deleteState;
+
+  Future<void> deleteMeeting({
     required int meetingId,
   }) async {
+    _deleteState = RequestState.loading;
     final res = await deleteMeetingUsecase.execute(meetingId);
     res.fold((l) {
-      return false;
+      _deleteState = RequestState.error;
     }, (r) {
-      return res;
+      if (r) {
+        _deleteState = RequestState.error;
+      } else {
+        _deleteState = RequestState.success;
+      }
+      ;
     });
-    return null;
+    notifyListeners();
   }
 
   RequestState _editState = RequestState.init;

@@ -105,16 +105,18 @@ class _TeacherAddMeetingPageState extends State<TeacherAddMeetingPage> {
                         AppSize.verticalSpace[3],
                         CustomButton(
                           text: 'Simpan',
-                          onTap: () {
+                          onTap: () async {
                             if (dateController.text.isNotEmpty &&
                                 topicController.text.isNotEmpty &&
                                 meetingDate != null) {
                               final prov =
                                   context.read<MeetingCourseNotifier>();
-                              prov.createNewMeeting(
+                              await prov.createNewMeeting(
                                   classId: widget.classId,
                                   topic: topicController.text,
                                   meetingDate: meetingDate!);
+                              await prov.getListMeeting(
+                                  classId: widget.classId);
                               if (mounted) {
                                 Navigator.pop(context);
                               }

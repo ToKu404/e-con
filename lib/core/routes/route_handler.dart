@@ -36,7 +36,7 @@ Route? routesHandler(RouteSettings settings) {
     case AppRoute.detailMeet:
       return MaterialPageRoute(
         builder: (_) => TeacherMeetDetailPage(
-          meetingId: settings.arguments as int,
+          args: settings.arguments as Map,
         ),
       );
     case AppRoute.genBarcode:
