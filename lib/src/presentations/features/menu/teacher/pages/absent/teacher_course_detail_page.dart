@@ -7,6 +7,7 @@ import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/pages/absent/widgets/teacher_meet_card.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/providers/course_student_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/providers/meeting_course_notifier.dart';
+import 'package:e_con/src/presentations/reusable_pages/econ_empty.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_error.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
 import 'package:e_con/src/presentations/widgets/custom_button.dart';
@@ -141,18 +142,22 @@ class _TeacherCourseDetailPageState extends State<TeacherCourseDetailPage> {
                                   )
                                 : SizedBox.shrink(),
                             Expanded(
-                              child: ListView.builder(
-                                itemCount: listMeeting.length,
-                                padding: EdgeInsets.all(
-                                  AppSize.space[3],
-                                ),
-                                itemBuilder: (context, index) {
-                                  return TeacherMeetCard(
-                                    meetingData: listMeeting[index],
-                                    classId: widget.clazzData.id!,
-                                  );
-                                },
-                              ),
+                              child: listMeeting.isEmpty
+                                  ? EconEmpty(
+                                      emptyMessage:
+                                          'Silahkan buat meeting terlebih dahulu!')
+                                  : ListView.builder(
+                                      itemCount: listMeeting.length,
+                                      padding: EdgeInsets.all(
+                                        AppSize.space[3],
+                                      ),
+                                      itemBuilder: (context, index) {
+                                        return TeacherMeetCard(
+                                          meetingData: listMeeting[index],
+                                          classId: widget.clazzData.id!,
+                                        );
+                                      },
+                                    ),
                             ),
                           ],
                         ),
