@@ -35,10 +35,6 @@ class _InputFieldState extends State<InputField> {
           borderSide: const BorderSide(color: Palette.primary),
           borderRadius: BorderRadius.circular(12.0),
         ),
-        // errorText: !state.isEmailValid
-        //     ? 'Please ensure the email entered is valid'
-        //     : null,
-        // labelText: 'Email',
       ),
     );
   }
