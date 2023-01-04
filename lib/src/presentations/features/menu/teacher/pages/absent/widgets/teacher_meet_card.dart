@@ -1,18 +1,19 @@
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
+import 'package:e_con/core/helpers/reusable_function_helper.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
+import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class TeacherMeetCard extends StatelessWidget {
   final MeetingData meetingData;
-  final int classId;
+  final ClazzData classData;
   const TeacherMeetCard({
     super.key,
     required this.meetingData,
-    required this.classId,
+    required this.classData,
   });
 
   @override
@@ -20,8 +21,8 @@ class TeacherMeetCard extends StatelessWidget {
     return InkWell(
       onTap: () =>
           Navigator.pushNamed(context, AppRoute.detailMeet, arguments: {
-        'id': meetingData.id,
-        'classId': classId,
+        'meetingData': meetingData,
+        'classData': classData,
       }),
       child: Container(
         margin: EdgeInsets.only(
@@ -46,8 +47,8 @@ class TeacherMeetCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        DateFormat('EEEE, dd MMMM yyyy', "id_ID")
-                            .format(meetingData.date!),
+                        ReusableFuntionHelper.datetimeToString(
+                            meetingData.date!),
                         style: kTextHeme.overline?.copyWith(
                           color: Palette.disable,
                         ),

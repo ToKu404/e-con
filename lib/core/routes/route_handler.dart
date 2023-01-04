@@ -7,6 +7,7 @@ import 'package:e_con/src/presentations/features/menu/teacher/pages/absent/teach
 import 'package:e_con/src/presentations/features/menu/teacher/pages/absent/teacher_barcode_page.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/pages/absent/teacher_course_detail_page.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/pages/absent/teacher_course_member.dart';
+import 'package:e_con/src/presentations/features/menu/teacher/pages/absent/teacher_edit_meeting_page.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/pages/absent/teacher_gen_barcode_page.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/pages/absent/teacher_meet_page.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/pages/setting/teacher_setting_page.dart';
@@ -58,7 +59,13 @@ Route? routesHandler(RouteSettings settings) {
     case AppRoute.addNewMeeting:
       return MaterialPageRoute(
         builder: (_) => TeacherAddMeetingPage(
-          classId: settings.arguments as int,
+          clazzData: settings.arguments as ClazzData,
+        ),
+      );
+    case AppRoute.editMeeting:
+      return MaterialPageRoute(
+        builder: (_) => TeacherEditMeetingPage(
+          args: settings.arguments as Map,
         ),
       );
     case AppRoute.cplWebview:

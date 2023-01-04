@@ -16,7 +16,6 @@ class TeacherAbsentPage extends StatefulWidget {
 }
 
 class _TeacherAbsentPageState extends State<TeacherAbsentPage> {
-  
   @override
   Widget build(BuildContext context) {
     final courseProvider = context.watch<LectureCourseNotifier>();
@@ -45,7 +44,7 @@ class _TeacherAbsentPageState extends State<TeacherAbsentPage> {
         itemBuilder: (context, index) {
           final data = courseProvider.listCourse!.elementAt(index);
           return TeacherAbsentCard(
-            courseData: data,
+            clazzData: data,
           );
         },
       ),

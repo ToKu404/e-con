@@ -6,14 +6,14 @@ import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
 import 'package:flutter/material.dart';
 
 class TeacherAbsentCard extends StatelessWidget {
-  final ClazzData courseData;
-  const TeacherAbsentCard({super.key, required this.courseData});
+  final ClazzData clazzData;
+  const TeacherAbsentCard({super.key, required this.clazzData});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => Navigator.pushNamed(context, AppRoute.detailCourse,
-          arguments: courseData),
+          arguments: clazzData),
       child: Container(
         width: AppSize.getAppWidth(context),
         margin: EdgeInsets.only(
@@ -42,20 +42,20 @@ class TeacherAbsentCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            courseData.courseData!.courseName ?? '',
+                            clazzData.courseData!.courseName ?? '',
                             style: kTextHeme.subtitle1?.copyWith(
                               color: Palette.primary,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           Text(
-                            courseData.name ?? '',
+                            'Kelas ${clazzData.name}',
                             style: kTextHeme.subtitle1?.copyWith(
                               color: Palette.disable,
                             ),
                           ),
                           Text(
-                            'Senin ${courseData.startTime}-${courseData.endTime} WITA',
+                            'Senin ${clazzData.startTime}-${clazzData.endTime} WITA',
                             style: kTextHeme.subtitle1?.copyWith(
                               color: Palette.onPrimary,
                             ),

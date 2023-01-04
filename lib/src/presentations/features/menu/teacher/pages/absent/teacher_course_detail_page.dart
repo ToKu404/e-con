@@ -27,7 +27,6 @@ class TeacherCourseDetailPage extends StatefulWidget {
 class _TeacherCourseDetailPageState extends State<TeacherCourseDetailPage> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Future.microtask(() {
       Provider.of<CourseStudentNotifier>(context, listen: false)
@@ -84,7 +83,7 @@ class _TeacherCourseDetailPageState extends State<TeacherCourseDetailPage> {
               label: Text('Tambah Pertemuan'),
               onPressed: () {
                 Navigator.pushNamed(context, AppRoute.addNewMeeting,
-                    arguments: widget.clazzData.id);
+                    arguments: widget.clazzData);
               },
             ),
             appBar: AppBar(
@@ -154,7 +153,7 @@ class _TeacherCourseDetailPageState extends State<TeacherCourseDetailPage> {
                                       itemBuilder: (context, index) {
                                         return TeacherMeetCard(
                                           meetingData: listMeeting[index],
-                                          classId: widget.clazzData.id!,
+                                          classData: widget.clazzData,
                                         );
                                       },
                                     ),

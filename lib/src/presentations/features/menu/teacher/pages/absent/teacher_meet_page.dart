@@ -3,7 +3,9 @@ import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
+import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/course_student_data.dart';
+import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/pages/absent/widgets/teacher_meet_card.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/providers/course_student_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/providers/meeting_course_notifier.dart';
@@ -23,8 +25,8 @@ class TeacherMeetDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final int meetingId = args['id'];
-    final int classId = args['classId'];
+    final MeetingData meetingData = args['meetingData'];
+    final ClazzData classData = args['classData'];
 
     final studentCourseProvider = context.watch<CourseStudentNotifier>();
     final meetingProvider = context.watch<MeetingCourseNotifier>();
@@ -74,7 +76,15 @@ class TeacherMeetDetailPage extends StatelessWidget {
             itemBuilder: (ctx) {
               return [
                 PopupMenuItem(
-                  value: () async {},
+                  value: () async {
+                    Navigator.pushNamed(context, AppRoute.editMeeting,
+                        arguments: {
+                          'classData': classData,
+                          'topic': meetingData.topics,
+                          'date': meetingData.date,
+                          'meetingId': meetingData.id,
+                        });
+                  },
                   child: Row(
                     children: [
                       const Icon(
@@ -93,8 +103,10 @@ class TeacherMeetDetailPage extends StatelessWidget {
                         context: ctx,
                         title: 'Yakin ingin menghapus pertemuan ini?');
                     if (deleteConfirmation) {
-                      await meetingProvider.deleteMeeting(meetingId: meetingId);
-                      await meetingProvider.getListMeeting(classId: classId);
+                      await meetingProvider.deleteMeeting(
+                          meetingId: meetingData.id);
+                      await meetingProvider.getListMeeting(
+                          classId: classData.id!);
                       Navigator.pop(context);
                     }
                   },

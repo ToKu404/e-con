@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/helpers/reusable_function_helper.dart';
@@ -12,18 +10,40 @@ import 'package:e_con/src/presentations/widgets/fields/input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class TeacherAddMeetingPage extends StatefulWidget {
-  final ClazzData clazzData;
-  const TeacherAddMeetingPage({super.key, required this.clazzData});
+class TeacherEditMeetingPage extends StatefulWidget {
+  final Map args;
+  const TeacherEditMeetingPage({
+    super.key,
+    required this.args,
+  });
 
   @override
-  State<TeacherAddMeetingPage> createState() => _TeacherAddMeetingPageState();
+  State<TeacherEditMeetingPage> createState() => _TeacherEditMeetingPageState();
 }
 
-class _TeacherAddMeetingPageState extends State<TeacherAddMeetingPage> {
+class _TeacherEditMeetingPageState extends State<TeacherEditMeetingPage> {
+  late ClazzData classData;
+  late String topic;
+  late DateTime date;
+  late int meetingId;
+
   final TextEditingController topicController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
   DateTime? meetingDate;
+
+  @override
+  void initState() {
+    super.initState();
+    classData = widget.args['classData'];
+    topic = widget.args['topic'];
+    date = widget.args['date'];
+    meetingId = widget.args['meetingId'];
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      topicController.text = topic;
+      meetingDate = date;
+      dateController.text = ReusableFuntionHelper.datetimeToString(date);
+    });
+  }
 
   @override
   void dispose() {
@@ -34,7 +54,6 @@ class _TeacherAddMeetingPageState extends State<TeacherAddMeetingPage> {
 
   @override
   Widget build(BuildContext context) {
-    final classData = widget.clazzData;
     return Scaffold(
       // resizeToAvoidBottomInset: false,
       backgroundColor: Palette.background,
@@ -96,7 +115,7 @@ class _TeacherAddMeetingPageState extends State<TeacherAddMeetingPage> {
                       children: [
                         InputField(
                           controller: topicController,
-                          text: 'Topik Pertemuan',
+                          text: 'Edit Pertemuan',
                         ),
                         AppSize.verticalSpace[2],
                         InputDateField(
@@ -108,17 +127,19 @@ class _TeacherAddMeetingPageState extends State<TeacherAddMeetingPage> {
                         ),
                         AppSize.verticalSpace[3],
                         CustomButton(
-                          text: 'Simpan',
+                          text: 'Simpan Perubahan',
                           onTap: () async {
                             if (dateController.text.isNotEmpty &&
                                 topicController.text.isNotEmpty &&
                                 meetingDate != null) {
                               final prov =
                                   context.read<MeetingCourseNotifier>();
-                              await prov.createNewMeeting(
-                                  classId: classData.id!,
-                                  topic: topicController.text,
-                                  meetingDate: meetingDate!);
+                              await prov.editMeeting(
+                                classId: classData.id!,
+                                topic: topicController.text,
+                                meetingDate: meetingDate!,
+                                meetingId: meetingId,
+                              );
                               await prov.getListMeeting(classId: classData.id!);
                               if (mounted) {
                                 Navigator.pop(context);
