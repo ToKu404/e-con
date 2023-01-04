@@ -85,39 +85,6 @@ class TeacherAbsentCard extends StatelessWidget {
                   ),
                 ),
               ),
-              ClipPath(
-                clipper: WaveClipper(),
-                child: Container(
-                  width: 110,
-                  decoration: BoxDecoration(
-                    color: Palette.primary,
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(AppSize.space[3]),
-                      bottomRight: Radius.circular(
-                        AppSize.space[3],
-                      ),
-                    ),
-                  ),
-                  alignment: Alignment.center,
-                  child: Container(
-                    alignment: Alignment.center,
-                    margin: const EdgeInsets.only(left: 12.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '14',
-                          style: kTextHeme.headline1,
-                        ),
-                        Text(
-                          'Peserta',
-                          style: kTextHeme.subtitle1?.copyWith(height: 1),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
             ],
           ),
         ),
