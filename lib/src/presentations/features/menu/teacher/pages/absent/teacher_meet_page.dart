@@ -230,7 +230,10 @@ class TeacherMeetDetailPage extends StatelessWidget {
                 icon: Icons.qr_code_2_rounded,
                 text: 'Barcode Absen',
                 onTap: () {
-                  Navigator.pushNamed(context, AppRoute.genBarcode);
+                  Navigator.pushNamed(context, AppRoute.genBarcode, arguments: {
+                    'meetingData': meetingData,
+                    'classData': classData,
+                  });
                 },
               ),
             ),

@@ -42,11 +42,15 @@ Route? routesHandler(RouteSettings settings) {
       );
     case AppRoute.genBarcode:
       return MaterialPageRoute(
-        builder: (_) => const TeacherGenBarcodePage(),
+        builder: (_) => TeacherGenBarcodePage(
+          args: settings.arguments as Map,
+        ),
       );
     case AppRoute.barcodeAbsent:
       return MaterialPageRoute(
-        builder: (_) => const TeacherBarcodePage(),
+        builder: (_) => TeacherBarcodePage(
+          args: settings.arguments as Map,
+        ),
       );
     case AppRoute.listStudent:
       return MaterialPageRoute(

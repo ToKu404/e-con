@@ -1,22 +1,37 @@
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
+import 'package:e_con/core/helpers/reusable_function_helper.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
+import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
+import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
 import 'package:e_con/src/presentations/widgets/custom_button.dart';
-import 'package:e_con/src/presentations/widgets/fields/input_field.dart';
+import 'package:e_con/src/presentations/widgets/fields/input_date_time_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class TeacherGenBarcodePage extends StatefulWidget {
-  const TeacherGenBarcodePage({super.key});
+  final Map args;
+
+  const TeacherGenBarcodePage({super.key, required this.args});
 
   @override
   State<TeacherGenBarcodePage> createState() => _TeacherGenBarcodePageState();
 }
 
 class _TeacherGenBarcodePageState extends State<TeacherGenBarcodePage> {
+  late ClazzData clazzData;
+  late MeetingData meetingData;
   final TextEditingController dateController = TextEditingController();
+  DateTime? dateTime;
   bool isNeedLocation = false;
+
+  @override
+  void initState() {
+    super.initState();
+    clazzData = widget.args['classData'];
+    meetingData = widget.args['meetingData'];
+  }
 
   @override
   void dispose() {
@@ -64,24 +79,26 @@ class _TeacherGenBarcodePageState extends State<TeacherGenBarcodePage> {
                               ?.copyWith(color: Palette.disable),
                         ),
                         Text(
-                          'Matematika Dasar 1',
+                          clazzData.courseData!.courseName!,
                           style: kTextHeme.headline4?.copyWith(
                             color: Palette.primary,
                           ),
                         ),
                         AppSize.verticalSpace[3],
                         _buildAbsentTile(
-                          title: 'Kelas A (2019)',
+                          title: 'Kelas ${clazzData.name} (2019)',
                           iconPath: 'assets/icons/school.svg',
                         ),
                         AppSize.verticalSpace[1],
                         _buildAbsentTile(
-                          title: '10.00 - 12.00 WITA',
+                          title:
+                              '${clazzData.startTime} - ${clazzData.endTime} WITA',
                           iconPath: 'assets/icons/time.svg',
                         ),
                         AppSize.verticalSpace[1],
                         _buildAbsentTile(
-                          title: 'Senin, 15 Januari 2022',
+                          title: ReusableFuntionHelper.datetimeToString(
+                              meetingData.date!),
                           iconPath: 'assets/icons/date.svg',
                         ),
                       ],
@@ -93,10 +110,12 @@ class _TeacherGenBarcodePageState extends State<TeacherGenBarcodePage> {
                     ),
                     child: Column(
                       children: [
-                        InputField(
-                          controller: dateController,
-                          text: 'Berlaku Hingga',
-                        ),
+                        InputDateTimeField(
+                            action: (d) async {
+                              dateTime = d;
+                            },
+                            controller: dateController,
+                            hintText: 'Berlaku Hingga'),
                         AppSize.verticalSpace[2],
                         DecoratedBox(
                           decoration: BoxDecoration(
@@ -124,10 +143,11 @@ class _TeacherGenBarcodePageState extends State<TeacherGenBarcodePage> {
                         CustomButton(
                           text: 'Lanjutkan',
                           onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              AppRoute.barcodeAbsent,
-                            );
+                            Navigator.pushNamed(context, AppRoute.barcodeAbsent,
+                                arguments: {
+                                  'meetingData': meetingData,
+                                  'classData': clazzData,
+                                });
                           },
                           height: 54,
                         ),

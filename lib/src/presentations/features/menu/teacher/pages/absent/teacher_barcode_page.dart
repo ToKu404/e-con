@@ -1,11 +1,32 @@
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/themes/text_theme.dart';
+import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
+import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
 import 'package:e_con/src/presentations/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 
-class TeacherBarcodePage extends StatelessWidget {
-  const TeacherBarcodePage({super.key});
+class TeacherBarcodePage extends StatefulWidget {
+  final Map args;
+  const TeacherBarcodePage({
+    super.key,
+    required this.args,
+  });
+
+  @override
+  State<TeacherBarcodePage> createState() => _TeacherBarcodePageState();
+}
+
+class _TeacherBarcodePageState extends State<TeacherBarcodePage> {
+  late ClazzData clazzData;
+  late MeetingData meetingData;
+
+  @override
+  void initState() {
+    super.initState();
+    clazzData = widget.args['classData'];
+    meetingData = widget.args['meetingData'];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +83,14 @@ class TeacherBarcodePage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Matematik Dasar',
+                          '${clazzData.courseData!.courseName!} (${clazzData.name})',
+                          style: kTextHeme.headline5?.copyWith(
+                            color: Palette.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          'Pertemuan ${meetingData.id}',
                           style: kTextHeme.headline5?.copyWith(
                             color: Palette.primary,
                             fontWeight: FontWeight.bold,
