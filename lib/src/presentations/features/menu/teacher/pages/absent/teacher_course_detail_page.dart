@@ -151,8 +151,11 @@ class _TeacherCourseDetailPageState extends State<TeacherCourseDetailPage> {
                                         AppSize.space[3],
                                       ),
                                       itemBuilder: (context, index) {
+                                        final meetingData = listMeeting[index];
+                                        meetingData.setMeetingNumber =
+                                            index + 1;
                                         return TeacherMeetCard(
-                                          meetingData: listMeeting[index],
+                                          meetingData: meetingData,
                                           classData: widget.clazzData,
                                         );
                                       },

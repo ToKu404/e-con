@@ -38,8 +38,6 @@ class AuthDataSourceImpl implements AuthDataSource {
         },
       );
 
-      print(responseFE.body);
-
       final responseCPL = await client.post(
         Uri.parse('${ApiService.baseUrlCPL}/login'),
         headers: {

@@ -54,7 +54,7 @@ class TeacherMeetCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Pertemuan ${meetingData.id}',
+                        'Pertemuan ${meetingData.meetingNumber}',
                         style: kTextHeme.subtitle1?.copyWith(
                           color: Palette.primary,
                           fontWeight: FontWeight.bold,
