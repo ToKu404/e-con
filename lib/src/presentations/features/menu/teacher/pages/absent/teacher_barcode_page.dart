@@ -90,7 +90,7 @@ class _TeacherBarcodePageState extends State<TeacherBarcodePage> {
                           ),
                         ),
                         Text(
-                          'Pertemuan ${meetingData.id}',
+                          'Pertemuan ${meetingData.meetingNumber}',
                           style: kTextHeme.headline5?.copyWith(
                             color: Palette.primary,
                             fontWeight: FontWeight.bold,
