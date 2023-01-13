@@ -20,4 +20,5 @@ abstract class CplLecturerRepository {
     DateTime? meetingDate,
     required meetingId,
   });
+  Future<Either<Failure, String>> getValidationCode({required int meetingId});
 }

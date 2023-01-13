@@ -5,6 +5,7 @@ import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/create_new_meeting.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/delete_meeting.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/get_list_meeting.dart';
+import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/get_validation_code.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/update_meeting.dart';
 import 'package:flutter/material.dart';
 
@@ -13,12 +14,14 @@ class MeetingCourseNotifier extends ChangeNotifier {
   final CreateNewMeeting createNewMeetingUsecase;
   final DeleteMeeting deleteMeetingUsecase;
   final UpdateMeeting updateMeetingUsecase;
+  final GetValidationCode getValidationCodeUsecase;
 
   MeetingCourseNotifier({
     required this.getListMeetingUsecase,
     required this.createNewMeetingUsecase,
     required this.updateMeetingUsecase,
     required this.deleteMeetingUsecase,
+    required this.getValidationCodeUsecase,
   });
 
   String _error = '';
@@ -116,6 +119,19 @@ class MeetingCourseNotifier extends ChangeNotifier {
       } else {
         _editState = RequestState.error;
       }
+    });
+    notifyListeners();
+  }
+
+  String? _validationCode;
+  String? get validationCode => _validationCode;
+
+  Future<void> getValidationCode({required int meetingId}) async {
+    final res = await getValidationCodeUsecase.execute(meetingId: meetingId);
+    res.fold((l) {
+      _validationCode = null;
+    }, (r) {
+      _validationCode = r;
     });
     notifyListeners();
   }

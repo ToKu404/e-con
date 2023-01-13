@@ -15,6 +15,7 @@ import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/delete_meeting.d
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/get_list_course.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/get_list_meeting.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/get_list_student.dart';
+import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/get_validation_code.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/update_meeting.dart';
 import 'package:e_con/src/domain/usecases/profile_usecases/get_lecture_data.dart';
 import 'package:e_con/src/domain/usecases/profile_usecases/get_student_data.dart';
@@ -129,6 +130,11 @@ void init() {
       cplLecturerRepository: locator(),
     ),
   );
+  locator.registerLazySingleton(
+    () => GetValidationCode(
+      cplLecturerRepository: locator(),
+    ),
+  );
 
   // Provider
   locator.registerFactory(
@@ -164,6 +170,7 @@ void init() {
   );
   locator.registerFactory(
     () => MeetingCourseNotifier(
+        getValidationCodeUsecase: locator(),
         getListMeetingUsecase: locator(),
         createNewMeetingUsecase: locator(),
         deleteMeetingUsecase: locator(),

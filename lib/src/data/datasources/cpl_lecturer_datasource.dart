@@ -7,7 +7,6 @@ import 'package:e_con/core/services/api_service.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/classs_content.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/course_student_data.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
-import 'package:e_con/src/data/models/profile/student_data.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
@@ -27,6 +26,7 @@ abstract class CplLecturerDataSource {
     DateTime? meetingDate,
     required meetingId,
   });
+  Future<String> getValidationCode({required int meetingId});
 }
 
 class CplLecturerDataSourceImpl implements CplLecturerDataSource {
@@ -186,5 +186,26 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
       body: json.encode(map),
     );
     return response.statusCode == 200;
+  }
+
+  @override
+  Future<String> getValidationCode({required int meetingId}) async {
+    final credential = await authPreferenceHelper.getUser();
+
+    final responseData = await client.get(
+      Uri.parse(
+          '${ApiService.baseUrlCPL}/class-record/meeting/${meetingId}/validation-code'),
+      headers: {
+        "Cookie": credential!.session ?? '',
+      },
+    );
+    if (responseData.statusCode == 200) {
+      final data =
+          DataResponse<String>.fromJson(jsonDecode(responseData.body)).data;
+
+      return data;
+    } else {
+      throw ServerException();
+    }
   }
 }

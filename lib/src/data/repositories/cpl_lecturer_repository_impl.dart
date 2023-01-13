@@ -95,4 +95,16 @@ class CplLecturerRepositoryImpl implements CplLecturerRepository {
       return Left(ServerFailure('Masalah Server'));
     }
   }
+
+  @override
+  Future<Either<Failure, String>> getValidationCode(
+      {required int meetingId}) async {
+    try {
+      final result =
+          await cplLecturerDataSource.getValidationCode(meetingId: meetingId);
+      return Right(result);
+    } catch (e) {
+      return Left(ServerFailure('Terdapat Masalah'));
+    }
+  }
 }

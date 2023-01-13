@@ -5,10 +5,12 @@ import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
+import 'package:e_con/src/presentations/features/menu/teacher/providers/meeting_course_notifier.dart';
 import 'package:e_con/src/presentations/widgets/custom_button.dart';
 import 'package:e_con/src/presentations/widgets/fields/input_date_time_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 class TeacherGenBarcodePage extends StatefulWidget {
   final Map args;
@@ -60,6 +62,7 @@ class _TeacherGenBarcodePageState extends State<TeacherGenBarcodePage> {
         centerTitle: true,
       ),
       body: LayoutBuilder(builder: (context, constraint) {
+        final provider = context.watch<MeetingCourseNotifier>();
         return SingleChildScrollView(
           child: ConstrainedBox(
             constraints: BoxConstraints(minHeight: constraint.maxHeight),
@@ -142,12 +145,18 @@ class _TeacherGenBarcodePageState extends State<TeacherGenBarcodePage> {
                         AppSize.verticalSpace[3],
                         CustomButton(
                           text: 'Lanjutkan',
-                          onTap: () {
-                            Navigator.pushNamed(context, AppRoute.barcodeAbsent,
-                                arguments: {
-                                  'meetingData': meetingData,
-                                  'classData': clazzData,
-                                });
+                          onTap: () async {
+                            provider.getValidationCode(
+                                meetingId: meetingData.id);
+                            if (provider.validationCode != null) {
+                              Navigator.pushNamed(
+                                  context, AppRoute.barcodeAbsent,
+                                  arguments: {
+                                    'meetingData': meetingData,
+                                    'classData': clazzData,
+                                    'validationCode': provider.validationCode,
+                                  });
+                            }
                           },
                           height: 54,
                         ),
