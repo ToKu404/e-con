@@ -146,8 +146,13 @@ class _TeacherGenBarcodePageState extends State<TeacherGenBarcodePage> {
                         CustomButton(
                           text: 'Lanjutkan',
                           onTap: () async {
-                            provider.getValidationCode(
+                            await provider.getValidationCode(
                                 meetingId: meetingData.id);
+                            if (dateTime != null) {
+                              await provider.setAttendanceExpiredDate(
+                                  meetingId: meetingData.id,
+                                  expiredDate: dateTime!);
+                            }
                             if (provider.validationCode != null) {
                               Navigator.pushNamed(
                                   context, AppRoute.barcodeAbsent,

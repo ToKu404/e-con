@@ -1,9 +1,11 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:path_provider/path_provider.dart';
 
 Future<Uint8List?> captureWidget(BuildContext context) async {
   final box = context.findRenderObject() as RenderRepaintBoundary;
@@ -25,4 +27,19 @@ Future<bool> takePicture(Uint8List image) async {
   } catch (e) {
     return false;
   }
+}
+
+
+Future<String> saveFileToTemp(Uint8List bytes) async {
+  late String filePath;
+  final tempDir = await getTemporaryDirectory();
+  final File file = File(
+    '${tempDir.path}/${DateTime.now().toIso8601String()}.png',
+  );
+
+  final raf = file.openSync(mode: FileMode.write);
+  filePath = file.path;
+  raf.writeFromSync(bytes);
+  await raf.close();
+  return filePath;
 }

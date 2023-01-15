@@ -5,7 +5,9 @@ import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
+import 'package:e_con/src/presentations/features/menu/teacher/providers/meeting_course_notifier.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class TeacherMeetCard extends StatelessWidget {
   final MeetingData meetingData;
@@ -19,11 +21,13 @@ class TeacherMeetCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () =>
-          Navigator.pushNamed(context, AppRoute.detailMeet, arguments: {
-        'meetingData': meetingData,
-        'classData': classData,
-      }),
+      onTap: () async {
+        
+        Navigator.pushNamed(context, AppRoute.detailMeet, arguments: {
+          'meetingData': meetingData,
+          'classData': classData,
+        });
+      },
       child: Container(
         margin: EdgeInsets.only(
           bottom: AppSize.space[2],

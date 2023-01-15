@@ -6,6 +6,7 @@ import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/create_new_meeti
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/delete_meeting.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/get_list_meeting.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/get_validation_code.dart';
+import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/set_attendance_validation_code.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/update_meeting.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +16,7 @@ class MeetingCourseNotifier extends ChangeNotifier {
   final DeleteMeeting deleteMeetingUsecase;
   final UpdateMeeting updateMeetingUsecase;
   final GetValidationCode getValidationCodeUsecase;
+  final SetAttendanceExpiredDate setAttendanceExpiredDateUsecase;
 
   MeetingCourseNotifier({
     required this.getListMeetingUsecase,
@@ -22,6 +24,7 @@ class MeetingCourseNotifier extends ChangeNotifier {
     required this.updateMeetingUsecase,
     required this.deleteMeetingUsecase,
     required this.getValidationCodeUsecase,
+    required this.setAttendanceExpiredDateUsecase,
   });
 
   String _error = '';
@@ -126,12 +129,42 @@ class MeetingCourseNotifier extends ChangeNotifier {
   String? _validationCode;
   String? get validationCode => _validationCode;
 
+  RequestState _validationCodeState = RequestState.init;
+  RequestState get validationCodeState => _validationCodeState;
+
   Future<void> getValidationCode({required int meetingId}) async {
     final res = await getValidationCodeUsecase.execute(meetingId: meetingId);
     res.fold((l) {
       _validationCode = null;
+      _validationCodeState = RequestState.error;
     }, (r) {
       _validationCode = r;
+      _validationCodeState = RequestState.success;
+    });
+    notifyListeners();
+  }
+
+  RequestState _setAttendanceExpiredDateState = RequestState.init;
+  RequestState get setAttendanceExpiredDateState =>
+      _setAttendanceExpiredDateState;
+
+  Future<void> setAttendanceExpiredDate({
+    required int meetingId,
+    required DateTime expiredDate,
+  }) async {
+    _setAttendanceExpiredDateState = RequestState.loading;
+    notifyListeners();
+
+    final res =
+        await setAttendanceExpiredDateUsecase.execute(meetingId, expiredDate);
+    res.fold((l) {
+      _setAttendanceExpiredDateState = RequestState.error;
+    }, (r) {
+      if (r) {
+        _setAttendanceExpiredDateState = RequestState.success;
+      } else {
+        _setAttendanceExpiredDateState = RequestState.error;
+      }
     });
     notifyListeners();
   }

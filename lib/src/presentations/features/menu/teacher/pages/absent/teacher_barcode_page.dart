@@ -7,6 +7,8 @@ import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
 import 'package:e_con/src/presentations/features/menu/teacher/pages/absent/widgets/pretier_qr_widget.dart';
 import 'package:e_con/src/presentations/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:share_plus/share_plus.dart';
 
 class TeacherBarcodeKey {
   static final GlobalKey repaintKeyQr = GlobalKey();
@@ -48,7 +50,8 @@ class _TeacherBarcodePageState extends State<TeacherBarcodePage> {
           ),
           onPressed: () {
             Navigator.pop(context);
-            Navigator.pop(context);
+            if (meetingData.validationCodeExpiredDate == null)
+              Navigator.pop(context);
           },
         ),
         centerTitle: true,
@@ -149,8 +152,19 @@ class _TeacherBarcodePageState extends State<TeacherBarcodePage> {
             ),
             CustomButton(
               text: 'Bagikan',
-              onTap: () {
-                
+              onTap: () async {
+                final byte = await captureWidget(
+                  TeacherBarcodeKey.repaintKeyQr.currentContext!,
+                );
+
+                if (byte == null || byte.isEmpty) {
+                  throw Exception('Capture image failed');
+                }
+                final imagePath = await saveFileToTemp(byte);
+                if (imagePath.isEmpty) {
+                  throw Exception('Failed save image to temp');
+                }
+                Share.shareXFiles([XFile(imagePath)]);
               },
               textColor: Palette.primary,
               icon: Icons.ios_share_rounded,

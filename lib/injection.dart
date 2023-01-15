@@ -16,6 +16,7 @@ import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/get_list_course.
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/get_list_meeting.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/get_list_student.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/get_validation_code.dart';
+import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/set_attendance_validation_code.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/update_meeting.dart';
 import 'package:e_con/src/domain/usecases/profile_usecases/get_lecture_data.dart';
 import 'package:e_con/src/domain/usecases/profile_usecases/get_student_data.dart';
@@ -135,6 +136,11 @@ void init() {
       cplLecturerRepository: locator(),
     ),
   );
+  locator.registerLazySingleton(
+    () => SetAttendanceExpiredDate(
+      cplLecturerRepository: locator(),
+    ),
+  );
 
   // Provider
   locator.registerFactory(
@@ -174,7 +180,8 @@ void init() {
         getListMeetingUsecase: locator(),
         createNewMeetingUsecase: locator(),
         deleteMeetingUsecase: locator(),
-        updateMeetingUsecase: locator()),
+        updateMeetingUsecase: locator(),
+        setAttendanceExpiredDateUsecase: locator()),
   );
 
   // client w/ SSL pinning certified

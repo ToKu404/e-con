@@ -32,10 +32,8 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final result = await authDataSource.getUser();
       return Right(result);
-    } on LocalDatabaseException {
-      return const Left(AuthFailure('Terdapat masalah pada data user'));
-    } on UserNotFoundException {
-      return const Left(AuthFailure('Data user tidak ditemukan'));
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
     }
   }
 

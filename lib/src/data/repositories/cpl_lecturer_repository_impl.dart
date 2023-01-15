@@ -107,4 +107,16 @@ class CplLecturerRepositoryImpl implements CplLecturerRepository {
       return Left(ServerFailure('Terdapat Masalah'));
     }
   }
+
+  @override
+  Future<Either<Failure, bool>> setAttendanceExpiredDate(
+      {required DateTime expiredDate, required int meetingId}) async {
+    try {
+      final result = await cplLecturerDataSource.setAttendanceExpiredDate(
+          expiredDate: expiredDate, meetingId: meetingId);
+      return Right(result);
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
 }

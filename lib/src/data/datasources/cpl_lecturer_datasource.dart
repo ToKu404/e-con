@@ -27,6 +27,8 @@ abstract class CplLecturerDataSource {
     required meetingId,
   });
   Future<String> getValidationCode({required int meetingId});
+  Future<bool> setAttendanceExpiredDate(
+      {required DateTime expiredDate, required int meetingId});
 }
 
 class CplLecturerDataSourceImpl implements CplLecturerDataSource {
@@ -207,5 +209,27 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
     } else {
       throw ServerException();
     }
+  }
+
+  @override
+  Future<bool> setAttendanceExpiredDate(
+      {required DateTime expiredDate, required int meetingId}) async {
+    final credential = await authPreferenceHelper.getUser();
+
+    final map = {
+      'dateTime': DateFormat('dd.MM.yyyy HH:mm').format(expiredDate),
+    };
+
+    final response = await client.put(
+      Uri.parse(
+        '${ApiService.baseUrlCPL}/class-record/meeting/${meetingId}/validation-code-expiration-datetime',
+      ).replace(queryParameters: map),
+      headers: {
+        'Content-Type': 'application/json',
+        "Cookie": credential!.session ?? '',
+      },
+    );
+
+    return response.statusCode == 200;
   }
 }

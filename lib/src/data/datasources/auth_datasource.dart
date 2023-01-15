@@ -37,6 +37,7 @@ class AuthDataSourceImpl implements AuthDataSource {
           "Authorization": basicAuth,
         },
       );
+      print("asfasd ${responseFE.body}");
 
       final responseCPL = await client.post(
         Uri.parse('${ApiService.baseUrlCPL}/login'),
@@ -44,6 +45,7 @@ class AuthDataSourceImpl implements AuthDataSource {
           "Authorization": basicAuth,
         },
       );
+      print(responseCPL.body);
 
       String? cookie = Session.getCookie(responseCPL.headers);
 
@@ -104,9 +106,6 @@ class AuthDataSourceImpl implements AuthDataSource {
           );
         }
 
-        print(responseData.body);
-        print(response.body);
-
         if (responseData.statusCode == 200 && response.statusCode == 200) {
           return credential;
         } else if (responseData.statusCode == 401 ||
@@ -120,7 +119,7 @@ class AuthDataSourceImpl implements AuthDataSource {
         return null;
       }
     } catch (e) {
-      throw LocalDatabaseException();
+      throw ServerException();
     }
   }
 

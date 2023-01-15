@@ -58,7 +58,7 @@ class TeacherMeetDetailPage extends StatelessWidget {
         ),
         centerTitle: true,
         title: Text(
-          'Pertemuan 1',
+          'Pertemuan ${meetingData.meetingNumber}',
           style: kTextHeme.headline5?.copyWith(
             color: Palette.primary,
           ),
@@ -229,7 +229,27 @@ class TeacherMeetDetailPage extends StatelessWidget {
                 height: 54,
                 icon: Icons.qr_code_2_rounded,
                 text: 'Barcode Absen',
-                onTap: () {
+                onTap: () async {
+                  print(meetingData.validationCodeExpiredDate);
+
+                  if (meetingData.validationCodeExpiredDate != null) {
+                    if (meetingData.validationCodeExpiredDate!
+                        .isAfter(DateTime.now())) {
+                      final provider = context.read<MeetingCourseNotifier>();
+                      await provider.getValidationCode(
+                          meetingId: meetingData.id);
+
+                      if (provider.validationCode != null) {
+                        Navigator.pushNamed(context, AppRoute.barcodeAbsent,
+                            arguments: {
+                              'meetingData': meetingData,
+                              'classData': classData,
+                              'validationCode': provider.validationCode,
+                            });
+                      }
+                    }
+                    return;
+                  }
                   Navigator.pushNamed(context, AppRoute.genBarcode, arguments: {
                     'meetingData': meetingData,
                     'classData': classData,
