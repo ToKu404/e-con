@@ -80,24 +80,7 @@ class StudentTaskCard extends StatelessWidget {
                                   ),
                                 ),
                                 AppSize.verticalSpace[3],
-                                Text(
-                                  'Tidak hadir : 1',
-                                  style: kTextHeme.overline?.copyWith(
-                                    color: Palette.secondary,
-                                  ),
-                                ),
                               ],
-                            ),
-                          ),
-                          Container(
-                            width: 20,
-                            height: 20,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Palette.disable,
-                              border: Border.all(
-                                color: Palette.primary,
-                              ),
                             ),
                           ),
                         ],

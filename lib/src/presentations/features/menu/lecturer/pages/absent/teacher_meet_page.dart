@@ -3,12 +3,14 @@ import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
+import 'package:e_con/src/data/models/attendance/attendance_data.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/course_student_data.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
-import 'package:e_con/src/presentations/features/menu/teacher/pages/absent/widgets/teacher_meet_card.dart';
-import 'package:e_con/src/presentations/features/menu/teacher/providers/course_student_notifier.dart';
-import 'package:e_con/src/presentations/features/menu/teacher/providers/meeting_course_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/pages/absent/widgets/teacher_meet_card.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/providers/course_student_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/providers/meeting_course_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/providers/attendance_notifier.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_error.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
 import 'package:e_con/src/presentations/widgets/choice_absent_modal.dart';
@@ -19,30 +21,44 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
-class TeacherMeetDetailPage extends StatelessWidget {
+class TeacherMeetDetailPage extends StatefulWidget {
   final Map args;
   const TeacherMeetDetailPage({super.key, required this.args});
 
   @override
-  Widget build(BuildContext context) {
-    final MeetingData meetingData = args['meetingData'];
-    final ClazzData classData = args['classData'];
+  State<TeacherMeetDetailPage> createState() => _TeacherMeetDetailPageState();
+}
 
-    final studentCourseProvider = context.watch<CourseStudentNotifier>();
+class _TeacherMeetDetailPageState extends State<TeacherMeetDetailPage> {
+  late MeetingData meetingData;
+  late ClazzData classData;
+  @override
+  void initState() {
+    super.initState();
+    meetingData = widget.args['meetingData'];
+    classData = widget.args['classData'];
+    Future.microtask(() =>
+        Provider.of<AttendanceNotifier>(context, listen: false)
+          ..fetchListAttendance(meetingId: meetingData.id));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final attendanceProvider = context.watch<AttendanceNotifier>();
     final meetingProvider = context.watch<MeetingCourseNotifier>();
 
-    if (studentCourseProvider.state == RequestState.loading) {
+    if (attendanceProvider.state == RequestState.loading) {
       return EconLoading(
         withScaffold: true,
       );
-    } else if (studentCourseProvider.state == RequestState.error) {
+    } else if (attendanceProvider.state == RequestState.error) {
       return EconError(
-        errorMessage: studentCourseProvider.error,
+        errorMessage: '',
         withScaffold: true,
       );
     }
 
-    final listStudent = studentCourseProvider.listStudent!;
+    final listAttendance = attendanceProvider.listAttendanceData;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -136,7 +152,7 @@ class TeacherMeetDetailPage extends StatelessWidget {
                   padding: EdgeInsets.all(
                     AppSize.space[3],
                   ),
-                  color: Palette.primary,
+                  color: Palette.background,
                   child: Container(
                     padding: EdgeInsets.all(AppSize.space[3]),
                     decoration: BoxDecoration(
@@ -145,7 +161,7 @@ class TeacherMeetDetailPage extends StatelessWidget {
                       ),
                       color: Colors.white,
                       border: Border.all(
-                        color: Palette.disable.withOpacity(.5),
+                        color: Palette.field,
                       ),
                     ),
                     child: Column(
@@ -192,11 +208,11 @@ class TeacherMeetDetailPage extends StatelessWidget {
                 ),
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate(
-                      childCount: listStudent.length, (context, index) {
+                      childCount: listAttendance.length, (context, index) {
                     return Column(
                       children: [
                         AttedanceStudentCard(
-                          studentData: listStudent[index],
+                          attendanceData: listAttendance[index],
                         ),
                         SizedBox(
                           height: (index == 9) ? 66 : 8,
@@ -242,9 +258,10 @@ class TeacherMeetDetailPage extends StatelessWidget {
                       if (provider.validationCode != null) {
                         Navigator.pushNamed(context, AppRoute.barcodeAbsent,
                             arguments: {
-                              'meetingData': meetingData,
+                              'meetingId': meetingData.id,
                               'classData': classData,
                               'validationCode': provider.validationCode,
+                              'meetingNumber': meetingData.meetingNumber,
                             });
                       }
                     }
@@ -253,6 +270,7 @@ class TeacherMeetDetailPage extends StatelessWidget {
                   Navigator.pushNamed(context, AppRoute.genBarcode, arguments: {
                     'meetingData': meetingData,
                     'classData': classData,
+                    'isEdit': false,
                   });
                 },
               ),
@@ -265,10 +283,10 @@ class TeacherMeetDetailPage extends StatelessWidget {
 }
 
 class AttedanceStudentCard extends StatelessWidget {
-  final CourseStudentData studentData;
+  final AttendanceData attendanceData;
   const AttedanceStudentCard({
     super.key,
-    required this.studentData,
+    required this.attendanceData,
   });
 
   @override
@@ -298,21 +316,17 @@ class AttedanceStudentCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    studentData.name ?? '-',
+                    attendanceData.studentData?.name ?? '-',
                     style: kTextHeme.subtitle2?.copyWith(
                       color: Palette.primary,
                     ),
                   ),
                   Text(
-                    studentData.id ?? '-',
+                    attendanceData.studentData?.id ?? '-',
                     style: kTextHeme.subtitle1?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: Palette.primary,
                     ),
-                  ),
-                  Text(
-                    '05:30 08-02-2022',
-                    style: kTextHeme.subtitle2,
                   ),
                 ],
               ),
@@ -393,7 +407,8 @@ class _CustomAppBarState extends State<_CustomAppBar> {
                   contentPadding: EdgeInsets.zero,
                   isDense: true,
                   hintText: 'Pencarian',
-                  hintStyle: kTextHeme.subtitle1,
+                  hintStyle:
+                      kTextHeme.subtitle1?.copyWith(color: Palette.disable),
                   filled: true,
                   prefixIcon: const SizedBox(
                     height: 12,
@@ -404,9 +419,9 @@ class _CustomAppBarState extends State<_CustomAppBar> {
                     ),
                   ),
                   prefixIconColor: Palette.disable,
-                  fillColor: Colors.white,
+                  fillColor: Palette.field,
                   enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Palette.background),
+                    borderSide: const BorderSide(color: Palette.field),
                     borderRadius: BorderRadius.circular(
                       AppSize.space[3],
                     ),
@@ -424,28 +439,28 @@ class _CustomAppBarState extends State<_CustomAppBar> {
                 ),
               ),
             ),
-            AppSize.verticalSpace[3],
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  AppSize.horizontalSpace[3],
-                  const CustomChip(
-                    title: 'Nama',
-                    haveShowMore: true,
-                  ),
-                  const CustomChip(
-                    title: 'Hadir',
-                  ),
-                  const CustomChip(
-                    title: 'Izin',
-                  ),
-                  const CustomChip(
-                    title: 'Sakit',
-                  ),
-                ],
-              ),
-            ),
+            // AppSize.verticalSpace[3],
+            // SingleChildScrollView(
+            //   scrollDirection: Axis.horizontal,
+            //   child: Row(
+            //     children: [
+            //       AppSize.horizontalSpace[3],
+            //       const CustomChip(
+            //         title: 'Nama',
+            //         haveShowMore: true,
+            //       ),
+            //       const CustomChip(
+            //         title: 'Hadir',
+            //       ),
+            //       const CustomChip(
+            //         title: 'Izin',
+            //       ),
+            //       const CustomChip(
+            //         title: 'Sakit',
+            //       ),
+            //     ],
+            //   ),
+            // ),
             AppSize.verticalSpace[5],
           ],
         ),

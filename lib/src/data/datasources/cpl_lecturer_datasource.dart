@@ -29,6 +29,7 @@ abstract class CplLecturerDataSource {
   Future<String> getValidationCode({required int meetingId});
   Future<bool> setAttendanceExpiredDate(
       {required DateTime expiredDate, required int meetingId});
+  Future<MeetingData> getMeetingData({required int meetingId});
 }
 
 class CplLecturerDataSourceImpl implements CplLecturerDataSource {
@@ -231,5 +232,27 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
     );
 
     return response.statusCode == 200;
+  }
+
+  @override
+  Future<MeetingData> getMeetingData({required int meetingId}) async {
+    final credential = await authPreferenceHelper.getUser();
+    final responseData = await client.get(
+      Uri.parse('${ApiService.baseUrlCPL}/class-record/meeting/${meetingId}'),
+      headers: {
+        "Cookie": credential!.session ?? '',
+      },
+    );
+
+    if (responseData.statusCode == 200) {
+      final dataResponse = DataResponse<Map<String, dynamic>>.fromJson(
+              jsonDecode(responseData.body))
+          .data;
+
+      final meetingData = MeetingData.fromJson(dataResponse);
+      return meetingData;
+    } else {
+      throw ServerException();
+    }
   }
 }

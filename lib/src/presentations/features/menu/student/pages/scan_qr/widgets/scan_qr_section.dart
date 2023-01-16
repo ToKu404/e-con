@@ -81,6 +81,7 @@ class _ScanQrSectionState extends State<ScanQrSection> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 FloatingActionButton(
+                  heroTag: 'flipTag',
                   shape: const CircleBorder(
                     side: BorderSide(color: Colors.white, width: 2),
                   ),
@@ -99,6 +100,7 @@ class _ScanQrSectionState extends State<ScanQrSection> {
                   ),
                 ),
                 FloatingActionButton(
+                  heroTag: 'flashTag',
                   shape: const CircleBorder(
                     side: BorderSide(color: Colors.white, width: 2),
                   ),
@@ -117,6 +119,7 @@ class _ScanQrSectionState extends State<ScanQrSection> {
                   ),
                 ),
                 FloatingActionButton(
+                  heroTag: 'fileTag',
                   shape: const CircleBorder(
                     side: BorderSide(color: Colors.white, width: 2),
                   ),

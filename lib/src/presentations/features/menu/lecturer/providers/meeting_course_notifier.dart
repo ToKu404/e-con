@@ -5,6 +5,7 @@ import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/create_new_meeting.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/delete_meeting.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/get_list_meeting.dart';
+import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/get_meeting_data.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/get_validation_code.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/set_attendance_validation_code.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/update_meeting.dart';
@@ -17,6 +18,7 @@ class MeetingCourseNotifier extends ChangeNotifier {
   final UpdateMeeting updateMeetingUsecase;
   final GetValidationCode getValidationCodeUsecase;
   final SetAttendanceExpiredDate setAttendanceExpiredDateUsecase;
+  final GetMeetingData getMeetingDataUsecase;
 
   MeetingCourseNotifier({
     required this.getListMeetingUsecase,
@@ -25,6 +27,7 @@ class MeetingCourseNotifier extends ChangeNotifier {
     required this.deleteMeetingUsecase,
     required this.getValidationCodeUsecase,
     required this.setAttendanceExpiredDateUsecase,
+    required this.getMeetingDataUsecase,
   });
 
   String _error = '';
@@ -165,6 +168,27 @@ class MeetingCourseNotifier extends ChangeNotifier {
       } else {
         _setAttendanceExpiredDateState = RequestState.error;
       }
+    });
+    notifyListeners();
+  }
+
+  MeetingData? get meetingData => _meetingData;
+  MeetingData? _meetingData;
+  RequestState _getMeetingDataState = RequestState.init;
+  RequestState get getMeetingDataState => _getMeetingDataState;
+
+  Future<void> getMeetingData({
+    required int meetingId,
+  }) async {
+    _getMeetingDataState = RequestState.loading;
+    notifyListeners();
+
+    final res = await getMeetingDataUsecase.execute(meetingId: meetingId);
+    res.fold((l) {
+      _getMeetingDataState = RequestState.error;
+    }, (r) {
+      _meetingData = r;
+      _getMeetingDataState = RequestState.success;
     });
     notifyListeners();
   }

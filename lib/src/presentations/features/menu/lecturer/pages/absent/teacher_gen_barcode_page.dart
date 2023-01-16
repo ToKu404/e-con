@@ -5,7 +5,7 @@ import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
-import 'package:e_con/src/presentations/features/menu/teacher/providers/meeting_course_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/providers/meeting_course_notifier.dart';
 import 'package:e_con/src/presentations/widgets/custom_button.dart';
 import 'package:e_con/src/presentations/widgets/fields/input_date_time_field.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +24,7 @@ class TeacherGenBarcodePage extends StatefulWidget {
 class _TeacherGenBarcodePageState extends State<TeacherGenBarcodePage> {
   late ClazzData clazzData;
   late MeetingData meetingData;
+  late bool isEdit;
   final TextEditingController dateController = TextEditingController();
   DateTime? dateTime;
   bool isNeedLocation = false;
@@ -33,6 +34,13 @@ class _TeacherGenBarcodePageState extends State<TeacherGenBarcodePage> {
     super.initState();
     clazzData = widget.args['classData'];
     meetingData = widget.args['meetingData'];
+    isEdit = widget.args['isEdit'];
+
+    if (isEdit) {
+      dateController.text = ReusableFuntionHelper.datetimeToString(
+          meetingData.validationCodeExpiredDate!);
+      dateTime = meetingData.validationCodeExpiredDate!;
+    }
   }
 
   @override
@@ -54,7 +62,7 @@ class _TeacherGenBarcodePageState extends State<TeacherGenBarcodePage> {
           icon: const Icon(Icons.close_rounded),
         ),
         title: Text(
-          'Barcode Absen',
+          isEdit ? 'Edit QrCode Absen' : 'Buat QrCode Absen',
           style: kTextHeme.headline5?.copyWith(
             color: Palette.primary,
           ),
@@ -117,6 +125,7 @@ class _TeacherGenBarcodePageState extends State<TeacherGenBarcodePage> {
                             action: (d) async {
                               dateTime = d;
                             },
+                            initialDate: dateTime,
                             controller: dateController,
                             hintText: 'Berlaku Hingga'),
                         AppSize.verticalSpace[2],
@@ -144,7 +153,7 @@ class _TeacherGenBarcodePageState extends State<TeacherGenBarcodePage> {
                         ),
                         AppSize.verticalSpace[3],
                         CustomButton(
-                          text: 'Lanjutkan',
+                          text: isEdit ? 'Simpan Perubahan' : 'Lanjutkan',
                           onTap: () async {
                             await provider.getValidationCode(
                                 meetingId: meetingData.id);
@@ -154,12 +163,19 @@ class _TeacherGenBarcodePageState extends State<TeacherGenBarcodePage> {
                                   expiredDate: dateTime!);
                             }
                             if (provider.validationCode != null) {
+                              if (isEdit) {
+                                await context.read<MeetingCourseNotifier>()
+                                  ..getMeetingData(meetingId: meetingData.id);
+                                Navigator.pop(context);
+                                return;
+                              }
                               Navigator.pushNamed(
                                   context, AppRoute.barcodeAbsent,
                                   arguments: {
-                                    'meetingData': meetingData,
+                                    'meetingId': meetingData.id,
                                     'classData': clazzData,
                                     'validationCode': provider.validationCode,
+                                    'meetingNumber': meetingData.meetingNumber,
                                   });
                             }
                           },

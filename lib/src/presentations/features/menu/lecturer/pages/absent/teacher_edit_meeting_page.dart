@@ -3,7 +3,7 @@ import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/helpers/reusable_function_helper.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
-import 'package:e_con/src/presentations/features/menu/teacher/providers/meeting_course_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/providers/meeting_course_notifier.dart';
 import 'package:e_con/src/presentations/widgets/custom_button.dart';
 import 'package:e_con/src/presentations/widgets/fields/input_date_field.dart';
 import 'package:e_con/src/presentations/widgets/fields/input_field.dart';

@@ -1,35 +1,45 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'package:e_con/core/helpers/auth_preference_helper.dart';
+import 'package:e_con/src/data/datasources/attendance_datasource.dart';
 import 'package:e_con/src/data/datasources/auth_datasource.dart';
 import 'package:e_con/src/data/datasources/cpl_lecturer_datasource.dart';
 import 'package:e_con/src/data/datasources/profile_datasource.dart';
+import 'package:e_con/src/data/repositories/attendance_repository_impl.dart';
 import 'package:e_con/src/data/repositories/auth_repository_impl.dart';
 import 'package:e_con/src/data/repositories/cpl_lecturer_repository_impl.dart';
 import 'package:e_con/src/data/repositories/profile_repository_impl.dart';
+import 'package:e_con/src/domain/repositories/attendance_repository.dart';
 import 'package:e_con/src/domain/repositories/auth_repository.dart';
 import 'package:e_con/src/domain/repositories/cpl_lecturer_repository.dart';
 import 'package:e_con/src/domain/repositories/profile_repository.dart';
+import 'package:e_con/src/domain/usecases/attendance_usecases/get_list_attendance.dart';
+import 'package:e_con/src/domain/usecases/attendance_usecases/set_attendance.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/create_new_meeting.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/delete_meeting.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/get_list_course.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/get_list_meeting.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/get_list_student.dart';
+import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/get_meeting_data.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/get_validation_code.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/set_attendance_validation_code.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/update_meeting.dart';
 import 'package:e_con/src/domain/usecases/profile_usecases/get_lecture_data.dart';
+import 'package:e_con/src/domain/usecases/profile_usecases/get_profile_picture.dart';
 import 'package:e_con/src/domain/usecases/profile_usecases/get_student_data.dart';
 import 'package:e_con/src/domain/usecases/user_usecases/get_user.dart';
 import 'package:e_con/src/domain/usecases/user_usecases/log_out.dart';
 import 'package:e_con/src/domain/usecases/user_usecases/sign_in.dart';
 import 'package:e_con/src/presentations/features/login/provider/auth_notifier.dart';
 import 'package:e_con/src/presentations/features/login/provider/get_user_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/providers/attendance_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/providers/profile_picture_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/student/pages/scan_qr/provider/qr_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/student/providers/student_profile_notifier.dart';
-import 'package:e_con/src/presentations/features/menu/teacher/providers/course_student_notifier.dart';
-import 'package:e_con/src/presentations/features/menu/teacher/providers/lecture_courses_notifier.dart';
-import 'package:e_con/src/presentations/features/menu/teacher/providers/lecture_profile_notifier.dart';
-import 'package:e_con/src/presentations/features/menu/teacher/providers/meeting_course_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/providers/course_student_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecture_courses_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecture_profile_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/providers/meeting_course_notifier.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 
@@ -52,6 +62,11 @@ void init() {
       cplLecturerDataSource: locator(),
     ),
   );
+  locator.registerLazySingleton<AttendanceRepository>(
+    () => AttendanceRepositoryImpl(
+      attendanceDataSource: locator(),
+    ),
+  );
 
   // Datasource
   locator.registerLazySingleton<AuthDataSource>(
@@ -69,6 +84,12 @@ void init() {
   );
   locator.registerLazySingleton<CplLecturerDataSource>(
     () => CplLecturerDataSourceImpl(
+      client: locator(),
+      authPreferenceHelper: locator(),
+    ),
+  );
+  locator.registerLazySingleton<AttendanceDataSource>(
+    () => AttendanceDataSourceImpl(
       client: locator(),
       authPreferenceHelper: locator(),
     ),
@@ -141,6 +162,26 @@ void init() {
       cplLecturerRepository: locator(),
     ),
   );
+  locator.registerLazySingleton(
+    () => GetMeetingData(
+      cplLecturerRepository: locator(),
+    ),
+  );
+  locator.registerLazySingleton(
+    () => SetAttendance(
+      attendanceRepository: locator(),
+    ),
+  );
+  locator.registerLazySingleton(
+    () => GetListAttendance(
+      attendanceRepository: locator(),
+    ),
+  );
+  locator.registerLazySingleton(
+    () => GetProfilePicture(
+      profileRepository: locator(),
+    ),
+  );
 
   // Provider
   locator.registerFactory(
@@ -176,12 +217,32 @@ void init() {
   );
   locator.registerFactory(
     () => MeetingCourseNotifier(
-        getValidationCodeUsecase: locator(),
-        getListMeetingUsecase: locator(),
-        createNewMeetingUsecase: locator(),
-        deleteMeetingUsecase: locator(),
-        updateMeetingUsecase: locator(),
-        setAttendanceExpiredDateUsecase: locator()),
+      getValidationCodeUsecase: locator(),
+      getListMeetingUsecase: locator(),
+      createNewMeetingUsecase: locator(),
+      deleteMeetingUsecase: locator(),
+      updateMeetingUsecase: locator(),
+      setAttendanceExpiredDateUsecase: locator(),
+      getMeetingDataUsecase: locator(),
+    ),
+  );
+  locator.registerFactory(
+    () => AttendanceNotifier(
+      setAttendanceUsecase: locator(),
+      getListAttendanceUsecase: locator(),
+    ),
+  );
+  locator.registerFactory(
+    () => ProfilePictureNotifier(
+      getProfilePictureUsecase: locator(),
+    ),
+  );
+
+  // Student Provider
+  locator.registerFactory(
+    () => QrNotifier(
+      getMeetingDataUsecase: locator(),
+    ),
   );
 
   // client w/ SSL pinning certified

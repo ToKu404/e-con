@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:e_con/core/utils/exception.dart';
 import 'package:e_con/src/data/datasources/profile_datasource.dart';
 import 'package:e_con/src/data/models/profile/lecture_data.dart';
@@ -5,6 +7,7 @@ import 'package:e_con/src/data/models/profile/student_data.dart';
 import 'package:e_con/core/utils/failure.dart';
 import 'package:dartz/dartz.dart';
 import 'package:e_con/src/domain/repositories/profile_repository.dart';
+import 'package:flutter/material.dart';
 
 class ProfileRepositoryImpl implements ProfileRepository {
   final ProfileDataSource profileDataSource;
@@ -36,6 +39,16 @@ class ProfileRepositoryImpl implements ProfileRepository {
       return const Left(AuthFailure('Data user tidak ditemukan'));
     } on AuthException {
       return const Left(AuthFailure('Proses login bermasalah'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Uint8List?>> getProfilePicture() async {
+    try {
+      final result = await profileDataSource.getProfilePicture();
+      return Right(result);
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
     }
   }
 }

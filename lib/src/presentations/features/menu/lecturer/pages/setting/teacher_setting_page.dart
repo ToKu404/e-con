@@ -1,10 +1,12 @@
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/routes/app_routes.dart';
+import 'package:e_con/core/services/api_service.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/presentations/features/login/provider/auth_notifier.dart';
-import 'package:e_con/src/presentations/features/menu/teacher/providers/lecture_profile_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecture_profile_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/providers/profile_picture_notifier.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_error.dart';
 import 'package:e_con/src/presentations/widgets/custom_button.dart';
 import 'package:e_con/src/presentations/widgets/dialog/show_confirmation.dart';
@@ -12,37 +14,57 @@ import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+class _AppBarSection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(AppSize.space[4]),
+      width: AppSize.getAppWidth(context),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(.15),
+            offset: const Offset(1, 0),
+            blurRadius: 6,
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Profile',
+            style: kTextHeme.headline5?.copyWith(
+              color: Palette.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class TeacherSettingPage extends StatelessWidget {
   const TeacherSettingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_rounded,
-            color: Palette.primary,
-          ),
-          onPressed: () => Navigator.pop(context),
-        ),
-        centerTitle: true,
-        title: Text(
-          'Pengaturan',
-          style: kTextHeme.headline5?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: Palette.primary,
+    return Column(
+      children: [
+        _AppBarSection(),
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                child: _ProfileCard(),
+              )
+            ],
           ),
         ),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Center(
-            child: _ProfileCard(),
-          )
-        ],
-      ),
+      ],
     );
   }
 }
@@ -59,15 +81,19 @@ class _ProfileCardState extends State<_ProfileCard> {
     Future.microtask(() {
       Provider.of<LectureProfileNotifier>(context, listen: false)
         ..getStudentData();
+      Provider.of<ProfilePictureNotifier>(context, listen: false)
+        ..getProfilePicture();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final profileProvider = context.read<LectureProfileNotifier>();
+    final profileProvider = context.watch<LectureProfileNotifier>();
+    final profilePictureProvider = context.watch<ProfilePictureNotifier>();
 
     if (profileProvider.state == RequestState.loading ||
-        profileProvider.lectureData == null) {
+        profileProvider.lectureData == null ||
+        profilePictureProvider.state == RequestState.loading) {
       return EconLoading();
     } else if (profileProvider.state == RequestState.error) {
       return EconError(errorMessage: profileProvider.error);
@@ -117,18 +143,16 @@ class _ProfileCardState extends State<_ProfileCard> {
                     width: 100,
                     height: 100,
                     decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          width: 2,
-                          color: Palette.disable,
-                        ),
-                        color: Palette.disable),
-                    child: Center(
-                      child: Icon(
-                        Icons.person,
-                        size: 36,
-                        color: Palette.background,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        width: 2,
+                        color: Palette.disable,
                       ),
+                      color: Palette.disable,
+                      image: DecorationImage(
+                          image: MemoryImage(
+                              profilePictureProvider.profilePicture!),
+                          fit: BoxFit.cover),
                     ),
                   ),
                 ),

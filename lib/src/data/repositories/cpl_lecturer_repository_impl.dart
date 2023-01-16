@@ -119,4 +119,16 @@ class CplLecturerRepositoryImpl implements CplLecturerRepository {
       return Left(ServerFailure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, MeetingData>> getMeetingData(
+      {required int meetingId}) async {
+    try {
+      final result =
+          await cplLecturerDataSource.getMeetingData(meetingId: meetingId);
+      return Right(result);
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
 }

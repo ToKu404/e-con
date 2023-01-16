@@ -5,16 +5,19 @@ import 'package:e_con/core/utils/observer.dart';
 import 'package:e_con/injection.dart' as di;
 import 'package:e_con/src/presentations/features/login/provider/auth_notifier.dart';
 import 'package:e_con/src/presentations/features/login/provider/get_user_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/providers/attendance_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/student/pages/scan_qr/provider/qr_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/student/providers/student_profile_notifier.dart';
-import 'package:e_con/src/presentations/features/menu/teacher/providers/lecture_profile_notifier.dart';
-import 'package:e_con/src/presentations/features/menu/teacher/providers/meeting_course_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/providers/course_student_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecture_courses_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecture_profile_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/providers/meeting_course_notifier.dart';
 import 'package:e_con/src/presentations/features/splash/splash_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import 'src/presentations/features/menu/teacher/providers/course_student_notifier.dart';
-import 'src/presentations/features/menu/teacher/providers/lecture_courses_notifier.dart';
+import 'src/presentations/features/menu/providers/profile_picture_notifier.dart';
 
 class EconApp extends StatelessWidget {
   const EconApp({super.key});
@@ -29,9 +32,10 @@ class EconApp extends StatelessWidget {
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         systemNavigationBarColor: Palette.primary,
-        statusBarColor: Palette.primaryVariant,
+        statusBarColor: Palette.teritory,
       ),
     );
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -41,8 +45,12 @@ class EconApp extends StatelessWidget {
           create: (_) => di.locator<AuthNotifier>(),
         ),
         ChangeNotifierProvider(
-          create: (_) => di.locator<StudentProfileNotifier>(),
+          create: (_) => di.locator<AttendanceNotifier>(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => di.locator<ProfilePictureNotifier>(),
+        ),
+        // Lecturer
         ChangeNotifierProvider(
           create: (_) => di.locator<LectureProfileNotifier>(),
         ),
@@ -54,6 +62,13 @@ class EconApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => di.locator<CourseStudentNotifier>(),
+        ),
+        // Student
+        ChangeNotifierProvider(
+          create: (_) => di.locator<StudentProfileNotifier>(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => di.locator<QrNotifier>(),
         ),
       ],
       child: MaterialApp(

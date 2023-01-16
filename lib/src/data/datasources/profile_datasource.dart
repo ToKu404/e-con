@@ -6,12 +6,14 @@ import 'package:e_con/core/responses/data_response.dart';
 import 'package:e_con/core/services/api_service.dart';
 import 'package:e_con/src/data/models/profile/lecture_data.dart';
 import 'package:e_con/src/data/models/profile/student_data.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decode/jwt_decode.dart';
 
 abstract class ProfileDataSource {
   Future<StudentData> getStudentData();
   Future<LectureData> getLectureData();
+  Future<Uint8List?> getProfilePicture();
 }
 
 class ProfileDataSourceImpl implements ProfileDataSource {
@@ -86,5 +88,22 @@ class ProfileDataSourceImpl implements ProfileDataSource {
     } else {
       throw AuthException();
     }
+  }
+
+  @override
+  Future<Uint8List?> getProfilePicture() async {
+    final credential = await authPreferenceHelper.getUser();
+    final responseData = await client.get(
+      Uri.parse('${ApiService.baseUrlCPL}/user/profile-picture'),
+      headers: {
+        "Cookie": credential!.session ?? '',
+      },
+    );
+    if (responseData.statusCode == 200) {
+      return responseData.bodyBytes;
+    } else {
+      ServerException();
+    }
+    return null;
   }
 }

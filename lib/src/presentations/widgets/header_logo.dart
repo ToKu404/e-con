@@ -5,27 +5,34 @@ import 'package:e_con/src/presentations/widgets/logo_container.dart';
 import 'package:flutter/material.dart';
 
 class HeaderLogo extends StatelessWidget {
-  final Color bgColor;
-  const HeaderLogo({super.key, this.bgColor = Colors.white});
+  final Color? bgColor;
+  const HeaderLogo({super.key, this.bgColor});
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const LogoContainer(
-          width: 30,
-          height: 30,
-        ),
-        AppSize.horizontalSpace[2],
-        Text(
-          'E-Con',
-          style: kTextHeme.headline5?.copyWith(
-            color: Palette.primary,
-            fontWeight: FontWeight.bold,
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: bgColor ?? Colors.transparent,
+      ),
+      padding: EdgeInsets.all(8),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const LogoContainer(
+            width: 30,
+            height: 30,
           ),
-        )
-      ],
+          AppSize.horizontalSpace[2],
+          Text(
+            'E-Con',
+            style: kTextHeme.headline5?.copyWith(
+              color: Palette.primaryVariant,
+              fontWeight: FontWeight.bold,
+            ),
+          )
+        ],
+      ),
     );
 
     // return Container(

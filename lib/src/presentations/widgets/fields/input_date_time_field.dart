@@ -8,13 +8,15 @@ import 'package:flutter/material.dart';
 class InputDateTimeField extends StatefulWidget {
   final TextEditingController controller;
   final String hintText;
+  final DateTime? initialDate;
   final FutureOr<void> Function(DateTime date)? action;
 
   const InputDateTimeField(
       {super.key,
       required this.action,
       required this.controller,
-      required this.hintText});
+      required this.hintText,
+      this.initialDate});
 
   @override
   State<InputDateTimeField> createState() => _InputDateTimeFieldState();
@@ -32,7 +34,11 @@ class _InputDateTimeFieldState extends State<InputDateTimeField> {
           initialDate: widget.controller.text.isEmpty
               ? DateTime.now()
               : ReusableFuntionHelper.stringToDateTime(widget.controller.text),
-          firstDate: DateTime.now(),
+          firstDate: widget.initialDate != null
+              ? (widget.initialDate!.isBefore(DateTime.now())
+                  ? widget.initialDate!
+                  : DateTime.now())
+              : DateTime.now(),
           lastDate: DateTime.now().add(
             const Duration(
               days: 30,

@@ -23,4 +23,6 @@ abstract class CplLecturerRepository {
   Future<Either<Failure, String>> getValidationCode({required int meetingId});
   Future<Either<Failure, bool>> setAttendanceExpiredDate(
       {required DateTime expiredDate, required int meetingId});
+
+  Future<Either<Failure, MeetingData>> getMeetingData({required int meetingId});
 }

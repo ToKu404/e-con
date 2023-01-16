@@ -1,5 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:e_con/core/constants/color_const.dart';
+import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
@@ -85,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
         create: (_) => ErrorFieldChecker(),
         builder: (context, _) {
           return Scaffold(
-            backgroundColor: Palette.background,
+            backgroundColor: Palette.white,
             body: SafeArea(
               child: CustomScrollView(
                 slivers: [
@@ -130,55 +131,24 @@ class _LoginPageState extends State<LoginPage> {
                                   controller: usernameController,
                                 ),
                                 const SizedBox(
-                                  height: 8,
+                                  height: 20,
                                 ),
                                 PasswordField(
                                   controller: passwordController,
                                 ),
                                 const SizedBox(
-                                  height: 24,
+                                  height: 28,
                                 ),
                                 Builder(builder: (context) {
                                   return CustomButton(
-                                    text: 'Lanjutkan',
+                                    text: 'Masuk',
                                     onTap: () =>
                                         _onPressedSignInButton(context),
                                   );
                                 }),
                               ],
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                bottom: 24,
-                              ),
-                              child: Column(
-                                children: [
-                                  Text(
-                                    'Lupa kata sandi?',
-                                    style: kTextHeme.subtitle1?.copyWith(
-                                      color: Palette.disable,
-                                    ),
-                                  ),
-                                  RichText(
-                                    textAlign: TextAlign.center,
-                                    text: TextSpan(
-                                      text: 'Silahkan hubungi',
-                                      style: kTextHeme.subtitle1?.copyWith(
-                                        color: Palette.disable,
-                                      ),
-                                      children: [
-                                        TextSpan(
-                                          text: ' Administrator',
-                                          style: kTextHeme.subtitle1?.copyWith(
-                                            color: Palette.primary,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            )
+                            SizedBox.shrink()
                           ],
                         );
                       }),
@@ -214,40 +184,50 @@ class UsernameField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final fieldNotifer = context.watch<ErrorFieldChecker>();
-    return TextField(
-      controller: controller,
-      onTap: () {
-        fieldNotifer.usernameActive();
-      },
-      keyboardType: TextInputType.text,
-      style: kTextHeme.subtitle1?.copyWith(
-        color: Palette.onPrimary,
-      ),
-      cursorColor: Palette.primary,
-      decoration: InputDecoration(
-        hintText: 'Nama Pengguna',
-        hintStyle: kTextHeme.subtitle1,
-        filled: true,
-        fillColor: Colors.white,
-        enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Palette.background),
-          borderRadius: BorderRadius.circular(12.0),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Nama Pengguna',
+          style: kTextHeme.subtitle1,
         ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Palette.primary),
-          borderRadius: BorderRadius.circular(12.0),
+        AppSize.verticalSpace[1],
+        TextField(
+          controller: controller,
+          onTap: () {
+            fieldNotifer.usernameActive();
+          },
+          keyboardType: TextInputType.text,
+          style: kTextHeme.subtitle1?.copyWith(
+            color: Palette.onPrimary,
+          ),
+          cursorColor: Palette.primary,
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Palette.field,
+            enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Palette.white),
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Palette.primary),
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+            errorText: fieldNotifer.isUsernameError
+                ? 'Nama pengguna wajib diisi'
+                : null,
+            errorStyle: TextStyle(height: 1),
+            focusedErrorBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.red),
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.red),
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+          ),
         ),
-        errorText:
-            fieldNotifer.isUsernameError ? 'Username tidak boleh kosong' : null,
-        focusedErrorBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.red),
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.red),
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-      ),
+      ],
     );
   }
 }
@@ -269,55 +249,64 @@ class PasswordFieldState extends State<PasswordField> {
   Widget build(BuildContext context) {
     final fieldNotifer = context.watch<ErrorFieldChecker>();
 
-    return ValueListenableBuilder<bool>(
-      valueListenable: isHide,
-      builder: (context, data, _) {
-        return TextField(
-          controller: widget.controller,
-          cursorColor: Palette.primary,
-          obscureText: data,
-          onTap: () {
-            fieldNotifer.passwordActive();
-          },
-          style: kTextHeme.subtitle1?.copyWith(
-            color: Palette.onPrimary,
-          ),
-          decoration: InputDecoration(
-            hintText: 'Kata Sandi',
-            hintStyle: kTextHeme.subtitle1,
-            filled: true,
-            fillColor: Colors.white,
-            enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: Palette.background),
-              borderRadius: BorderRadius.circular(12.0),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: Palette.primary),
-              borderRadius: BorderRadius.circular(12.0),
-            ),
-            suffixIcon: IconButton(
-              onPressed: () async {
-                isHide.value = !data;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Kata Sandi',
+          style: kTextHeme.subtitle1,
+        ),
+        AppSize.verticalSpace[1],
+        ValueListenableBuilder<bool>(
+          valueListenable: isHide,
+          builder: (context, data, _) {
+            return TextField(
+              controller: widget.controller,
+              cursorColor: Palette.primary,
+              obscureText: data,
+              onTap: () {
+                fieldNotifer.passwordActive();
               },
-              icon: Icon(
-                isHide.value ? Icons.visibility_off : Icons.visibility,
-                color: Palette.background,
+              style: kTextHeme.subtitle1?.copyWith(
+                color: Palette.onPrimary,
               ),
-            ),
-            errorText: fieldNotifer.isPasswordError
-                ? 'Password tidak boleh kosong'
-                : null,
-            focusedErrorBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: Colors.red),
-              borderRadius: BorderRadius.circular(12.0),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: Colors.red),
-              borderRadius: BorderRadius.circular(12.0),
-            ),
-          ),
-        );
-      },
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Palette.field,
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Palette.white),
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Palette.primary),
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+                suffixIcon: IconButton(
+                  onPressed: () async {
+                    isHide.value = !data;
+                  },
+                  icon: Icon(
+                    isHide.value ? Icons.visibility_off : Icons.visibility,
+                    color: Palette.black,
+                  ),
+                ),
+                errorText: fieldNotifer.isPasswordError
+                    ? 'Kata sandi wajib diisi'
+                    : null,
+                errorStyle: TextStyle(height: 1),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.red),
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.red),
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 }

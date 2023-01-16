@@ -1,11 +1,14 @@
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
+import 'package:e_con/core/helpers/reusable_function_helper.dart';
 import 'package:e_con/core/themes/text_theme.dart';
+import 'package:e_con/src/presentations/features/menu/student/pages/scan_qr/provider/qr_notifier.dart';
 import 'package:e_con/src/presentations/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class SuccessModal extends StatelessWidget {
-  const SuccessModal({super.key});
+class SuccessAttendanceModal extends StatelessWidget {
+  const SuccessAttendanceModal({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +68,8 @@ class SuccessModal extends StatelessWidget {
           ),
           AppSize.verticalSpace[0],
           Text(
-            '14:00 05-12-2022',
+            ReusableFuntionHelper.datetimeToString(DateTime.now(),
+                format: 'HH:mm dd-MM-yyyy'),
             style: kTextHeme.subtitle2?.copyWith(
               color: Palette.disable,
             ),
@@ -74,6 +78,7 @@ class SuccessModal extends StatelessWidget {
           CustomButton(
             text: 'Kembali',
             onTap: () {
+              context.read<QrNotifier>()..resetQrCode();
               Navigator.pop(context);
               Navigator.pop(context);
             },

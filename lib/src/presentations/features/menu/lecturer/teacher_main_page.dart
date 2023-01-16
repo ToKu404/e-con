@@ -2,10 +2,31 @@ import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
-import 'package:e_con/src/presentations/features/menu/teacher/pages/absent/teacher_absent_page.dart';
-import 'package:e_con/src/presentations/features/menu/teacher/pages/activity/teacher_activity_page.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/pages/absent/teacher_absent_page.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/pages/activity/teacher_activity_page.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/pages/setting/teacher_setting_page.dart';
 import 'package:e_con/src/presentations/widgets/header_logo.dart';
 import 'package:flutter/material.dart';
+import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+
+class TopIndicator extends Decoration {
+  @override
+  BoxPainter createBoxPainter([VoidCallback? onChanged]) {
+    return _TopIndicatorBox();
+  }
+}
+
+class _TopIndicatorBox extends BoxPainter {
+  @override
+  void paint(Canvas canvas, Offset offset, ImageConfiguration cfg) {
+    Paint _paint = Paint()
+      ..color = Palette.primary
+      ..strokeWidth = 3
+      ..isAntiAlias = true;
+
+    canvas.drawLine(offset, Offset(cfg.size!.width + offset.dx, 0), _paint);
+  }
+}
 
 class TeacherMainPage extends StatefulWidget {
   const TeacherMainPage({super.key});
@@ -14,30 +35,57 @@ class TeacherMainPage extends StatefulWidget {
   State<TeacherMainPage> createState() => _TeacherMainPageState();
 }
 
-class _TeacherMainPageState extends State<TeacherMainPage> {
+class _TeacherMainPageState extends State<TeacherMainPage>
+    with TickerProviderStateMixin {
+  late TabController tabController;
+
   @override
   void initState() {
     super.initState();
+    tabController = TabController(
+      length: 3,
+      vsync: this,
+      initialIndex: 0,
+    );
   }
+
+  final listMenu = [
+    TeacherActivityPage(),
+    TeacherAbsentPage(),
+    TeacherSettingPage()
+  ];
+
+  final List<SalomonBottomBarItem> items = [
+    SalomonBottomBarItem(
+      icon: Icon(Icons.home_rounded),
+      title: Text('Beranda'),
+    ),
+    SalomonBottomBarItem(
+      icon: Icon(Icons.assignment),
+      title: Text('Kelasku'),
+    ),
+    SalomonBottomBarItem(
+      icon: Icon(Icons.account_box_rounded),
+      title: Text('Profile'),
+    ),
+  ];
+  int selectIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Palette.background,
       body: SafeArea(
-        child: DefaultTabController(
-          length: 2,
-          child: NestedScrollView(
-            headerSliverBuilder: (context, innerBoxIsScrolled) {
-              return [
-                _AppBarSection(),
-              ];
-            },
-            body: const TabBarView(
-              children: [TeacherActivityPage(), TeacherAbsentPage()],
-            ),
-          ),
-        ),
+        child: listMenu[selectIndex],
+      ),
+      bottomNavigationBar: Container(
+        color: Palette.white,
+        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+        child: SalomonBottomBar(
+            items: items,
+            unselectedItemColor: Palette.disable,
+            currentIndex: selectIndex,
+            onTap: (i) => setState(() => selectIndex = i)),
       ),
     );
   }

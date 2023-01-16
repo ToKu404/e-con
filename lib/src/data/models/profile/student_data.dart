@@ -1,3 +1,4 @@
+import 'package:e_con/src/data/models/attendance/attendance_type.dart';
 import 'package:e_con/src/data/models/profile/study_program.dart';
 import 'package:equatable/equatable.dart';
 

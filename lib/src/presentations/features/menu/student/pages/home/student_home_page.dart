@@ -56,6 +56,7 @@ class _ActivitySection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ValueNotifier<int> selectIndex = ValueNotifier(0);
+    final ValueNotifier<bool?> isRightSwap = ValueNotifier(null);
 
     final dayName = [
       'Sen',
@@ -63,6 +64,8 @@ class _ActivitySection extends StatelessWidget {
       'Rab',
       'Kam',
       'Jum',
+      'Sab',
+      'Min',
     ];
     return ValueListenableBuilder(
       valueListenable: selectIndex,
@@ -132,7 +135,29 @@ class _ActivitySection extends StatelessWidget {
             SliverToBoxAdapter(
               child: SizedBox(height: AppSize.space[2]),
             ),
-            const ActivityBody(),
+            SliverToBoxAdapter(
+              child: ValueListenableBuilder(
+                  valueListenable: isRightSwap,
+                  builder: (context, isRight, _) {
+                    return GestureDetector(
+                        onHorizontalDragUpdate: (details) {
+                          int sensitivity = 12;
+                          if (details.delta.dx > sensitivity && val != 0) {
+                            isRightSwap.value = true;
+                          } else if (details.delta.dx < -sensitivity &&
+                              val != 6) {
+                            isRightSwap.value = false;
+                          }
+                        },
+                        onHorizontalDragEnd: (details) {
+                          if (isRight != null) {
+                            selectIndex.value = isRight ? val - 1 : val + 1;
+                            isRightSwap.value = null;
+                          }
+                        },
+                        child: const ActivityBody());
+                  }),
+            ),
             SliverToBoxAdapter(
               child: SizedBox(height: AppSize.space[4]),
             ),
@@ -229,19 +254,13 @@ class ActivityBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverList(
-      delegate: SliverChildListDelegate(
-        [
-          ListView.builder(
-            itemCount: 10,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              return const StudentTaskCard();
-            },
-          ),
-        ],
-      ),
+    return ListView.builder(
+      itemCount: 10,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemBuilder: (context, index) {
+        return const StudentTaskCard();
+      },
     );
   }
 }

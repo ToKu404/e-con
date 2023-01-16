@@ -116,14 +116,6 @@ class _AppBarSectionState extends State<_AppBarSection> {
                   ),
                 ),
               ),
-              AppSize.horizontalSpace[2],
-              IconButton(
-                style: IconButton.styleFrom(
-                  backgroundColor: Palette.primary,
-                ),
-                onPressed: () {},
-                icon: SvgPicture.asset('assets/icons/filter.svg'),
-              )
             ],
           )
         ],

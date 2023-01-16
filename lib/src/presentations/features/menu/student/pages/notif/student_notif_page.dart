@@ -75,35 +75,35 @@ class _AppBarSection extends StatelessWidget {
               ),
             ],
           ),
-          Row(
-            children: [
-              Chip(
-                label: Row(
-                  children: [
-                    Text(
-                      'Terbaru',
-                      style: kTextHeme.subtitle2?.copyWith(
-                        color: Palette.onPrimary,
-                      ),
-                    ),
-                    const Icon(
-                      Icons.keyboard_arrow_down_rounded,
-                      color: Palette.onPrimary,
-                    )
-                  ],
-                ),
-              ),
-              AppSize.horizontalSpace[1],
-              Chip(
-                label: Text(
-                  'Belum Dibaca',
-                  style: kTextHeme.subtitle2?.copyWith(
-                    color: Palette.onPrimary,
-                  ),
-                ),
-              )
-            ],
-          )
+          // Row(
+          //   children: [
+          //     Chip(
+          //       label: Row(
+          //         children: [
+          //           Text(
+          //             'Terbaru',
+          //             style: kTextHeme.subtitle2?.copyWith(
+          //               color: Palette.onPrimary,
+          //             ),
+          //           ),
+          //           const Icon(
+          //             Icons.keyboard_arrow_down_rounded,
+          //             color: Palette.onPrimary,
+          //           )
+          //         ],
+          //       ),
+          //     ),
+          //     AppSize.horizontalSpace[1],
+          //     Chip(
+          //       label: Text(
+          //         'Belum Dibaca',
+          //         style: kTextHeme.subtitle2?.copyWith(
+          //           color: Palette.onPrimary,
+          //         ),
+          //       ),
+          //     )
+          //   ],
+          // )
         ],
       ),
     );

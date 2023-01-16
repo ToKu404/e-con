@@ -1,13 +1,18 @@
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
+import 'package:e_con/core/helpers/reusable_function_helper.dart';
+import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/services/backround_service.dart';
 import 'package:e_con/core/themes/text_theme.dart';
+import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
-import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
-import 'package:e_con/src/presentations/features/menu/teacher/pages/absent/widgets/pretier_qr_widget.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/pages/absent/widgets/pretier_qr_widget.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/providers/meeting_course_notifier.dart';
+import 'package:e_con/src/presentations/reusable_pages/econ_error.dart';
+import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
 import 'package:e_con/src/presentations/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 class TeacherBarcodeKey {
@@ -27,19 +32,38 @@ class TeacherBarcodePage extends StatefulWidget {
 
 class _TeacherBarcodePageState extends State<TeacherBarcodePage> {
   late ClazzData clazzData;
-  late MeetingData meetingData;
+  late int meetingId;
+  late int meetingNumber;
   late String validationCode;
 
   @override
   void initState() {
     super.initState();
     clazzData = widget.args['classData'];
-    meetingData = widget.args['meetingData'];
+    meetingId = widget.args['meetingId'];
+    meetingNumber = widget.args['meetingNumber'];
+
     validationCode = widget.args['validationCode'];
+    Future.microtask(() {
+      Provider.of<MeetingCourseNotifier>(context, listen: false)
+        ..getMeetingData(meetingId: meetingId);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<MeetingCourseNotifier>();
+
+    if (provider.getMeetingDataState == RequestState.loading) {
+      return EconLoading(
+        withScaffold: true,
+      );
+    } else if (provider.getMeetingDataState == RequestState.error) {
+      return EconError(errorMessage: provider.error);
+    }
+    final meetingData = provider.meetingData!;
+    meetingData.setMeetingNumber = meetingNumber;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Palette.primary,
@@ -68,7 +92,13 @@ class _TeacherBarcodePageState extends State<TeacherBarcodePage> {
               Icons.mode_edit_outline_outlined,
               color: Colors.white,
             ),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              Navigator.pushNamed(context, AppRoute.genBarcode, arguments: {
+                'meetingData': meetingData,
+                'classData': clazzData,
+                'isEdit': true,
+              });
+            },
           ),
         ],
       ),
@@ -138,7 +168,9 @@ class _TeacherBarcodePageState extends State<TeacherBarcodePage> {
                             ),
                           ),
                           Text(
-                            '09:00 12-02-2022',
+                            ReusableFuntionHelper.datetimeToString(
+                                meetingData.validationCodeExpiredDate!,
+                                format: 'HH:mm dd-MM-yyyy'),
                             style: kTextHeme.subtitle1?.copyWith(
                               color: Palette.primary,
                             ),

@@ -22,7 +22,7 @@ class EconLoading extends StatelessWidget {
         itemBuilder: (_, int index) {
           return DecoratedBox(
             decoration: BoxDecoration(
-              color: index.isEven ? Palette.primary : Palette.secondary,
+              color: index.isEven ? Palette.primary : Palette.teritory,
             ),
           );
         },

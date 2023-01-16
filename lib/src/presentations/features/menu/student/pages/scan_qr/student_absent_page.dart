@@ -1,10 +1,16 @@
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
+import 'package:e_con/core/helpers/reusable_function_helper.dart';
 import 'package:e_con/core/themes/text_theme.dart';
+import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/scan_qr/provider/qr_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/scan_qr/widgets/ripple_location.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/scan_qr/widgets/scan_qr_section.dart';
+import 'package:e_con/src/presentations/features/menu/student/providers/student_profile_notifier.dart';
+import 'package:e_con/src/presentations/reusable_pages/econ_error.dart';
 import 'package:e_con/src/presentations/widgets/custom_button.dart';
+import 'package:e_con/src/presentations/widgets/custom_shimmer.dart';
+import 'package:e_con/src/presentations/widgets/placeholders/text_placeholder.dart';
 import 'package:e_con/src/presentations/widgets/success_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -101,117 +107,161 @@ class _BodySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => QrNotifier(),
-      child: Consumer<QrNotifier>(
-        builder: (context, value, child) {
-          return Stack(
-            children: <Widget>[
-              const Positioned.fill(
-                child: ScanQrSection(),
-              ),
-              // if (value.qrCode.isNotEmpty)
-              Positioned(
-                bottom: 0,
-                child: Container(
-                  width: AppSize.getAppWidth(context),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(AppSize.space[2]),
-                      topRight: Radius.circular(AppSize.space[2]),
-                    ),
-                    color: Colors.white,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
+    return Consumer<QrNotifier>(
+      builder: (context, value, child) {
+        return Stack(
+          children: <Widget>[
+            const Positioned.fill(
+              child: ScanQrSection(),
+            ),
+            if (value.qrData != null) AttendanceDetailSection(),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class AttendanceDetailSection extends StatefulWidget {
+  const AttendanceDetailSection({super.key});
+
+  @override
+  State<AttendanceDetailSection> createState() =>
+      _AttendanceDetailSectionState();
+}
+
+class _AttendanceDetailSectionState extends State<AttendanceDetailSection> {
+  @override
+  Widget build(BuildContext context) {
+    final qrProvider = context.watch<QrNotifier>();
+    final studentProvider = context.watch<StudentProfileNotifier>();
+
+    return Positioned(
+      bottom: 0,
+      child: Container(
+        width: AppSize.getAppWidth(context),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(AppSize.space[2]),
+            topRight: Radius.circular(AppSize.space[2]),
+          ),
+          color: Colors.white,
+        ),
+        child: Builder(builder: (context) {
+          if (qrProvider == RequestState.loading ||
+              studentProvider == RequestState.loading ||
+              qrProvider.qrResult == null ||
+              studentProvider.studentData == null) {
+            return CustomShimmer(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AppSize.verticalSpace[4],
+                TextPlaceholder(),
+                AppSize.verticalSpace[4],
+                TextPlaceholder(),
+                AppSize.verticalSpace[4],
+                TextPlaceholder()
+              ],
+            ));
+          }
+          if (qrProvider == RequestState.error ||
+              studentProvider == RequestState.error) {
+            return EconError(errorMessage: '');
+          }
+
+          final qrResult = qrProvider.qrResult!;
+          final studentData = studentProvider.studentData!;
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        top: AppSize.space[4],
+                        left: AppSize.space[4],
+                        right: AppSize.space[2],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                top: AppSize.space[4],
-                                left: AppSize.space[4],
-                                right: AppSize.space[2],
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  AppSize.verticalSpace[2],
-                                  Text(
-                                    'Mata Kuliah',
-                                    style: kTextHeme.subtitle1?.copyWith(
-                                      color: Palette.disable,
-                                      height: 1,
-                                    ),
-                                  ),
-                                  Text(
-                                    'Matematika Dasar 1',
-                                    style: kTextHeme.headline5
-                                        ?.copyWith(color: Palette.primary),
-                                  ),
-                                ],
-                              ),
+                          AppSize.verticalSpace[2],
+                          Text(
+                            'Mata Kuliah',
+                            style: kTextHeme.subtitle1?.copyWith(
+                              color: Palette.disable,
+                              height: 1,
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                              top: AppSize.space[2],
-                              right: AppSize.space[0],
-                            ),
-                            child: IconButton(
-                              onPressed: () {
-                                value.resetQrCode();
-                              },
-                              icon: const Icon(Icons.close_rounded),
-                            ),
-                          )
+                          Text(
+                            qrResult
+                                .meetingData.clazzData!.courseData!.courseName!,
+                            style: kTextHeme.headline5
+                                ?.copyWith(color: Palette.primary),
+                          ),
                         ],
                       ),
-                      Padding(
-                        padding: EdgeInsets.all(
-                          AppSize.space[4],
-                        ),
-                        child: Column(
-                          children: [
-                            _buildAbsentTile(
-                              title: 'Pakilaran Devon M.Si',
-                              iconPath: 'assets/icons/user.svg',
-                            ),
-                            AppSize.verticalSpace[1],
-                            _buildAbsentTile(
-                              title: '21.00 - 24.00',
-                              iconPath: 'assets/icons/time.svg',
-                            ),
-                            AppSize.verticalSpace[1],
-                            _buildAbsentTile(
-                              title: 'Senin, 15 Januari 2022',
-                              iconPath: 'assets/icons/date.svg',
-                            ),
-                            AppSize.verticalSpace[5],
-                            CustomButton(
-                              height: 50,
-                              text: 'Konfirmasi',
-                              onTap: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return const SuccessModal();
-                                  },
-                                );
-                              },
-                            ),
-                            AppSize.verticalSpace[5],
-                          ],
-                        ),
-                      )
-                    ],
+                    ),
                   ),
-                ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: AppSize.space[2],
+                      right: AppSize.space[0],
+                    ),
+                    child: IconButton(
+                      onPressed: () {
+                        qrProvider.resetQrCode();
+                      },
+                      icon: const Icon(Icons.close_rounded),
+                    ),
+                  )
+                ],
               ),
+              Padding(
+                padding: EdgeInsets.all(
+                  AppSize.space[4],
+                ),
+                child: Column(
+                  children: [
+                    _buildAbsentTile(
+                      title: studentData.studentName!,
+                      iconPath: 'assets/icons/user.svg',
+                    ),
+                    AppSize.verticalSpace[1],
+                    _buildAbsentTile(
+                      title:
+                          '${qrResult.meetingData.clazzData!.startTime} - ${qrResult.meetingData.clazzData!.endTime}',
+                      iconPath: 'assets/icons/time.svg',
+                    ),
+                    AppSize.verticalSpace[1],
+                    _buildAbsentTile(
+                      title: ReusableFuntionHelper.datetimeToString(
+                          qrResult.meetingData.date!),
+                      iconPath: 'assets/icons/date.svg',
+                    ),
+                    AppSize.verticalSpace[5],
+                    CustomButton(
+                      height: 50,
+                      text: 'Konfirmasi',
+                      onTap: () {
+                        // #TODO hit api absen with valcode and meetingId
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return const SuccessAttendanceModal();
+                          },
+                        );
+                      },
+                    ),
+                    AppSize.verticalSpace[5],
+                  ],
+                ),
+              )
             ],
           );
-        },
+        }),
       ),
     );
   }

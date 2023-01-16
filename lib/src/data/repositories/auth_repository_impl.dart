@@ -4,6 +4,7 @@ import 'package:e_con/src/data/models/user/user_credential.dart';
 import 'package:e_con/core/utils/failure.dart';
 import 'package:dartz/dartz.dart';
 import 'package:e_con/src/domain/repositories/auth_repository.dart';
+import 'package:flutter/src/painting/image_provider.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthDataSource authDataSource;
