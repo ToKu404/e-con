@@ -55,7 +55,7 @@ class TeacherAbsentCard extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            'Senin ${clazzData.startTime}-${clazzData.endTime} WITA',
+                            '${clazzData.startTime}-${clazzData.endTime} WITA',
                             style: kTextHeme.subtitle1?.copyWith(
                               color: Palette.onPrimary,
                             ),

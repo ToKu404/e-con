@@ -171,12 +171,14 @@ class _TeacherMeetDetailPageState extends State<TeacherMeetDetailPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               AbsentStatisticCard(
-                                absentStatus: AttendanceValueHelper.getAttendanceValue(1),
+                                absentStatus:
+                                    AttendanceValueHelper.getAttendanceValue(1),
                                 value: 49,
                               ),
                               AppSize.horizontalSpace[2],
                               AbsentStatisticCard(
-                                absentStatus: AttendanceValueHelper.getAttendanceValue(4),
+                                absentStatus:
+                                    AttendanceValueHelper.getAttendanceValue(4),
                                 value: 2,
                               ),
                             ],
@@ -186,12 +188,14 @@ class _TeacherMeetDetailPageState extends State<TeacherMeetDetailPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               AbsentStatisticCard(
-                                absentStatus: AttendanceValueHelper.getAttendanceValue(3),
+                                absentStatus:
+                                    AttendanceValueHelper.getAttendanceValue(3),
                                 value: 3,
                               ),
                               AppSize.horizontalSpace[2],
                               AbsentStatisticCard(
-                                absentStatus: AttendanceValueHelper.getAttendanceValue(2),
+                                absentStatus:
+                                    AttendanceValueHelper.getAttendanceValue(2),
                                 value: 2,
                               ),
                             ],
@@ -535,7 +539,8 @@ class AbsentStatisticCard extends StatelessWidget {
                 Text(
                   absentStatus.status,
                   style: kTextHeme.subtitle1?.copyWith(
-                    color: absentStatus.color,
+                    fontWeight: FontWeight.normal,
+                    color: Palette.black,
                   ),
                 ),
               ],

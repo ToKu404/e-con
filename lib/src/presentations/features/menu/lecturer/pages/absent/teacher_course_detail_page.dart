@@ -114,8 +114,10 @@ class _TeacherCourseDetailPageState extends State<TeacherCourseDetailPage> {
                   onPressed: () {
                     isShowDetail.value = !isShowDetail.value;
                   },
-                  icon: const Icon(
-                    Icons.keyboard_arrow_down_rounded,
+                  icon: Icon(
+                    isShowDetail.value
+                        ? Icons.keyboard_arrow_up_rounded
+                        : Icons.keyboard_arrow_down_rounded,
                   ),
                 ),
               ],
@@ -138,6 +140,7 @@ class _TeacherCourseDetailPageState extends State<TeacherCourseDetailPage> {
                                     totalStudent: studentCourseProvider
                                         .listStudent!.length,
                                     courseDate: courseDate,
+                                    classId: widget.clazzData.id!,
                                   )
                                 : SizedBox.shrink(),
                             Expanded(
@@ -175,6 +178,7 @@ class _TeacherCourseDetailPageState extends State<TeacherCourseDetailPage> {
                                     totalStudent: studentCourseProvider
                                         .listStudent!.length,
                                     courseDate: courseDate,
+                                    classId: widget.clazzData.id!,
                                   )
                                 : SizedBox.shrink(),
                           ],
@@ -189,6 +193,7 @@ class _TeacherCourseDetailPageState extends State<TeacherCourseDetailPage> {
 }
 
 class TitleSection extends StatelessWidget {
+  final int classId;
   final String courseName;
   final String className;
   final String semesterName;
@@ -200,6 +205,7 @@ class TitleSection extends StatelessWidget {
     required this.semesterName,
     required this.totalStudent,
     required this.courseDate,
+    required this.classId,
     super.key,
   });
 
@@ -241,7 +247,8 @@ class TitleSection extends StatelessWidget {
           CustomButton(
             text: '$totalStudent Mahasiswa',
             onTap: () {
-              Navigator.pushNamed(context, AppRoute.listStudent);
+              Navigator.pushNamed(context, AppRoute.listStudent,
+                  arguments: classId);
             },
             height: 50,
             iconPath: 'assets/icons/user.svg',

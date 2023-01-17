@@ -35,7 +35,8 @@ class _InputDateTimeFieldState extends State<InputDateTimeField> {
               ? (widget.initialDate != null
                   ? widget.initialDate!
                   : DateTime.now())
-              : ReusableFuntionHelper.stringToDateTime(widget.controller.text),
+              : ReusableFuntionHelper.stringToDateTime(widget.controller.text,
+                  isShowTime: true),
           firstDate:
               widget.initialDate != null ? widget.initialDate! : DateTime.now(),
           lastDate: DateTime.now().add(

@@ -38,7 +38,8 @@ class _TeacherGenBarcodePageState extends State<TeacherGenBarcodePage> {
 
     if (isEdit) {
       dateController.text = ReusableFuntionHelper.datetimeToString(
-          meetingData.validationCodeExpiredDate!);
+          meetingData.validationCodeExpiredDate!,
+          isShowTime: true);
       dateTime = meetingData.validationCodeExpiredDate!;
     }
   }

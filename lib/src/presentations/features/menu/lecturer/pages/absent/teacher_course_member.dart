@@ -1,5 +1,6 @@
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
+import 'package:e_con/core/helpers/reusable_function_helper.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/data/models/attendance/student_attendance_data.dart';
@@ -7,35 +8,34 @@ import 'package:e_con/src/data/models/profile/student_data.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_empty.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_error.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
+import 'package:e_con/src/presentations/widgets/custom_shimmer.dart';
+import 'package:e_con/src/presentations/widgets/placeholders/card_placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/course_student_notifier.dart';
 
-class TeacherCourseMember extends StatelessWidget {
-  const TeacherCourseMember({super.key});
+class TeacherCourseMember extends StatefulWidget {
+  final int classId;
+  const TeacherCourseMember({super.key, required this.classId});
+
+  @override
+  State<TeacherCourseMember> createState() => _TeacherCourseMemberState();
+}
+
+class _TeacherCourseMemberState extends State<TeacherCourseMember> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.microtask(() {
+      Provider.of<CourseStudentNotifier>(context, listen: false)
+        ..getListStudent(widget.classId);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final studentCourseProvider = context.watch<CourseStudentNotifier>();
-
-    if (studentCourseProvider.state == RequestState.loading) {
-      return EconLoading(
-        withScaffold: true,
-      );
-    } else if (studentCourseProvider.state == RequestState.error ||
-        studentCourseProvider.listStudent == null) {
-      return EconError(
-        errorMessage: studentCourseProvider.error,
-        withScaffold: true,
-      );
-    } else if (studentCourseProvider.listStudent!.isEmpty) {
-      return EconEmpty(
-          emptyMessage: 'Data peserta matakuliah belum ditambahkan');
-    }
-
-    final listStudent = studentCourseProvider.listStudent!;
-
     return Scaffold(
       backgroundColor: Palette.background,
       appBar: AppBar(
@@ -55,13 +55,51 @@ class TeacherCourseMember extends StatelessWidget {
           ),
         ),
       ),
-      body: ListView.builder(
-        itemCount: listStudent.length,
-        padding: EdgeInsets.all(AppSize.space[4]),
-        itemBuilder: (context, index) {
-          return CourseParticipantCard(studentData: listStudent[index]);
-        },
-      ),
+      body: Builder(builder: (context) {
+        final studentCourseProvider = context.watch<CourseStudentNotifier>();
+
+        if (studentCourseProvider.state == RequestState.loading) {
+          return Padding(
+            padding: EdgeInsets.all(AppSize.space[4]),
+            child: CustomShimmer(
+                child: Column(
+              children: [
+                CardPlaceholder(
+                  height: 65,
+                  horizontalPadding: 0,
+                ),
+                AppSize.verticalSpace[4],
+                CardPlaceholder(
+                  height: 65,
+                  horizontalPadding: 0,
+                ),
+                AppSize.verticalSpace[4],
+                CardPlaceholder(
+                  height: 65,
+                  horizontalPadding: 0,
+                )
+              ],
+            )),
+          );
+        } else if (studentCourseProvider.state == RequestState.error ||
+            studentCourseProvider.listStudent == null) {
+          return EconError(
+            errorMessage: studentCourseProvider.error,
+          );
+        } else if (studentCourseProvider.listStudent!.isEmpty) {
+          return EconEmpty(
+              emptyMessage: 'Data peserta matakuliah belum ditambahkan');
+        }
+
+        final listStudent = studentCourseProvider.listStudent!;
+        return ListView.builder(
+          itemCount: listStudent.length,
+          padding: EdgeInsets.all(AppSize.space[4]),
+          itemBuilder: (context, index) {
+            return CourseParticipantCard(studentData: listStudent[index]);
+          },
+        );
+      }),
     );
   }
 }
@@ -110,46 +148,51 @@ class CourseParticipantCard extends StatelessWidget {
               ],
             ),
           ),
-          Stack(
-            children: [
-              const SizedBox(
-                width: 40,
-                height: 40,
-                child: CircularProgressIndicator(
-                  color: Palette.success,
-                  strokeWidth: 5,
-                  backgroundColor: Palette.disable,
-                  value: .6,
+          Builder(builder: (context) {
+            final attendanceStatusCard =
+                ReusableFuntionHelper.getAttendanceStat(
+                    attendances: studentData.attendances!);
+            return Stack(
+              children: [
+                SizedBox(
+                  width: 40,
+                  height: 40,
+                  child: CircularProgressIndicator(
+                    color: Palette.success,
+                    strokeWidth: 5,
+                    backgroundColor: Palette.disable,
+                    value: attendanceStatusCard.percent / 100,
+                  ),
                 ),
-              ),
-              Positioned.fill(
-                  child: Center(
-                child: SizedBox(
-                  width: 28,
-                  height: 28,
-                  child: Center(
-                    child: RichText(
-                      text: TextSpan(
-                        text: '75',
-                        style: kTextHeme.subtitle2?.copyWith(
-                          color: Palette.success,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: '%',
-                            style: kTextHeme.overline?.copyWith(
-                              color: Palette.success,
-                            ),
+                Positioned.fill(
+                    child: Center(
+                  child: SizedBox(
+                    width: 30,
+                    height: 30,
+                    child: Center(
+                      child: RichText(
+                        text: TextSpan(
+                          text: '${attendanceStatusCard.percent}',
+                          style: kTextHeme.subtitle2?.copyWith(
+                            color: attendanceStatusCard.statusColor,
+                            fontWeight: FontWeight.bold,
                           ),
-                        ],
+                          children: [
+                            TextSpan(
+                              text: '%',
+                              style: kTextHeme.overline?.copyWith(
+                                color: attendanceStatusCard.statusColor,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ))
-            ],
-          )
+                )),
+              ],
+            );
+          })
         ],
       ),
     );

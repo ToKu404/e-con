@@ -54,7 +54,9 @@ Route? routesHandler(RouteSettings settings) {
       );
     case AppRoute.listStudent:
       return MaterialPageRoute(
-        builder: (_) => const TeacherCourseMember(),
+        builder: (_) => TeacherCourseMember(
+          classId: settings.arguments as int,
+        ),
       );
     case AppRoute.teacherProfile:
       return MaterialPageRoute(

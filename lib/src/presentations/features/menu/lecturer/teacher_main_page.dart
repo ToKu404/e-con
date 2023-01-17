@@ -84,7 +84,8 @@ class _TeacherMainPageState extends State<TeacherMainPage>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Palette.background,
-      body: SafeArea(
+      body: Padding(
+        padding: EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top),
         child: listMenu[selectIndex],
       ),
       bottomNavigationBar: Container(
