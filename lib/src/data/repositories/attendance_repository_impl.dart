@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:e_con/core/utils/failure.dart';
 import 'package:e_con/src/data/datasources/attendance_datasource.dart';
 import 'package:e_con/src/data/models/attendance/attendance_data.dart';
+import 'package:e_con/src/data/models/attendance/student_attendance_data.dart';
 import 'package:e_con/src/domain/repositories/attendance_repository.dart';
 
 class AttendanceRepositoryImpl implements AttendanceRepository {
@@ -13,12 +14,14 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
   Future<Either<Failure, bool>> setAttendance(
       {required int meetingId,
       required int studentId,
-      required int attendanceTypeId}) async {
+      required int attendanceTypeId,
+      required int attendanceId}) async {
     try {
       final result = await attendanceDataSource.setAttendance(
           meetingId: meetingId,
           studentId: studentId,
-          attendanceTypeId: attendanceTypeId);
+          attendanceTypeId: attendanceTypeId,
+          attendanceId: attendanceId);
       return Right(result);
     } catch (e) {
       return Left(ServerFailure(e.toString()));
@@ -26,7 +29,7 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
   }
 
   @override
-  Future<Either<Failure, List<AttendanceData>?>> getListStudentAttendance({
+  Future<Either<Failure, List<AttendanceData>?>> getListAttendance({
     required int meetingId,
     required String? query,
   }) async {
@@ -35,6 +38,18 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
         meetingId: meetingId,
         query: query,
       );
+      return Right(result);
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<StudentAttendanceData>>> getListStudentAttendance(
+      {required int classId}) async {
+    try {
+      final result =
+          await attendanceDataSource.getListStudentAttendance(classId: classId);
       return Right(result);
     } catch (e) {
       return Left(ServerFailure(e.toString()));

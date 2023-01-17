@@ -7,15 +7,16 @@ class SetAttendance {
 
   SetAttendance({required this.attendanceRepository});
 
-  Future<Either<Failure, bool>> execute({
-    required int attendanceTypeId,
-    required int studentId,
-    required int meetingId,
-  }) async {
+  Future<Either<Failure, bool>> execute(
+      {required int attendanceTypeId,
+      required int studentId,
+      required int meetingId,
+      required int attendanceId}) async {
     return attendanceRepository.setAttendance(
       attendanceTypeId: attendanceTypeId,
       meetingId: meetingId,
       studentId: studentId,
+      attendanceId: attendanceId,
     );
   }
 }

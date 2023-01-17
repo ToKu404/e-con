@@ -18,17 +18,22 @@ class AttendanceNotifier extends ChangeNotifier {
   RequestState _setAttendanceState = RequestState.init;
   RequestState get setAttendanceState => _setAttendanceState;
 
-  Future<void> setAttendance({
-    required int attendanceTypeId,
-    required int studentId,
-    required int meetingId,
-  }) async {
+  Future<void> init() async {
+    _setAttendanceState = RequestState.init;
+  }
+
+  Future<void> setAttendance(
+      {required int attendanceTypeId,
+      required int studentId,
+      required int meetingId,
+      required int attendanceId}) async {
     _setAttendanceState = RequestState.loading;
     notifyListeners();
     final result = await setAttendanceUsecase.execute(
         attendanceTypeId: attendanceTypeId,
         studentId: studentId,
-        meetingId: meetingId);
+        meetingId: meetingId,
+        attendanceId: attendanceId);
 
     result.fold((l) {
       _setAttendanceState = RequestState.error;

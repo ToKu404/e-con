@@ -12,7 +12,7 @@ class GetListAttendance {
     required int meetingId,
     required String? query,
   }) async {
-    return attendanceRepository.getListStudentAttendance(
+    return attendanceRepository.getListAttendance(
       meetingId: meetingId,
       query: query,
     );

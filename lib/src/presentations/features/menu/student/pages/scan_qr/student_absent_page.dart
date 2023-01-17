@@ -254,6 +254,7 @@ class _AttendanceDetailSectionState extends State<AttendanceDetailSection> {
                           meetingId: qrResult.meetingData.id,
                           studentId: studentData.id!,
                           attendanceTypeId: 0,
+                          attendanceId: 0,
                         );
                         if (attendanceProvider.setAttendanceState ==
                             RequestState.success) {

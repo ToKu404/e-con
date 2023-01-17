@@ -3,16 +3,24 @@ import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/src/data/models/attendance/helpers/attendance_value.dart';
 import 'package:e_con/src/data/models/profile/student_data.dart';
-import 'package:flutter/foundation.dart';
-
+import 'package:e_con/src/presentations/features/menu/providers/attendance_notifier.dart';
+import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 class ChoiceAbsentModal extends StatelessWidget {
   final AttendanceValue attendanceValue;
   final StudentData studentData;
-  const ChoiceAbsentModal(
-      {super.key, required this.attendanceValue, required this.studentData});
+  final int meetingId;
+  final int attendenceId;
+  const ChoiceAbsentModal({
+    super.key,
+    required this.attendanceValue,
+    required this.studentData,
+    required this.meetingId,
+    required this.attendenceId,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -62,8 +70,24 @@ class ChoiceAbsentModal extends StatelessWidget {
                 ),
               ),
               IconButton(
-                onPressed: () {
-                  
+                onPressed: () async {
+                  final provider = context.read<AttendanceNotifier>();
+
+                  if (selectedAttedanceValue.value != attendanceValue) {
+                    await provider.setAttendance(
+                      attendanceTypeId: selectedAttedanceValue.value.id,
+                      studentId: studentData.id!,
+                      meetingId: meetingId,
+                      attendanceId: attendenceId,
+                    );
+                    await provider
+                        .fetchListAttendance(meetingId: meetingId)
+                        .then((value) {
+                      Navigator.pop(context);
+                    });
+                  } else {
+                    Navigator.pop(context);
+                  }
                 },
                 icon: const Icon(
                   Icons.check_rounded,
@@ -85,7 +109,8 @@ class ChoiceAbsentModal extends StatelessWidget {
                     children: [
                       Text(
                         'Absensi',
-                        style: kTextHeme.subtitle2,
+                        style:
+                            kTextHeme.subtitle2?.copyWith(color: Palette.black),
                       ),
                       Text(
                         studentData.name!,
@@ -152,7 +177,7 @@ class ChoiceAbsentModal extends StatelessWidget {
                     ],
                   ),
                 );
-              })
+              }),
         ],
       ),
     );

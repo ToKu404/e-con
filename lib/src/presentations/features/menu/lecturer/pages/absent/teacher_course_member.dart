@@ -2,6 +2,7 @@ import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
+import 'package:e_con/src/data/models/attendance/student_attendance_data.dart';
 import 'package:e_con/src/data/models/profile/student_data.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_empty.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_error.dart';
@@ -50,7 +51,7 @@ class TeacherCourseMember extends StatelessWidget {
           'Peserta Matakuliah',
           style: kTextHeme.headline5?.copyWith(
             fontWeight: FontWeight.bold,
-            color: Palette.primary,
+            color: Palette.black,
           ),
         ),
       ),
@@ -71,7 +72,7 @@ class CourseParticipantCard extends StatelessWidget {
     required this.studentData,
   });
 
-  final StudentData studentData;
+  final StudentAttendanceData studentData;
 
   @override
   Widget build(BuildContext context) {
@@ -96,11 +97,11 @@ class CourseParticipantCard extends StatelessWidget {
                 Text(
                   studentData.name ?? '-',
                   style: kTextHeme.subtitle2?.copyWith(
-                    color: Palette.primary,
+                    color: Palette.black,
                   ),
                 ),
                 Text(
-                  studentData.nim ?? '-',
+                  studentData.idNumber ?? '-',
                   style: kTextHeme.subtitle1?.copyWith(
                     color: Palette.primary,
                     fontWeight: FontWeight.bold,
