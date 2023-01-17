@@ -5,13 +5,16 @@ import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/data/models/user/helper/user_role_type.dart';
+import 'package:e_con/src/presentations/blocs/realtime_internet_check/realtime_internet_check_cubit.dart';
 import 'package:e_con/src/presentations/features/login/provider/auth_notifier.dart';
 import 'package:e_con/src/presentations/features/login/provider/error_field_checker.dart';
+import 'package:e_con/src/presentations/reusable_pages/check_internet_single.dart';
 import 'package:e_con/src/presentations/widgets/custom_button.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
 import 'package:e_con/src/presentations/widgets/header_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
@@ -32,13 +35,14 @@ class _LoginPageState extends State<LoginPage> {
     passwordController.dispose();
   }
 
+  bool isLoadingEnd = false;
+
   @override
   Widget build(BuildContext context) {
     final authNotifier = context.watch<AuthNotifier>();
-
     SchedulerBinding.instance.addPostFrameCallback((_) {
       if (authNotifier.loginState == RequestState.error) {
-        Navigator.pop(context);
+        if (isLoadingEnd) Navigator.pop(context);
         AwesomeDialog(
           context: context,
           animType: AnimType.scale,
@@ -46,10 +50,10 @@ class _LoginPageState extends State<LoginPage> {
           autoHide: Duration(seconds: 2, milliseconds: 500),
           body: Center(
             child: Text(
-              authNotifier.error,
+              'Data Pengguna Tidak Ditemukan',
             ),
           ),
-          title: 'Gagal Login',
+          title: 'Data Pengguna Tidak Ditemukan',
           btnOkColor: Palette.primary,
           btnOkText: 'Kembali',
           btnOkOnPress: () {},
@@ -62,8 +66,9 @@ class _LoginPageState extends State<LoginPage> {
             return EconLoading();
           },
         );
+        isLoadingEnd = true;
       } else if (authNotifier.loginState == RequestState.success) {
-        Navigator.pop(context);
+        if (isLoadingEnd) Navigator.pop(context);
         if (authNotifier.user != null) {
           if (authNotifier.user!.role == UserRole.student) {
             Navigator.pushNamedAndRemoveUntil(
@@ -88,73 +93,75 @@ class _LoginPageState extends State<LoginPage> {
           return Scaffold(
             backgroundColor: Palette.white,
             body: SafeArea(
-              child: CustomScrollView(
-                slivers: [
-                  SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: Padding(
-                      padding: const EdgeInsets.all(24.0),
-                      child: Builder(builder: (context) {
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Center(
-                              child: HeaderLogo(
-                                bgColor: Palette.primaryVariant.withOpacity(
-                                  .07,
-                                ),
-                              ),
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                RichText(
-                                  text: TextSpan(
-                                    text: 'Selamat',
-                                    style: kTextHeme.headline2?.copyWith(
-                                      color: Palette.onPrimary,
-                                    ),
-                                    children: [
-                                      TextSpan(
-                                        text: ' Datang',
-                                        style: kTextHeme.headline2?.copyWith(
-                                          color: Palette.primary,
-                                        ),
-                                      ),
-                                    ],
+              child: CheckInternetSingle(
+                child: CustomScrollView(
+                  slivers: [
+                    SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: Padding(
+                        padding: const EdgeInsets.all(24.0),
+                        child: Builder(builder: (context) {
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Center(
+                                child: HeaderLogo(
+                                  bgColor: Palette.primaryVariant.withOpacity(
+                                    .07,
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                UsernameField(
-                                  controller: usernameController,
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                PasswordField(
-                                  controller: passwordController,
-                                ),
-                                const SizedBox(
-                                  height: 28,
-                                ),
-                                Builder(builder: (context) {
-                                  return CustomButton(
-                                    text: 'Masuk',
-                                    onTap: () =>
-                                        _onPressedSignInButton(context),
-                                  );
-                                }),
-                              ],
-                            ),
-                            SizedBox.shrink()
-                          ],
-                        );
-                      }),
-                    ),
-                  )
-                ],
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  RichText(
+                                    text: TextSpan(
+                                      text: 'Selamat',
+                                      style: kTextHeme.headline2?.copyWith(
+                                        color: Palette.onPrimary,
+                                      ),
+                                      children: [
+                                        TextSpan(
+                                          text: ' Datang',
+                                          style: kTextHeme.headline2?.copyWith(
+                                            color: Palette.primary,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  UsernameField(
+                                    controller: usernameController,
+                                  ),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  PasswordField(
+                                    controller: passwordController,
+                                  ),
+                                  const SizedBox(
+                                    height: 28,
+                                  ),
+                                  Builder(builder: (context) {
+                                    return CustomButton(
+                                      text: 'Masuk',
+                                      onTap: () =>
+                                          _onPressedSignInButton(context),
+                                    );
+                                  }),
+                                ],
+                              ),
+                              SizedBox.shrink()
+                            ],
+                          );
+                        }),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           );

@@ -8,8 +8,13 @@ class GetListAttendance {
 
   GetListAttendance({required this.attendanceRepository});
 
-  Future<Either<Failure, List<AttendanceData>?>> execute(
-      {required int meetingId}) async {
-    return attendanceRepository.getListStudentAttendance(meetingId: meetingId);
+  Future<Either<Failure, List<AttendanceData>?>> execute({
+    required int meetingId,
+    required String? query,
+  }) async {
+    return attendanceRepository.getListStudentAttendance(
+      meetingId: meetingId,
+      query: query,
+    );
   }
 }

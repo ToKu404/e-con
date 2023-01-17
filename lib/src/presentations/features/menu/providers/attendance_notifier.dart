@@ -46,10 +46,12 @@ class AttendanceNotifier extends ChangeNotifier {
 
   Future<void> fetchListAttendance({
     required int meetingId,
+    String? query,
   }) async {
     _getAttendanceState = RequestState.loading;
     notifyListeners();
-    final result = await getListAttendanceUsecase.execute(meetingId: meetingId);
+    final result = await getListAttendanceUsecase.execute(
+        meetingId: meetingId, query: query);
 
     result.fold((l) {
       _getAttendanceState = RequestState.error;

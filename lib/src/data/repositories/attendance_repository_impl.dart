@@ -26,11 +26,14 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
   }
 
   @override
-  Future<Either<Failure, List<AttendanceData>?>> getListStudentAttendance(
-      {required int meetingId}) async {
+  Future<Either<Failure, List<AttendanceData>?>> getListStudentAttendance({
+    required int meetingId,
+    required String? query,
+  }) async {
     try {
       final result = await attendanceDataSource.getListAttendance(
         meetingId: meetingId,
+        query: query,
       );
       return Right(result);
     } catch (e) {

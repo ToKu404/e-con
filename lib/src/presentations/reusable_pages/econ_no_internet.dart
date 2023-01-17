@@ -2,11 +2,9 @@ import 'package:e_con/core/constants/color_const.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class EconError extends StatelessWidget {
-  final String errorMessage;
+class EconNoInternet extends StatelessWidget {
   final bool withScaffold;
-  const EconError(
-      {super.key, required this.errorMessage, this.withScaffold = false});
+  const EconNoInternet({super.key, this.withScaffold = false});
 
   @override
   Widget build(BuildContext context) {
@@ -27,16 +25,16 @@ class EconError extends StatelessWidget {
           height: 200,
           width: 250,
           child: SvgPicture.asset(
-            'assets/illustrations/error_vector.svg',
+            'assets/illustrations/no_connection_vector.svg',
             fit: BoxFit.contain,
           ),
         ),
         Text(
-          'Terdapat Kesalahan',
+          'Koneksi Terputus',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         Text(
-          errorMessage,
+          'Harap periksa sambungan internet anda',
           maxLines: 3,
           style: TextStyle(
             height: 1,

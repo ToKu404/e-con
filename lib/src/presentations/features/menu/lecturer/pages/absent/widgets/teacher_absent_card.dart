@@ -104,8 +104,6 @@ class WaveClipper extends CustomClipper<Path> {
       ..moveTo(size.width / 3, 0)
       ..close();
 
-    // path.lineTo(size.width, size.height);
-    // path.lineTo(size.height, size.width);
     return path;
   }
 

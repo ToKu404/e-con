@@ -7,6 +7,8 @@ abstract class AttendanceRepository {
       {required int meetingId,
       required int studentId,
       required int attendanceTypeId});
-  Future<Either<Failure, List<AttendanceData>?>> getListStudentAttendance(
-      {required int meetingId});
+  Future<Either<Failure, List<AttendanceData>?>> getListStudentAttendance({
+    required int meetingId,
+    required String? query,
+  });
 }

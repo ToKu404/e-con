@@ -30,6 +30,7 @@ import 'package:e_con/src/domain/usecases/profile_usecases/get_student_data.dart
 import 'package:e_con/src/domain/usecases/user_usecases/get_user.dart';
 import 'package:e_con/src/domain/usecases/user_usecases/log_out.dart';
 import 'package:e_con/src/domain/usecases/user_usecases/sign_in.dart';
+import 'package:e_con/src/presentations/blocs/realtime_internet_check/realtime_internet_check_cubit.dart';
 import 'package:e_con/src/presentations/features/login/provider/auth_notifier.dart';
 import 'package:e_con/src/presentations/features/login/provider/get_user_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/providers/attendance_notifier.dart';
@@ -40,6 +41,7 @@ import 'package:e_con/src/presentations/features/menu/lecturer/providers/course_
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecture_courses_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecture_profile_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/meeting_course_notifier.dart';
+import 'package:e_con/src/presentations/blocs/onetime_internet_check/onetime_internet_check_cubit.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 
@@ -184,6 +186,12 @@ void init() {
   );
 
   // Provider
+  locator.registerFactory(
+    () => OnetimeInternetCheckCubit(),
+  );
+  locator.registerFactory(
+    () => RealtimeInternetCheckCubit(),
+  );
   locator.registerFactory(
     () => GetUserNotifier(
       getUserUsecase: locator(),

@@ -3,6 +3,7 @@ import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/helpers/reusable_function_helper.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
+import 'package:e_con/src/data/models/attendance/helpers/attendance_value.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
 import 'package:flutter/material.dart';
@@ -160,8 +161,6 @@ class TeacherMeetCard extends StatelessWidget {
     );
   }
 }
-
-enum AbsentStatus { hadir, izin, tidakHadir, sakit }
 
 class AbsentData {
   final String title;

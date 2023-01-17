@@ -5,7 +5,6 @@ import 'package:e_con/core/responses/data_response.dart';
 import 'package:e_con/core/services/api_service.dart';
 import 'package:e_con/core/utils/exception.dart';
 import 'package:e_con/src/data/models/attendance/attendance_data.dart';
-import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 
 abstract class AttendanceDataSource {
@@ -15,6 +14,7 @@ abstract class AttendanceDataSource {
       required attendanceTypeId});
   Future<List<AttendanceData>> getListAttendance({
     required int meetingId,
+    required String? query,
   });
 }
 
@@ -54,11 +54,17 @@ class AttendanceDataSourceImpl implements AttendanceDataSource {
   @override
   Future<List<AttendanceData>> getListAttendance({
     required int meetingId,
+    required String? query,
   }) async {
     final credential = await authPreferenceHelper.getUser();
+    final map = {
+      'query': query,
+    };
+
     final responseData = await client.get(
       Uri.parse(
-          '${ApiService.baseUrlCPL}/class-record/attendance/all-by-meetingid/${meetingId}'),
+        '${ApiService.baseUrlCPL}/class-record/attendance/all-by-meetingid/${meetingId}',
+      ).replace(queryParameters: map),
       headers: {
         "Cookie": credential!.session ?? '',
       },

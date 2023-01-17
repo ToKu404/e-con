@@ -15,9 +15,12 @@ import 'package:e_con/src/presentations/features/menu/lecturer/providers/meeting
 import 'package:e_con/src/presentations/features/splash/splash_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
+import 'src/presentations/blocs/realtime_internet_check/realtime_internet_check_cubit.dart';
 import 'src/presentations/features/menu/providers/profile_picture_notifier.dart';
+import 'src/presentations/blocs/onetime_internet_check/onetime_internet_check_cubit.dart';
 
 class EconApp extends StatelessWidget {
   const EconApp({super.key});
@@ -38,6 +41,12 @@ class EconApp extends StatelessWidget {
 
     return MultiProvider(
       providers: [
+        BlocProvider(
+          create: (_) => di.locator<OnetimeInternetCheckCubit>(),
+        ),
+        BlocProvider(
+          create: (_) => di.locator<RealtimeInternetCheckCubit>(),
+        ),
         ChangeNotifierProvider(
           create: (_) => di.locator<GetUserNotifier>(),
         ),
