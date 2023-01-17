@@ -16,6 +16,7 @@ import 'package:e_con/src/domain/repositories/profile_repository.dart';
 import 'package:e_con/src/domain/usecases/attendance_usecases/get_list_attendance.dart';
 import 'package:e_con/src/domain/usecases/attendance_usecases/get_list_student_attendance.dart';
 import 'package:e_con/src/domain/usecases/attendance_usecases/set_attendance.dart';
+import 'package:e_con/src/domain/usecases/attendance_usecases/set_attendance_by_student.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/create_new_meeting.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/delete_meeting.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/get_list_course.dart';
@@ -176,6 +177,11 @@ void init() {
     ),
   );
   locator.registerLazySingleton(
+    () => SetAttendanceByStudent(
+      attendanceRepository: locator(),
+    ),
+  );
+  locator.registerLazySingleton(
     () => GetListAttendance(
       attendanceRepository: locator(),
     ),
@@ -244,6 +250,7 @@ void init() {
     () => AttendanceNotifier(
       setAttendanceUsecase: locator(),
       getListAttendanceUsecase: locator(),
+      setAttendanceByStudentUsecase: locator(),
     ),
   );
   locator.registerFactory(

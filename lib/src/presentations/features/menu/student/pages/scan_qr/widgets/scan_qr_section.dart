@@ -21,8 +21,6 @@ class _ScanQrSectionState extends State<ScanQrSection> {
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
-  // In order to get hot reload to work we need to pause the camera if the platform
-  // is android, or resume the camera if the platform is iOS.
   @override
   void reassemble() {
     super.reassemble();
@@ -41,10 +39,14 @@ class _ScanQrSectionState extends State<ScanQrSection> {
 
   @override
   Widget build(BuildContext context) {
-    if (controller != null && mounted) {
+    final qrNotifier = context.watch<QrNotifier>();
+    if (qrNotifier.qrData == null && controller != null && mounted) {
       controller?.pauseCamera();
       controller?.resumeCamera();
+    } else {
+      controller?.stopCamera();
     }
+
     return _buildBody();
   }
 

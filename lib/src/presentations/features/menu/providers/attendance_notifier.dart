@@ -4,14 +4,18 @@ import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/data/models/attendance/attendance_data.dart';
 import 'package:e_con/src/domain/usecases/attendance_usecases/get_list_attendance.dart';
 import 'package:e_con/src/domain/usecases/attendance_usecases/set_attendance.dart';
+import 'package:e_con/src/domain/usecases/attendance_usecases/set_attendance_by_student.dart';
 import 'package:flutter/material.dart';
 
 class AttendanceNotifier extends ChangeNotifier {
   final SetAttendance setAttendanceUsecase;
+  final SetAttendanceByStudent setAttendanceByStudentUsecase;
+
   final GetListAttendance getListAttendanceUsecase;
 
   AttendanceNotifier({
     required this.setAttendanceUsecase,
+    required this.setAttendanceByStudentUsecase,
     required this.getListAttendanceUsecase,
   });
 
@@ -20,6 +24,7 @@ class AttendanceNotifier extends ChangeNotifier {
 
   Future<void> init() async {
     _setAttendanceState = RequestState.init;
+    _setAttendanceByStudentState = RequestState.init;
   }
 
   Future<void> setAttendance(
@@ -63,6 +68,29 @@ class AttendanceNotifier extends ChangeNotifier {
     }, (r) {
       _getAttendanceState = RequestState.success;
       _listAttendanceData = r ?? [];
+    });
+    notifyListeners();
+  }
+
+  RequestState _setAttendanceByStudentState = RequestState.init;
+  RequestState get setAttendanceByStudentState => _setAttendanceByStudentState;
+
+  Future<void> setAttendanceByStudent(
+      {required int attendanceTypeId,
+      required int studentId,
+      required int meetingId}) async {
+    _setAttendanceByStudentState = RequestState.loading;
+    notifyListeners();
+    final result = await setAttendanceByStudentUsecase.execute(
+        attendanceTypeId: attendanceTypeId,
+        studentId: studentId,
+        meetingId: meetingId);
+
+    result.fold((l) {
+      _setAttendanceByStudentState = RequestState.error;
+    }, (r) {
+      print('asascsacacsa');
+      _setAttendanceByStudentState = RequestState.success;
     });
     notifyListeners();
   }

@@ -55,4 +55,21 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
       return Left(ServerFailure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, bool>> setAttendanceByStudent(
+      {required int meetingId,
+      required int studentId,
+      required int attendanceTypeId}) async {
+    try {
+      final result = await attendanceDataSource.setAttendanceByStudent(
+        meetingId: meetingId,
+        studentId: studentId,
+        attendanceTypeId: attendanceTypeId,
+      );
+      return Right(result);
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
 }

@@ -14,6 +14,11 @@ abstract class AttendanceDataSource {
       required int studentId,
       required int attendanceTypeId,
       required int attendanceId});
+  Future<bool> setAttendanceByStudent({
+    required int meetingId,
+    required int studentId,
+    required int attendanceTypeId,
+  });
   Future<List<AttendanceData>> getListAttendance({
     required int meetingId,
     required String? query,
@@ -118,6 +123,37 @@ class AttendanceDataSourceImpl implements AttendanceDataSource {
       throw DataNotFoundException();
     } else {
       throw ServerException();
+    }
+  }
+
+  @override
+  Future<bool> setAttendanceByStudent(
+      {required int meetingId,
+      required int studentId,
+      required int attendanceTypeId}) async {
+    try {
+      final credential = await authPreferenceHelper.getUser();
+
+      final map = {
+        'meetingId': meetingId,
+        'studentId': studentId,
+        'attendanceTypeId': attendanceTypeId,
+      };
+      final response = await client.post(
+        Uri.parse(
+          '${ApiService.baseUrlCPL}/class-record/attendance',
+        ),
+        headers: {
+          'Content-Type': 'application/json',
+          "Cookie": credential!.session ?? '',
+        },
+        body: jsonEncode(map),
+      );
+      print(response.body);
+      return response.statusCode == 200;
+    } catch (e) {
+      print(e.toString());
+      return false;
     }
   }
 }

@@ -14,6 +14,7 @@ import 'package:e_con/src/presentations/widgets/custom_shimmer.dart';
 import 'package:e_con/src/presentations/widgets/placeholders/text_placeholder.dart';
 import 'package:e_con/src/presentations/widgets/success_modal.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
@@ -74,6 +75,10 @@ class _AppBarSection extends StatelessWidget {
             children: [
               IconButton(
                 onPressed: () {
+                  final qrProvider = context.read<QrNotifier>();
+
+                  qrProvider.resetQrCode();
+
                   Navigator.pop(context);
                 },
                 icon: const Icon(
@@ -112,7 +117,7 @@ class _BodySection extends StatelessWidget {
       builder: (context, value, child) {
         return Stack(
           children: <Widget>[
-            const Positioned.fill(
+            Positioned.fill(
               child: ScanQrSection(),
             ),
             if (value.qrData != null) AttendanceDetailSection(),
@@ -137,6 +142,19 @@ class _AttendanceDetailSectionState extends State<AttendanceDetailSection> {
     final qrProvider = context.watch<QrNotifier>();
     final studentProvider = context.watch<StudentProfileNotifier>();
     final attendanceProvider = context.watch<AttendanceNotifier>();
+
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      if (attendanceProvider.setAttendanceByStudentState ==
+          RequestState.success) {
+        attendanceProvider.init();
+        showDialog(
+          context: context,
+          builder: (context) {
+            return const SuccessAttendanceModal();
+          },
+        );
+      }
+    });
 
     return Positioned(
       bottom: 0,
@@ -249,22 +267,11 @@ class _AttendanceDetailSectionState extends State<AttendanceDetailSection> {
                       text: 'Konfirmasi',
                       onTap: () {
                         // #TODO hit api absen with valcode and meetingId
-
-                        attendanceProvider.setAttendance(
+                        attendanceProvider.setAttendanceByStudent(
                           meetingId: qrResult.meetingData.id,
                           studentId: studentData.id!,
-                          attendanceTypeId: 0,
-                          attendanceId: 0,
+                          attendanceTypeId: 1,
                         );
-                        if (attendanceProvider.setAttendanceState ==
-                            RequestState.success) {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return const SuccessAttendanceModal();
-                            },
-                          );
-                        }
                       },
                     ),
                     AppSize.verticalSpace[5],

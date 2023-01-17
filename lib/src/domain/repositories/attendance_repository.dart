@@ -17,4 +17,9 @@ abstract class AttendanceRepository {
       getListStudentAttendance({
     required int classId,
   });
+  Future<Either<Failure, bool>> setAttendanceByStudent({
+    required int meetingId,
+    required int studentId,
+    required int attendanceTypeId,
+  });
 }
