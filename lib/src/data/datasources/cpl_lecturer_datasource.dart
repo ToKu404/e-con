@@ -5,7 +5,7 @@ import 'package:e_con/core/utils/exception.dart';
 import 'package:e_con/core/responses/data_response.dart';
 import 'package:e_con/core/services/api_service.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/classs_content.dart';
-import 'package:e_con/src/data/models/cpl_lecturer/course_student_data.dart';
+import 'package:e_con/src/data/models/profile/student_data.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -13,7 +13,7 @@ import 'package:intl/intl.dart';
 abstract class CplLecturerDataSource {
   Future<ClazzContent> getListClazz();
   Future<List<MeetingData>> getListMeeting(int classId);
-  Future<List<CourseStudentData>> getListStudent(int classId);
+  Future<List<StudentData>> getListStudent(int classId);
   Future<bool> createNewMeeting({
     required int classId,
     required String topic,
@@ -59,7 +59,7 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
     } else if (responseData.statusCode == 401) {
       throw UnauthenticateException();
     } else if (responseData.statusCode == 404) {
-      throw UserNotFoundException();
+      throw DataNotFoundException();
     } else {
       throw AuthException();
     }
@@ -76,8 +76,6 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
       },
     );
 
-    print(responseData.body);
-
     if (responseData.statusCode == 200) {
       Iterable dataResponse =
           DataResponse<List<dynamic>>.fromJson(jsonDecode(responseData.body))
@@ -91,14 +89,14 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
     } else if (responseData.statusCode == 401) {
       throw UnauthenticateException();
     } else if (responseData.statusCode == 404) {
-      throw UserNotFoundException();
+      throw DataNotFoundException();
     } else {
       throw AuthException();
     }
   }
 
   @override
-  Future<List<CourseStudentData>> getListStudent(int classId) async {
+  Future<List<StudentData>> getListStudent(int classId) async {
     final credential = await authPreferenceHelper.getUser();
     final responseData = await client.get(
       Uri.parse(
@@ -112,15 +110,15 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
       Iterable dataResponse =
           DataResponse<List<dynamic>>.fromJson(jsonDecode(responseData.body))
               .data;
-      return List<CourseStudentData>.from(
+      return List<StudentData>.from(
         dataResponse.map(
-          (e) => CourseStudentData.fromJson(e),
+          (e) => StudentData.fromJson(e),
         ),
       );
     } else if (responseData.statusCode == 401) {
       throw UnauthenticateException();
     } else if (responseData.statusCode == 404) {
-      throw UserNotFoundException();
+      throw DataNotFoundException();
     } else {
       throw AuthException();
     }
@@ -147,6 +145,7 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
       },
       body: json.encode(map),
     );
+
     return response.statusCode == 200;
   }
 
@@ -161,7 +160,7 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
         "Cookie": credential!.session ?? '',
       },
     );
-    print(response.body);
+
     return response.statusCode == 200;
   }
 
@@ -251,6 +250,8 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
 
       final meetingData = MeetingData.fromJson(dataResponse);
       return meetingData;
+    } else if (responseData.statusCode == 404) {
+      throw DataNotFoundException();
     } else {
       throw ServerException();
     }

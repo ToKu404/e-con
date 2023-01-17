@@ -3,7 +3,7 @@ import 'package:e_con/core/utils/exception.dart';
 import 'package:e_con/core/utils/failure.dart';
 import 'package:e_con/src/data/datasources/cpl_lecturer_datasource.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
-import 'package:e_con/src/data/models/cpl_lecturer/course_student_data.dart';
+import 'package:e_con/src/data/models/profile/student_data.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
 import 'package:e_con/src/domain/repositories/cpl_lecturer_repository.dart';
 
@@ -17,12 +17,8 @@ class CplLecturerRepositoryImpl implements CplLecturerRepository {
     try {
       final result = await cplLecturerDataSource.getListClazz();
       return Right(result.listClazz);
-    } on UnauthenticateException {
-      return const Left(ServerFailure('Username atau Password salah'));
-    } on UserNotFoundException {
-      return const Left(ServerFailure('User tidak ditemukan'));
-    } on AuthException {
-      return const Left(ServerFailure('Proses login gagal'));
+    } on DataNotFoundException {
+      return Left(EmptyFailure('Dosen Belum Memiliki Kelas'));
     }
   }
 
@@ -32,23 +28,19 @@ class CplLecturerRepositoryImpl implements CplLecturerRepository {
     try {
       final result = await cplLecturerDataSource.getListMeeting(classId);
       return Right(result);
-    } on UnauthenticateException {
-      return const Left(AuthFailure('Masalah auth'));
-    } on AuthException {
-      return const Left(AuthFailure('Masalah auth'));
+    } on DataNotFoundException {
+      return Left(EmptyFailure('Silahkan buat pertemuan terlebih dahulu'));
     }
   }
 
   @override
-  Future<Either<Failure, List<CourseStudentData>?>> getListStudent(
+  Future<Either<Failure, List<StudentData>?>> getListStudent(
       int classId) async {
     try {
       final result = await cplLecturerDataSource.getListStudent(classId);
       return Right(result);
-    } on UnauthenticateException {
-      return const Left(ServerFailure('Masalah auth'));
-    } on AuthException {
-      return const Left(ServerFailure('Masalah auth'));
+    } on DataNotFoundException {
+      return Left(EmptyFailure('Belum ada peserta matakuliah ini'));
     }
   }
 

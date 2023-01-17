@@ -1,14 +1,12 @@
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
+import 'package:e_con/core/helpers/reusable_function_helper.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/data/models/attendance/attendance_data.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
-import 'package:e_con/src/data/models/cpl_lecturer/course_student_data.dart';
-import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/pages/absent/widgets/teacher_meet_card.dart';
-import 'package:e_con/src/presentations/features/menu/lecturer/providers/course_student_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/meeting_course_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/providers/attendance_notifier.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_error.dart';
@@ -30,16 +28,21 @@ class TeacherMeetDetailPage extends StatefulWidget {
 }
 
 class _TeacherMeetDetailPageState extends State<TeacherMeetDetailPage> {
-  late MeetingData meetingData;
+  late int meetingId;
+  late int meetingNumber;
   late ClazzData classData;
   @override
   void initState() {
     super.initState();
-    meetingData = widget.args['meetingData'];
+    meetingId = widget.args['meetingId'];
+    meetingNumber = widget.args['meetingNumber'];
     classData = widget.args['classData'];
-    Future.microtask(() =>
-        Provider.of<AttendanceNotifier>(context, listen: false)
-          ..fetchListAttendance(meetingId: meetingData.id));
+    Future.microtask(() {
+      Provider.of<AttendanceNotifier>(context, listen: false)
+        ..fetchListAttendance(meetingId: meetingId);
+      Provider.of<MeetingCourseNotifier>(context, listen: false)
+        ..getMeetingData(meetingId: meetingId);
+    });
   }
 
   @override
@@ -47,7 +50,9 @@ class _TeacherMeetDetailPageState extends State<TeacherMeetDetailPage> {
     final attendanceProvider = context.watch<AttendanceNotifier>();
     final meetingProvider = context.watch<MeetingCourseNotifier>();
 
-    if (attendanceProvider.state == RequestState.loading) {
+    if (attendanceProvider.state == RequestState.loading ||
+        meetingProvider.state == RequestState.loading ||
+        meetingProvider.meetingData == null) {
       return EconLoading(
         withScaffold: true,
       );
@@ -57,9 +62,8 @@ class _TeacherMeetDetailPageState extends State<TeacherMeetDetailPage> {
         withScaffold: true,
       );
     }
-
+    final meetingData = meetingProvider.meetingData!;
     final listAttendance = attendanceProvider.listAttendanceData;
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Palette.background,
@@ -74,9 +78,9 @@ class _TeacherMeetDetailPageState extends State<TeacherMeetDetailPage> {
         ),
         centerTitle: true,
         title: Text(
-          'Pertemuan ${meetingData.meetingNumber}',
+          'Pertemuan ${meetingNumber}',
           style: kTextHeme.headline5?.copyWith(
-            color: Palette.primary,
+            color: Palette.black,
           ),
         ),
         actions: [
@@ -246,9 +250,9 @@ class _TeacherMeetDetailPageState extends State<TeacherMeetDetailPage> {
                 icon: Icons.qr_code_2_rounded,
                 text: 'Barcode Absen',
                 onTap: () async {
-                  print(meetingData.validationCodeExpiredDate);
-
-                  if (meetingData.validationCodeExpiredDate != null) {
+                  if (meetingData.validationCodeExpiredDate != null &&
+                      !ReusableFuntionHelper.isInitialExpiredDate(
+                          meetingData.validationCodeExpiredDate!)) {
                     if (meetingData.validationCodeExpiredDate!
                         .isAfter(DateTime.now())) {
                       final provider = context.read<MeetingCourseNotifier>();
@@ -261,12 +265,13 @@ class _TeacherMeetDetailPageState extends State<TeacherMeetDetailPage> {
                               'meetingId': meetingData.id,
                               'classData': classData,
                               'validationCode': provider.validationCode,
-                              'meetingNumber': meetingData.meetingNumber,
+                              'meetingNumber': meetingNumber,
                             });
                       }
                     }
                     return;
                   }
+                  meetingData.setMeetingNumber = meetingNumber;
                   Navigator.pushNamed(context, AppRoute.genBarcode, arguments: {
                     'meetingData': meetingData,
                     'classData': classData,
@@ -322,7 +327,7 @@ class AttedanceStudentCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    attendanceData.studentData?.id ?? '-',
+                    attendanceData.studentData?.nim ?? '-',
                     style: kTextHeme.subtitle1?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: Palette.primary,

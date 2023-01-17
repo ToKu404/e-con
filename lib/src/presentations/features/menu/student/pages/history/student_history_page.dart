@@ -85,7 +85,8 @@ class _AppBarSectionState extends State<_AppBarSection> {
                     contentPadding: EdgeInsets.zero,
                     isDense: true,
                     hintText: 'Pencarian',
-                    hintStyle: kTextHeme.subtitle1,
+                    hintStyle:
+                        kTextHeme.subtitle1?.copyWith(color: Palette.disable),
                     filled: true,
                     prefixIcon: const SizedBox(
                       height: 12,
@@ -96,9 +97,9 @@ class _AppBarSectionState extends State<_AppBarSection> {
                       ),
                     ),
                     prefixIconColor: Palette.disable,
-                    fillColor: Colors.white,
+                    fillColor: Palette.field,
                     enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Palette.background),
+                      borderSide: const BorderSide(color: Palette.field),
                       borderRadius: BorderRadius.circular(
                         AppSize.space[3],
                       ),

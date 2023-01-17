@@ -3,6 +3,7 @@ import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/helpers/reusable_function_helper.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
+import 'package:e_con/src/presentations/features/menu/providers/attendance_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/scan_qr/provider/qr_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/scan_qr/widgets/ripple_location.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/scan_qr/widgets/scan_qr_section.dart';
@@ -135,6 +136,7 @@ class _AttendanceDetailSectionState extends State<AttendanceDetailSection> {
   Widget build(BuildContext context) {
     final qrProvider = context.watch<QrNotifier>();
     final studentProvider = context.watch<StudentProfileNotifier>();
+    final attendanceProvider = context.watch<AttendanceNotifier>();
 
     return Positioned(
       bottom: 0,
@@ -226,7 +228,7 @@ class _AttendanceDetailSectionState extends State<AttendanceDetailSection> {
                 child: Column(
                   children: [
                     _buildAbsentTile(
-                      title: studentData.studentName!,
+                      title: studentData.name!,
                       iconPath: 'assets/icons/user.svg',
                     ),
                     AppSize.verticalSpace[1],
@@ -247,12 +249,21 @@ class _AttendanceDetailSectionState extends State<AttendanceDetailSection> {
                       text: 'Konfirmasi',
                       onTap: () {
                         // #TODO hit api absen with valcode and meetingId
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return const SuccessAttendanceModal();
-                          },
+
+                        attendanceProvider.setAttendance(
+                          meetingId: qrResult.meetingData.id,
+                          studentId: studentData.id!,
+                          attendanceTypeId: 0,
                         );
+                        if (attendanceProvider.setAttendanceState ==
+                            RequestState.success) {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return const SuccessAttendanceModal();
+                            },
+                          );
+                        }
                       },
                     ),
                     AppSize.verticalSpace[5],

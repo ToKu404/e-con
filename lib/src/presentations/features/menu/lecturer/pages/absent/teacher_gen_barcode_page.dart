@@ -62,9 +62,9 @@ class _TeacherGenBarcodePageState extends State<TeacherGenBarcodePage> {
           icon: const Icon(Icons.close_rounded),
         ),
         title: Text(
-          isEdit ? 'Edit QrCode Absen' : 'Buat QrCode Absen',
+          isEdit ? 'Edit QrCode Absen' : 'QrCode Absen',
           style: kTextHeme.headline5?.copyWith(
-            color: Palette.primary,
+            color: Palette.black,
           ),
         ),
         centerTitle: true,
@@ -125,32 +125,32 @@ class _TeacherGenBarcodePageState extends State<TeacherGenBarcodePage> {
                             action: (d) async {
                               dateTime = d;
                             },
-                            initialDate: dateTime,
+                            initialDate: meetingData.date,
                             controller: dateController,
                             hintText: 'Berlaku Hingga'),
-                        AppSize.verticalSpace[2],
-                        DecoratedBox(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            color: Colors.white,
-                          ),
-                          child: CheckboxListTile(
-                              title: Text(
-                                'Deteksi Lokasi',
-                                style: kTextHeme.subtitle1?.copyWith(
-                                  color: Palette.primary,
-                                ),
-                              ),
-                              checkColor: Palette.primary,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.0),
-                              ),
-                              checkboxShape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4.0),
-                              ),
-                              value: isNeedLocation,
-                              onChanged: (val) {}),
-                        ),
+                        // AppSize.verticalSpace[2],
+                        // DecoratedBox(
+                        //   decoration: BoxDecoration(
+                        //     borderRadius: BorderRadius.circular(12),
+                        //     color: Colors.white,
+                        //   ),
+                        //   child: CheckboxListTile(
+                        //       title: Text(
+                        //         'Deteksi Lokasi',
+                        //         style: kTextHeme.subtitle1?.copyWith(
+                        //           color: Palette.primary,
+                        //         ),
+                        //       ),
+                        //       checkColor: Palette.primary,
+                        //       shape: RoundedRectangleBorder(
+                        //         borderRadius: BorderRadius.circular(12.0),
+                        //       ),
+                        //       checkboxShape: RoundedRectangleBorder(
+                        //         borderRadius: BorderRadius.circular(4.0),
+                        //       ),
+                        //       value: isNeedLocation,
+                        //       onChanged: (val) {}),
+                        // ),
                         AppSize.verticalSpace[3],
                         CustomButton(
                           text: isEdit ? 'Simpan Perubahan' : 'Lanjutkan',

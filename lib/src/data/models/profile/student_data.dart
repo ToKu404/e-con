@@ -1,34 +1,26 @@
-import 'package:e_con/src/data/models/attendance/attendance_type.dart';
-import 'package:e_con/src/data/models/profile/study_program.dart';
+import 'package:e_con/src/data/models/profile/major_data.dart';
 import 'package:equatable/equatable.dart';
 
 class StudentData extends Equatable {
   StudentData({
-    this.studentId,
-    this.studentName,
-    this.studentGender,
-    this.studyProgram,
+    this.id,
+    this.nim,
+    this.name,
+    this.major,
   });
 
-  final String? studentId;
-  final String? studentName;
-  final String? studentGender;
-  final StudyProgram? studyProgram;
+  final int? id;
+  final String? nim;
+  final String? name;
+  final MajorData? major;
 
   factory StudentData.fromJson(Map<String, dynamic> json) => StudentData(
-        studentId: json["mhsNim"],
-        studentName: json["mhsNama"],
-        studentGender: json["mhsJk"],
-        studyProgram: json["ref_prodi"] != null
-            ? StudyProgram.fromJson(json["ref_prodi"])
-            : null,
+        nim: json['idNumber'],
+        name: json['name'],
+        id: json['id'],
+        major: MajorData.fromJson(json['major']),
       );
 
   @override
-  List<Object?> get props => [
-        studentId,
-        studentName,
-        studentGender,
-        studyProgram,
-      ];
+  List<Object?> get props => [nim, name, id];
 }

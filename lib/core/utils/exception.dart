@@ -6,4 +6,6 @@ class UnauthenticateException implements Exception {}
 
 class UserNotFoundException implements Exception {}
 
+class DataNotFoundException implements Exception {}
+
 class LocalDatabaseException implements Exception {}

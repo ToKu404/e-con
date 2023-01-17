@@ -2,7 +2,7 @@ import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
-import 'package:e_con/src/data/models/cpl_lecturer/course_student_data.dart';
+import 'package:e_con/src/data/models/profile/student_data.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_empty.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_error.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
@@ -71,7 +71,7 @@ class CourseParticipantCard extends StatelessWidget {
     required this.studentData,
   });
 
-  final CourseStudentData studentData;
+  final StudentData studentData;
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +100,7 @@ class CourseParticipantCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  studentData.id ?? '-',
+                  studentData.nim ?? '-',
                   style: kTextHeme.subtitle1?.copyWith(
                     color: Palette.primary,
                     fontWeight: FontWeight.bold,

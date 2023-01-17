@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:e_con/core/constants/color_const.dart';
+import 'package:e_con/core/services/api_service.dart';
 import 'package:e_con/core/services/webview_service.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +42,19 @@ class _WebViewPageState extends State<WebViewPage> {
         ),
       )
       ..loadRequest(Uri.parse(WebViewService.url));
+      
+    // final String basicAuth =
+    //     "Basic ${base64.encode(utf8.encode('N011171052:N011171052'))}";
+
+    // controller.loadRequest(
+    //   Uri.parse('${ApiService.baseUrlCPL}/login'),
+    //   method: LoadRequestMethod.post,
+    //   headers: {
+    //     "Authorization": basicAuth,
+    //     'Content-Type': 'application/json',
+    //     "Access-Control-Allow-Origin": "*",
+    //   },
+    // );
   }
 
   Future<bool> _exitApp(BuildContext context) async {

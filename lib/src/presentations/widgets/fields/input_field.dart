@@ -24,11 +24,11 @@ class _InputFieldState extends State<InputField> {
       cursorColor: Palette.primary,
       decoration: InputDecoration(
         hintText: widget.text,
-        hintStyle: kTextHeme.subtitle1,
+        hintStyle: kTextHeme.subtitle1?.copyWith(color: Palette.disable),
         filled: true,
         fillColor: Colors.white,
         enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Palette.background),
+          borderSide: const BorderSide(color: Palette.onPrimary),
           borderRadius: BorderRadius.circular(12.0),
         ),
         focusedBorder: OutlineInputBorder(

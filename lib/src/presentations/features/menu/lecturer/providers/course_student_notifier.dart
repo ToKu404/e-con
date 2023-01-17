@@ -1,5 +1,5 @@
 import 'package:e_con/core/utils/request_state.dart';
-import 'package:e_con/src/data/models/cpl_lecturer/course_student_data.dart';
+import 'package:e_con/src/data/models/profile/student_data.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/get_list_student.dart';
 import 'package:flutter/material.dart';
 
@@ -16,8 +16,8 @@ class CourseStudentNotifier extends ChangeNotifier {
   RequestState _state = RequestState.init;
   RequestState get state => _state;
 
-  List<CourseStudentData>? _listStudent;
-  List<CourseStudentData>? get listStudent => _listStudent;
+  List<StudentData>? _listStudent;
+  List<StudentData>? get listStudent => _listStudent;
 
   Future<void> getListStudent(int classId) async {
     _state = RequestState.loading;

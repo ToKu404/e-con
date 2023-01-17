@@ -6,6 +6,7 @@ import 'package:e_con/core/responses/data_response.dart';
 import 'package:e_con/core/services/api_service.dart';
 import 'package:e_con/src/data/models/profile/lecture_data.dart';
 import 'package:e_con/src/data/models/profile/student_data.dart';
+import 'package:e_con/src/data/models/profile/student_home.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decode/jwt_decode.dart';
@@ -27,31 +28,34 @@ class ProfileDataSourceImpl implements ProfileDataSource {
 
   @override
   Future<LectureData> getLectureData() async {
-    String token = '';
+    // String token = '';
+    String session = '';
     try {
       final userCredential = await authPreferenceHelper.getUser();
-      token = userCredential!.token ?? '';
+      // token = userCredential!.token ?? '';
+      session = userCredential!.session ?? '';
     } catch (e) {
       throw LocalDatabaseException();
     }
 
-    Map<String, dynamic> payload = Jwt.parseJwt(token);
+    // Map<String, dynamic> payload = Jwt.parseJwt(token);
 
-    final response = await client.get(
-      Uri.parse(
-          '${ApiService.baseUrlFinalExam}/lecturers/${payload['username']}'),
+    final responseData = await client.get(
+      Uri.parse('${ApiService.baseUrlCPL}/dosen-authority/profile'),
       headers: {
-        "Authorization": "Bearer $token",
+        "Cookie": session,
       },
     );
 
-    if (response.statusCode == 200) {
-      final dataResponse =
-          DataResponse<Map<String, dynamic>>.fromJson(jsonDecode(response.body))
-              .data;
+    print(responseData.body);
+
+    if (responseData.statusCode == 200) {
+      final dataResponse = DataResponse<Map<String, dynamic>>.fromJson(
+              jsonDecode(responseData.body))
+          .data;
       final userData = LectureData.fromJson(dataResponse);
       return userData;
-    } else if (response.statusCode == 404) {
+    } else if (responseData.statusCode == 404) {
       throw UserNotFoundException();
     } else {
       throw AuthException();
@@ -60,30 +64,34 @@ class ProfileDataSourceImpl implements ProfileDataSource {
 
   @override
   Future<StudentData> getStudentData() async {
-    String token = '';
+    // String token = '';
+    String session = '';
     try {
       final userCredential = await authPreferenceHelper.getUser();
-      token = userCredential!.token ?? '';
+      // token = userCredential!.token ?? '';
+      session = userCredential!.session ?? '';
     } catch (e) {
       throw LocalDatabaseException();
     }
 
-    Map<String, dynamic> payload = Jwt.parseJwt(token);
-    final response = await client.get(
-      Uri.parse(
-          '${ApiService.baseUrlFinalExam}/students/${payload['username']}'),
+    // Map<String, dynamic> payload = Jwt.parseJwt(token);
+
+    final responseData = await client.get(
+      Uri.parse('${ApiService.baseUrlCPL}/mahasiswa-authority/home'),
       headers: {
-        "Authorization": "Bearer $token",
+        "Cookie": session,
       },
     );
 
-    if (response.statusCode == 200) {
-      final dataResponse =
-          DataResponse<Map<String, dynamic>>.fromJson(jsonDecode(response.body))
-              .data;
-      final userData = StudentData.fromJson(dataResponse);
+    print(responseData.body);
+
+    if (responseData.statusCode == 200) {
+      final dataResponse = DataResponse<Map<String, dynamic>>.fromJson(
+              jsonDecode(responseData.body))
+          .data;
+      final userData = StudentHome.fromJson(dataResponse).profile!;
       return userData;
-    } else if (response.statusCode == 404) {
+    } else if (responseData.statusCode == 404) {
       throw UserNotFoundException();
     } else {
       throw AuthException();
@@ -100,7 +108,11 @@ class ProfileDataSourceImpl implements ProfileDataSource {
       },
     );
     if (responseData.statusCode == 200) {
-      return responseData.bodyBytes;
+      final data = responseData.bodyBytes;
+
+      return data;
+    } else if (responseData.statusCode == 404) {
+      throw DataNotFoundException();
     } else {
       ServerException();
     }

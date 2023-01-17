@@ -5,8 +5,11 @@ import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/pages/absent/teacher_absent_page.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/pages/activity/teacher_activity_page.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/pages/setting/teacher_setting_page.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecture_profile_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/providers/profile_picture_notifier.dart';
 import 'package:e_con/src/presentations/widgets/header_logo.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 class TopIndicator extends Decoration {
@@ -47,6 +50,12 @@ class _TeacherMainPageState extends State<TeacherMainPage>
       vsync: this,
       initialIndex: 0,
     );
+    Future.microtask(() {
+      Provider.of<LectureProfileNotifier>(context, listen: false)
+        ..getStudentData();
+      Provider.of<ProfilePictureNotifier>(context, listen: false)
+        ..getProfilePicture();
+    });
   }
 
   final listMenu = [
@@ -62,11 +71,11 @@ class _TeacherMainPageState extends State<TeacherMainPage>
     ),
     SalomonBottomBarItem(
       icon: Icon(Icons.assignment),
-      title: Text('Kelasku'),
+      title: Text('Kelas'),
     ),
     SalomonBottomBarItem(
       icon: Icon(Icons.account_box_rounded),
-      title: Text('Profile'),
+      title: Text('Pengguna'),
     ),
   ];
   int selectIndex = 0;

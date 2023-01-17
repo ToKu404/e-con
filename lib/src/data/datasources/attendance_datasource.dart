@@ -46,6 +46,7 @@ class AttendanceDataSourceImpl implements AttendanceDataSource {
         "Cookie": credential!.session ?? '',
       },
     );
+    print(response.body);
 
     return response.statusCode == 200;
   }
@@ -72,6 +73,8 @@ class AttendanceDataSourceImpl implements AttendanceDataSource {
           (e) => AttendanceData.fromJson(e),
         ),
       );
+    } else if (responseData.statusCode == 404) {
+      throw DataNotFoundException();
     } else {
       throw ServerException();
     }

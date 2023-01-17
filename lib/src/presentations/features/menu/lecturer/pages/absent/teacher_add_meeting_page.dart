@@ -48,7 +48,7 @@ class _TeacherAddMeetingPageState extends State<TeacherAddMeetingPage> {
         title: Text(
           'Tambah Pertemuan',
           style: kTextHeme.headline5?.copyWith(
-            color: Palette.primary,
+            color: Palette.black,
           ),
         ),
         centerTitle: true,
@@ -106,7 +106,7 @@ class _TeacherAddMeetingPageState extends State<TeacherAddMeetingPage> {
                           },
                           hintText: 'Waktu Pertemuan',
                         ),
-                        AppSize.verticalSpace[3],
+                        AppSize.verticalSpace[4],
                         CustomButton(
                           text: 'Simpan',
                           onTap: () async {

@@ -11,4 +11,14 @@ class ReusableFuntionHelper {
   static DateTime stringToDateTime(String date) {
     return DateFormat("EEEE, dd MMMM yyyy", "id_ID").parse(date);
   }
+
+  static bool isInitialExpiredDate(DateTime expiredDate) {
+    final dateTime = expiredDate;
+    final initDate = DateTime(
+      dateTime.year,
+      dateTime.month,
+      dateTime.day,
+    );
+    return initDate.isAtSameMomentAs(expiredDate);
+  }
 }

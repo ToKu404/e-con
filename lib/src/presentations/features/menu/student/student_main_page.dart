@@ -1,6 +1,7 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/routes/app_routes.dart';
+import 'package:e_con/src/presentations/features/menu/providers/profile_picture_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/history/student_history_page.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/home/student_home_page.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/notif/student_notif_page.dart';
@@ -32,7 +33,12 @@ class _StudentMainPageState extends State<StudentMainPage>
 
   @override
   void initState() {
-    Provider.of<StudentProfileNotifier>(context, listen: false);
+    Future.microtask(() {
+      Provider.of<StudentProfileNotifier>(context, listen: false)
+        ..getStudentData();
+      Provider.of<ProfilePictureNotifier>(context, listen: false)
+        ..getProfilePicture();
+    });
     tabController = TabController(length: 5, vsync: this);
     super.initState();
   }
@@ -118,14 +124,14 @@ class _StudentMainPageState extends State<StudentMainPage>
             icon: Padding(
               padding: const EdgeInsets.all(2.0),
               child: SvgPicture.asset(
-                'assets/icons/setting_outlined_icon.svg',
+                'assets/icons/user_outlined.svg',
                 color: Palette.disable,
               ),
             ),
             activeIcon: Padding(
               padding: const EdgeInsets.all(2.0),
               child: SvgPicture.asset(
-                'assets/icons/setting_fill_icon.svg',
+                'assets/icons/user_filled.svg',
                 color: Palette.primaryVariant,
               ),
             ),

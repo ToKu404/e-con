@@ -7,7 +7,6 @@ import 'package:e_con/src/data/models/profile/student_data.dart';
 import 'package:e_con/core/utils/failure.dart';
 import 'package:dartz/dartz.dart';
 import 'package:e_con/src/domain/repositories/profile_repository.dart';
-import 'package:flutter/material.dart';
 
 class ProfileRepositoryImpl implements ProfileRepository {
   final ProfileDataSource profileDataSource;

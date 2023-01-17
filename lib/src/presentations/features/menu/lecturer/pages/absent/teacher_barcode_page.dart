@@ -16,7 +16,7 @@ import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 class TeacherBarcodeKey {
-  static final GlobalKey repaintKeyQr = GlobalKey();
+  static final GlobalKey repaintKeyQr = GlobalKey(debugLabel: 'rqr');
 }
 
 class TeacherBarcodePage extends StatefulWidget {
@@ -54,7 +54,8 @@ class _TeacherBarcodePageState extends State<TeacherBarcodePage> {
   Widget build(BuildContext context) {
     final provider = context.watch<MeetingCourseNotifier>();
 
-    if (provider.getMeetingDataState == RequestState.loading) {
+    if (provider.getMeetingDataState == RequestState.loading ||
+        provider.meetingData == null) {
       return EconLoading(
         withScaffold: true,
       );
@@ -74,7 +75,7 @@ class _TeacherBarcodePageState extends State<TeacherBarcodePage> {
           ),
           onPressed: () {
             Navigator.pop(context);
-            if (meetingData.validationCodeExpiredDate == null)
+            if (meetingData.validationCodeExpiredDate != null)
               Navigator.pop(context);
           },
         ),
@@ -128,16 +129,15 @@ class _TeacherBarcodePageState extends State<TeacherBarcodePage> {
                           Text(
                             '${clazzData.courseData!.courseName!} (${clazzData.name})',
                             style: kTextHeme.headline5?.copyWith(
-                              color: Palette.primary,
-                              fontWeight: FontWeight.bold,
-                            ),
+                                color: Palette.primary,
+                                fontWeight: FontWeight.bold,
+                                height: 1),
                           ),
                           Text(
                             'Pertemuan ${meetingData.meetingNumber}',
                             style: kTextHeme.headline5?.copyWith(
-                              color: Palette.primary,
-                              fontWeight: FontWeight.bold,
-                            ),
+                                color: Palette.black,
+                                fontWeight: FontWeight.w300),
                           ),
                           AspectRatio(
                             aspectRatio: 1,
@@ -228,7 +228,7 @@ class _TeacherBarcodePageState extends State<TeacherBarcodePage> {
               },
               icon: Icons.download_rounded,
               height: 54,
-              color: Palette.secondary,
+              color: Palette.primaryVariant,
             )
           ],
         ),

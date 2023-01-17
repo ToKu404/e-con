@@ -36,13 +36,25 @@ class _AppBarSection extends StatelessWidget {
       pinned: true,
       title: const HeaderLogo(),
       actions: [
-        IconButton(
-          onPressed: () {
-            Navigator.pushNamed(context, AppRoute.cplWebview);
-          },
-          icon: const Icon(
-            Icons.badge_rounded,
-            color: Palette.primary,
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ElevatedButton.icon(
+            label: Text(
+              'Buka SIFA',
+              style: kTextHeme.subtitle1?.copyWith(color: Palette.white),
+            ),
+            style: ElevatedButton.styleFrom(
+              elevation: 0,
+              backgroundColor: Palette.primaryVariant.withOpacity(.7),
+            ),
+            onPressed: () {
+              Navigator.pushNamed(context, AppRoute.cplWebview);
+            },
+            icon: const Icon(
+              Icons.open_in_new,
+              size: 16,
+              color: Palette.white,
+            ),
           ),
         ),
       ],
@@ -80,6 +92,7 @@ class _ActivitySection extends StatelessWidget {
                 'Aktivitas',
                 style: kTextHeme.subtitle1?.copyWith(
                   fontWeight: FontWeight.bold,
+                  color: Palette.white,
                 ),
               ),
               bottom: PreferredSize(
@@ -229,8 +242,10 @@ class _NotifSection extends StatelessWidget {
                 children: [
                   Text(
                     'Jadwal Seminar Proposal',
-                    style: kTextHeme.subtitle1
-                        ?.copyWith(fontWeight: FontWeight.bold),
+                    style: kTextHeme.subtitle1?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Palette.white,
+                    ),
                   ),
                   AppSize.verticalSpace[1],
                   Text(

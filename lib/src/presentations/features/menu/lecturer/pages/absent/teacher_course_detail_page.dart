@@ -104,7 +104,7 @@ class _TeacherCourseDetailPageState extends State<TeacherCourseDetailPage> {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: kTextHeme.headline5?.copyWith(
-                  color: Palette.primary,
+                  color: Palette.black,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -225,13 +225,13 @@ class TitleSection extends StatelessWidget {
           AppSize.verticalSpace[4],
           _BuildCourseTile(
             iconPath: 'assets/icons/class.svg',
-            title: className,
+            title: 'Kelas $className',
           ),
-          AppSize.verticalSpace[2],
-          _BuildCourseTile(
-            iconPath: 'assets/icons/school.svg',
-            title: semesterName,
-          ),
+          // AppSize.verticalSpace[2],
+          // _BuildCourseTile(
+          //   iconPath: 'assets/icons/school.svg',
+          //   title: semesterName,
+          // ),
           AppSize.verticalSpace[2],
           _BuildCourseTile(
             iconPath: 'assets/icons/schedule.svg',
@@ -268,14 +268,14 @@ class _BuildCourseTile extends StatelessWidget {
           iconPath,
           width: 24,
           height: 24,
-          color: Palette.primary,
+          color: Palette.black,
         ),
         AppSize.horizontalSpace[2],
         Expanded(
           child: Text(
             title,
             style: kTextHeme.subtitle1?.copyWith(
-              color: Palette.primary,
+              color: Palette.black,
             ),
           ),
         ),

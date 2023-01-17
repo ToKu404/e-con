@@ -32,13 +32,12 @@ class _InputDateTimeFieldState extends State<InputDateTimeField> {
         final dateSelected = await showDatePicker(
           context: context,
           initialDate: widget.controller.text.isEmpty
-              ? DateTime.now()
-              : ReusableFuntionHelper.stringToDateTime(widget.controller.text),
-          firstDate: widget.initialDate != null
-              ? (widget.initialDate!.isBefore(DateTime.now())
+              ? (widget.initialDate != null
                   ? widget.initialDate!
                   : DateTime.now())
-              : DateTime.now(),
+              : ReusableFuntionHelper.stringToDateTime(widget.controller.text),
+          firstDate:
+              widget.initialDate != null ? widget.initialDate! : DateTime.now(),
           lastDate: DateTime.now().add(
             const Duration(
               days: 30,
@@ -71,11 +70,11 @@ class _InputDateTimeFieldState extends State<InputDateTimeField> {
       cursorColor: Palette.primary,
       decoration: InputDecoration(
         hintText: widget.hintText,
-        hintStyle: kTextHeme.subtitle1,
+        hintStyle: kTextHeme.subtitle1?.copyWith(color: Palette.disable),
         filled: true,
         fillColor: Colors.white,
         enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Palette.background),
+          borderSide: const BorderSide(color: Palette.onPrimary),
           borderRadius: BorderRadius.circular(12.0),
         ),
         focusedBorder: OutlineInputBorder(

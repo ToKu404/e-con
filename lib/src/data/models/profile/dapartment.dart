@@ -1,12 +1,12 @@
 import 'package:equatable/equatable.dart';
 
-class Department extends Equatable {
+class DepartmentData extends Equatable {
   final String? departmentName;
 
-  Department({this.departmentName});
+  DepartmentData({this.departmentName});
 
-  factory Department.fromJson(Map<String, dynamic> json) => Department(
-        departmentName: json["dprtNama"],
+  factory DepartmentData.fromJson(Map<String, dynamic> json) => DepartmentData(
+        departmentName: json["name"],
       );
 
   @override

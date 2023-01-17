@@ -4,8 +4,9 @@ import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/presentations/features/login/provider/auth_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/providers/profile_picture_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/student/providers/student_profile_notifier.dart';
-import 'package:e_con/src/presentations/widgets/custom_button.dart';
+import 'package:e_con/src/presentations/reusable_pages/econ_error.dart';
 import 'package:e_con/src/presentations/widgets/dialog/show_confirmation.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
 import 'package:flutter/material.dart';
@@ -20,14 +21,7 @@ class StudentSettingPage extends StatelessWidget {
       children: [
         _AppBarSection(),
         Expanded(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
-                child: _ProfileCard(),
-              )
-            ],
-          ),
+          child: ProfileSection(),
         )
       ],
     );
@@ -38,7 +32,7 @@ class _AppBarSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(AppSize.space[4]),
+      padding: EdgeInsets.symmetric(vertical: AppSize.space[2]),
       width: AppSize.getAppWidth(context),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -50,155 +44,341 @@ class _AppBarSection extends StatelessWidget {
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            'Pengaturan',
-            style: kTextHeme.headline5?.copyWith(
-              color: Palette.primary,
-              fontWeight: FontWeight.bold,
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: AppSize.space[4],
+            ),
+            child: Text(
+              'Data Pengguna',
+              style: kTextHeme.headline5?.copyWith(
+                color: Palette.black,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
+          IconButton(
+              onPressed: () async {
+                final logoutConfirmation = await showConfirmation(
+                    context: context,
+                    title: 'Apakah anda serius ingin keluar?');
+
+                if (logoutConfirmation) {
+                  await context.read<AuthNotifier>()
+                    ..logOut();
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    AppRoute.login,
+                    (route) => false,
+                  );
+                }
+              },
+              icon: Icon(Icons.exit_to_app))
         ],
       ),
     );
   }
 }
 
-class _ProfileCard extends StatelessWidget {
+// class _ProfileCard extends StatefulWidget {
+//   @override
+//   State<_ProfileCard> createState() => _ProfileCardState();
+// }
+
+// class _ProfileCardState extends State<_ProfileCard> {
+//   @override
+//   Widget build(BuildContext context) {
+//     final profileProvider = context.watch<StudentProfileNotifier>();
+//     final profilePictureProvider = context.watch<ProfilePictureNotifier>();
+
+//     if (profileProvider.state == RequestState.loading ||
+//         profileProvider.studentData == null ||
+//         profilePictureProvider.state == RequestState.loading) {
+//       return EconLoading();
+//     } else if (profileProvider.state == RequestState.error) {
+//       return Text(profileProvider.error);
+//     }
+
+//     final studentData = profileProvider.studentData!;
+
+//     return Container(
+//       width: AppSize.getAppWidth(context) * 0.8,
+//       padding: EdgeInsets.symmetric(
+//           horizontal: AppSize.space[4], vertical: AppSize.space[6]),
+//       decoration: BoxDecoration(
+//         borderRadius: BorderRadius.circular(
+//           AppSize.space[4],
+//         ),
+//         color: Colors.white,
+//         boxShadow: [
+//           BoxShadow(
+//             blurRadius: 10,
+//             color: Palette.onPrimary.withOpacity(
+//               .34,
+//             ),
+//           ),
+//           BoxShadow(
+//             blurRadius: 3.19,
+//             color: Palette.onPrimary.withOpacity(
+//               .20,
+//             ),
+//           ),
+//           BoxShadow(
+//             blurRadius: 1,
+//             color: Palette.onPrimary.withOpacity(
+//               .13,
+//             ),
+//           ),
+//         ],
+//       ),
+//       child: AspectRatio(
+//         aspectRatio: .75,
+//         child: Column(
+//           children: [
+//             Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 Center(
+//                   child: Container(
+//                     width: 100,
+//                     height: 100,
+//                     decoration: BoxDecoration(
+//                       border: Border.all(
+//                         width: 2,
+//                         color: Palette.primary,
+//                       ),
+//                       shape: BoxShape.circle,
+//                       image: profilePictureProvider.profilePicture != null
+//                           ? DecorationImage(
+//                               image: MemoryImage(
+//                                   profilePictureProvider.profilePicture!),
+//                               fit: BoxFit.cover)
+//                           : null,
+//                     ),
+//                     child: profilePictureProvider.profilePicture == null
+//                         ? Center(
+//                             child: Text(
+//                               studentData.name![0],
+//                               style: TextStyle(
+//                                 fontSize: 40,
+//                                 fontWeight: FontWeight.w600,
+//                                 color: Palette.white,
+//                               ),
+//                             ),
+//                           )
+//                         : SizedBox.shrink(),
+//                   ),
+//                 ),
+//                 AppSize.verticalSpace[1],
+//                 Center(
+//                   child: Text(
+//                     studentData.name ?? '',
+//                     style: kTextHeme.headline5,
+//                   ),
+//                 ),
+//                 Center(
+//                   child: Text(
+//                     studentData.nim ?? '',
+//                     style: kTextHeme.subtitle1?.copyWith(
+//                       color: Palette.disable,
+//                       height: 1,
+//                     ),
+//                   ),
+//                 ),
+
+//                 // Text(
+//                 //   'Program Studi',
+//                 //   style: kTextHeme.subtitle2?.copyWith(
+//                 //     color: Palette.disable,
+//                 //   ),
+//                 // ),
+//                 // Text(
+//                 //   studentData.studyProgram != null
+//                 //       ? studentData.studyProgram!.name!
+//                 //       : '',
+//                 //   style: kTextHeme.subtitle1?.copyWith(
+//                 //     color: Palette.primary,
+//                 //     height: 1.2,
+//                 //     fontWeight: FontWeight.bold,
+//                 //   ),
+//                 // ),
+//                 // AppSize.verticalSpace[4],
+//               ],
+//             ),
+//             Spacer(),
+//             CustomButton(
+//               text: 'Keluar',
+//               onTap: () async {
+//                 final logoutConfirmation = await showConfirmation(
+//                     context: context,
+//                     title: 'Apakah anda serius ingin keluar?');
+
+//                 if (logoutConfirmation) {
+//                   await context.read<AuthNotifier>()
+//                     ..logOut();
+//                   Navigator.pushNamedAndRemoveUntil(
+//                     context,
+//                     AppRoute.login,
+//                     (route) => false,
+//                   );
+//                 }
+//               },
+//             )
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+class ProfileSection extends StatelessWidget {
+  const ProfileSection({super.key});
+
   @override
   Widget build(BuildContext context) {
-    final profileProvider = context.read<StudentProfileNotifier>();
+    final profileProvider = context.watch<StudentProfileNotifier>();
+    final profilePictureProvider = context.watch<ProfilePictureNotifier>();
 
-    if (profileProvider.state == RequestState.loading) {
+    if (profileProvider.state == RequestState.loading ||
+        profileProvider.studentData == null ||
+        profilePictureProvider.state == RequestState.loading) {
       return EconLoading();
     } else if (profileProvider.state == RequestState.error) {
-      return Text(profileProvider.error);
+      return EconError(errorMessage: profileProvider.error);
     }
-
     final studentData = profileProvider.studentData!;
-
-    return Container(
-      width: AppSize.getAppWidth(context) * 0.8,
-      padding: EdgeInsets.symmetric(
-          horizontal: AppSize.space[4], vertical: AppSize.space[6]),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(
-          AppSize.space[4],
-        ),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            blurRadius: 10,
-            color: Palette.onPrimary.withOpacity(
-              .34,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Stack(
+          clipBehavior: Clip.antiAlias,
+          children: [
+            SizedBox(
+              width: AppSize.getAppWidth(context),
+              height: 160,
             ),
-          ),
-          BoxShadow(
-            blurRadius: 3.19,
-            color: Palette.onPrimary.withOpacity(
-              .20,
-            ),
-          ),
-          BoxShadow(
-            blurRadius: 1,
-            color: Palette.onPrimary.withOpacity(
-              .13,
-            ),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Center(
-            child: Container(
-              width: 100,
+            Container(
               height: 100,
+              width: AppSize.getAppWidth(context),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(AppSize.space[2]),
-                image: const DecorationImage(
-                  image: NetworkImage(
-                    'https://images.unsplash.com/photo-1614436163996-25cee5f54290?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=742&q=80',
+                gradient: LinearGradient(
+                  colors: [
+                    Palette.primary,
+                    Palette.primaryVariant,
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              left: 20,
+              child: Container(
+                width: 120,
+                height: 120,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    width: 2,
+                    color: Palette.background,
                   ),
-                  fit: BoxFit.cover,
+                  color: Palette.disable,
+                  image: profilePictureProvider.profilePicture != null
+                      ? DecorationImage(
+                          image: MemoryImage(
+                              profilePictureProvider.profilePicture!),
+                          fit: BoxFit.cover)
+                      : null,
                 ),
-                border: Border.all(
-                  width: 2,
-                  color: Palette.primary,
-                ),
+                child: profilePictureProvider.profilePicture == null
+                    ? Center(
+                        child: Text(
+                          studentData.name![0],
+                          style: TextStyle(
+                            fontSize: 40,
+                            fontWeight: FontWeight.w600,
+                            color: Palette.white,
+                          ),
+                        ),
+                      )
+                    : SizedBox.shrink(),
               ),
             ),
-          ),
-          AppSize.verticalSpace[1],
-          Center(
-            child: Text(
-              studentData.studentName ?? '',
-              style: kTextHeme.headline5,
-            ),
-          ),
-          Center(
-            child: Text(
-              studentData.studentId ?? '',
-              style: kTextHeme.subtitle1?.copyWith(
-                color: Palette.disable,
-                height: 1,
+          ],
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                studentData.name ?? '',
+                style: kTextHeme.headline2?.copyWith(
+                    color: Palette.black,
+                    fontWeight: FontWeight.w500,
+                    height: 1.1),
               ),
-            ),
+              Text(
+                'NIM. ${studentData.nim ?? ''}',
+                style: kTextHeme.headline6?.copyWith(
+                    color: Palette.black,
+                    fontWeight: FontWeight.normal,
+                    height: 1),
+              )
+            ],
           ),
-          AppSize.verticalSpace[3],
-          Text(
-            'Jenis Kelamin',
-            style: kTextHeme.subtitle2?.copyWith(
-              color: Palette.disable,
-            ),
+        ),
+        Divider(),
+        Padding(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Jenjang',
+                style: kTextHeme.subtitle1?.copyWith(color: Palette.disable),
+              ),
+              Text(
+                studentData.major?.degree ?? '',
+                style: kTextHeme.subtitle1?.copyWith(
+                    color: Palette.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                    height: 1),
+              ),
+              AppSize.verticalSpace[4],
+              Text(
+                'Program Studi',
+                style: kTextHeme.subtitle1?.copyWith(color: Palette.disable),
+              ),
+              Text(
+                studentData.major?.name ?? '',
+                style: kTextHeme.subtitle1?.copyWith(
+                    color: Palette.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                    height: 1),
+              ),
+              AppSize.verticalSpace[4],
+              Text(
+                'Departemen',
+                style: kTextHeme.subtitle1?.copyWith(color: Palette.disable),
+              ),
+              Text(
+                studentData.major?.departmentData?.departmentName ?? '',
+                style: kTextHeme.subtitle1?.copyWith(
+                    color: Palette.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                    height: 1),
+              )
+            ],
           ),
-          Text(
-            studentData.studentGender ?? '',
-            style: kTextHeme.subtitle1?.copyWith(
-              color: Palette.primary,
-              height: 1.2,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          AppSize.verticalSpace[4],
-          Text(
-            'Program Studi',
-            style: kTextHeme.subtitle2?.copyWith(
-              color: Palette.disable,
-            ),
-          ),
-          Text(
-            studentData.studyProgram != null
-                ? studentData.studyProgram!.name!
-                : '',
-            style: kTextHeme.subtitle1?.copyWith(
-              color: Palette.primary,
-              height: 1.2,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          AppSize.verticalSpace[4],
-          CustomButton(
-            text: 'Keluar',
-            onTap: () async {
-              final logoutConfirmation = await showConfirmation(
-                  context: context, title: 'Apakah anda serius ingin keluar?');
-
-              if (logoutConfirmation) {
-                await context.read<AuthNotifier>()
-                  ..logOut();
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  AppRoute.login,
-                  (route) => false,
-                );
-              }
-            },
-          )
-        ],
-      ),
+        )
+      ],
     );
   }
 }
