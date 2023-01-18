@@ -3,6 +3,7 @@ import 'package:e_con/core/utils/failure.dart';
 import 'package:e_con/src/data/datasources/attendance_datasource.dart';
 import 'package:e_con/src/data/models/attendance/attendance_data.dart';
 import 'package:e_con/src/data/models/attendance/student_attendance_data.dart';
+import 'package:e_con/src/data/models/cpl_lecturer/statistic_data.dart';
 import 'package:e_con/src/domain/repositories/attendance_repository.dart';
 
 class AttendanceRepositoryImpl implements AttendanceRepository {

@@ -4,15 +4,12 @@ import 'package:e_con/core/helpers/reusable_function_helper.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
-import 'package:e_con/src/data/models/attendance/attendance_data.dart';
 import 'package:e_con/src/data/models/attendance/helpers/attendance_value.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/pages/absent/widgets/attendance_student_card.dart';
-import 'package:e_con/src/presentations/features/menu/lecturer/pages/absent/widgets/teacher_meet_card.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/meeting_course_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/providers/attendance_notifier.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
-import 'package:e_con/src/presentations/widgets/choice_absent_modal.dart';
 import 'package:e_con/src/presentations/widgets/custom_button.dart';
 import 'package:e_con/src/presentations/widgets/custom_shimmer.dart';
 import 'package:e_con/src/presentations/widgets/dialog/show_confirmation.dart';
@@ -165,42 +162,8 @@ class _TeacherMeetDetailPageState extends State<TeacherMeetDetailPage> {
                           color: Palette.field,
                         ),
                       ),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              AbsentStatisticCard(
-                                absentStatus:
-                                    AttendanceValueHelper.getAttendanceValue(1),
-                                value: 49,
-                              ),
-                              AppSize.horizontalSpace[2],
-                              AbsentStatisticCard(
-                                absentStatus:
-                                    AttendanceValueHelper.getAttendanceValue(4),
-                                value: 2,
-                              ),
-                            ],
-                          ),
-                          AppSize.verticalSpace[2],
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              AbsentStatisticCard(
-                                absentStatus:
-                                    AttendanceValueHelper.getAttendanceValue(3),
-                                value: 3,
-                              ),
-                              AppSize.horizontalSpace[2],
-                              AbsentStatisticCard(
-                                absentStatus:
-                                    AttendanceValueHelper.getAttendanceValue(2),
-                                value: 2,
-                              ),
-                            ],
-                          ),
-                        ],
+                      child: _StatisticSection(
+                        meetingId: meetingId,
                       ),
                     ),
                   ),
@@ -209,10 +172,7 @@ class _TeacherMeetDetailPageState extends State<TeacherMeetDetailPage> {
                   meetingId: meetingId,
                 ),
                 SliverPadding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: AppSize.space[3],
-                    horizontal: AppSize.space[3],
-                  ),
+                  padding: EdgeInsets.all(AppSize.space[4]),
                   sliver: Builder(builder: (context) {
                     final attendanceProvider =
                         context.watch<AttendanceNotifier>();
@@ -221,19 +181,18 @@ class _TeacherMeetDetailPageState extends State<TeacherMeetDetailPage> {
                         child: CustomShimmer(
                             child: Column(
                           children: [
-                            AppSize.verticalSpace[4],
                             CardPlaceholder(
-                              height: 60,
+                              height: 80,
                               horizontalPadding: 0,
                             ),
                             AppSize.verticalSpace[4],
                             CardPlaceholder(
-                              height: 60,
+                              height: 80,
                               horizontalPadding: 0,
                             ),
                             AppSize.verticalSpace[4],
                             CardPlaceholder(
-                              height: 60,
+                              height: 80,
                               horizontalPadding: 0,
                             )
                           ],
@@ -325,6 +284,78 @@ class _TeacherMeetDetailPageState extends State<TeacherMeetDetailPage> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _StatisticSection extends StatefulWidget {
+  final int meetingId;
+  const _StatisticSection({
+    required this.meetingId,
+  });
+
+  @override
+  State<_StatisticSection> createState() => _StatisticSectionState();
+}
+
+class _StatisticSectionState extends State<_StatisticSection> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      Provider.of<MeetingCourseNotifier>(context, listen: false)
+        ..getListAttendanceStatistic(meetingId: widget.meetingId);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final statProvider = context.watch<MeetingCourseNotifier>();
+    if (statProvider.listStatisticState == RequestState.loading ||
+        statProvider.listStatisticData == null) {
+      return CustomShimmer(
+          child: CardPlaceholder(
+        height: 160,
+        horizontalPadding: 0,
+      ));
+    } else if (statProvider.listStatisticState == RequestState.error) {
+      return SizedBox.shrink();
+    }
+    final statData = statProvider.listStatisticData!;
+    final getStatValue = ReusableFuntionHelper.getStatisticValue(statData);
+
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            AbsentStatisticCard(
+              absentStatus: AttendanceValueHelper.getAttendanceValue(1),
+              value: getStatValue[1]!,
+            ),
+            AppSize.horizontalSpace[2],
+            AbsentStatisticCard(
+              absentStatus: AttendanceValueHelper.getAttendanceValue(4),
+              value: getStatValue[4]!,
+            ),
+          ],
+        ),
+        AppSize.verticalSpace[2],
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            AbsentStatisticCard(
+              absentStatus: AttendanceValueHelper.getAttendanceValue(3),
+              value: getStatValue[3]!,
+            ),
+            AppSize.horizontalSpace[2],
+            AbsentStatisticCard(
+              absentStatus: AttendanceValueHelper.getAttendanceValue(2),
+              value: getStatValue[2]!,
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

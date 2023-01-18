@@ -3,6 +3,7 @@ import 'package:e_con/core/utils/exception.dart';
 import 'package:e_con/core/utils/failure.dart';
 import 'package:e_con/src/data/datasources/cpl_lecturer_datasource.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
+import 'package:e_con/src/data/models/cpl_lecturer/statistic_data.dart';
 import 'package:e_con/src/data/models/profile/student_data.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
 import 'package:e_con/src/domain/repositories/cpl_lecturer_repository.dart';
@@ -118,6 +119,18 @@ class CplLecturerRepositoryImpl implements CplLecturerRepository {
     try {
       final result =
           await cplLecturerDataSource.getMeetingData(meetingId: meetingId);
+      return Right(result);
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<StatisticData>>> getAttendanceStatisticData(
+      {required int meetingId}) async {
+    try {
+      final result = await cplLecturerDataSource.getAttendanceStatisticData(
+          meetingId: meetingId);
       return Right(result);
     } catch (e) {
       return Left(ServerFailure(e.toString()));

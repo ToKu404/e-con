@@ -3,6 +3,7 @@ import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/src/data/models/attendance/helpers/attendance_value.dart';
 import 'package:e_con/src/data/models/profile/student_data.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/providers/meeting_course_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/providers/attendance_notifier.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
 import 'package:flutter/material.dart';
@@ -72,6 +73,7 @@ class ChoiceAbsentModal extends StatelessWidget {
               IconButton(
                 onPressed: () async {
                   final provider = context.read<AttendanceNotifier>();
+                  final meetingProvider = context.read<MeetingCourseNotifier>();
 
                   if (selectedAttedanceValue.value != attendanceValue) {
                     await provider.setAttendance(
@@ -80,8 +82,10 @@ class ChoiceAbsentModal extends StatelessWidget {
                       meetingId: meetingId,
                       attendanceId: attendenceId,
                     );
-                    await provider
-                        .fetchListAttendance(meetingId: meetingId)
+
+                    await provider.fetchListAttendance(meetingId: meetingId);
+                    await meetingProvider
+                        .getListAttendanceStatistic(meetingId: meetingId)
                         .then((value) {
                       Navigator.pop(context);
                     });

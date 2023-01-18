@@ -3,12 +3,18 @@ import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/helpers/reusable_function_helper.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
+import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/data/models/attendance/helpers/attendance_value.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
+import 'package:e_con/src/data/models/cpl_lecturer/statistic_data.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/providers/meeting_course_notifier.dart';
+import 'package:e_con/src/presentations/widgets/custom_shimmer.dart';
+import 'package:e_con/src/presentations/widgets/placeholders/card_placeholder.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class TeacherMeetCard extends StatelessWidget {
+class TeacherMeetCard extends StatefulWidget {
   final MeetingData meetingData;
   final ClazzData classData;
   const TeacherMeetCard({
@@ -18,16 +24,41 @@ class TeacherMeetCard extends StatelessWidget {
   });
 
   @override
+  State<TeacherMeetCard> createState() => _TeacherMeetCardState();
+}
+
+class _TeacherMeetCardState extends State<TeacherMeetCard> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      Provider.of<MeetingCourseNotifier>(context, listen: false)
+        ..getListAttendanceStatistic(meetingId: widget.meetingData.id);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final statProv = context.watch<MeetingCourseNotifier>();
+    if (statProv.listStatisticState == RequestState.loading ||
+        statProv.listStatisticData == null) {
+      return Padding(
+        padding: EdgeInsets.only(bottom: AppSize.space[2]),
+        child: CustomShimmer(
+          child: CardPlaceholder(height: 120, horizontalPadding: 0),
+        ),
+      );
+    }
     return InkWell(
       onTap: () async {
         Navigator.pushNamed(context, AppRoute.detailMeet, arguments: {
-          'meetingId': meetingData.id,
-          'classData': classData,
-          'meetingNumber': meetingData.meetingNumber,
+          'meetingId': widget.meetingData.id,
+          'classData': widget.classData,
+          'meetingNumber': widget.meetingData.meetingNumber,
         });
       },
       child: Container(
+        height: 120,
         margin: EdgeInsets.only(
           bottom: AppSize.space[2],
         ),
@@ -41,6 +72,7 @@ class TeacherMeetCard extends StatelessWidget {
           color: Colors.white,
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,20 +83,20 @@ class TeacherMeetCard extends StatelessWidget {
                     children: [
                       Text(
                         ReusableFuntionHelper.datetimeToString(
-                            meetingData.date!),
+                            widget.meetingData.date!),
                         style: kTextHeme.overline?.copyWith(
                           color: Palette.disable,
                         ),
                       ),
                       Text(
-                        'Pertemuan ${meetingData.meetingNumber}',
+                        'Pertemuan ${widget.meetingData.meetingNumber}',
                         style: kTextHeme.subtitle1?.copyWith(
                           color: Palette.primary,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
-                        meetingData.topics ?? '-',
+                        widget.meetingData.topics ?? '-',
                         style: kTextHeme.overline?.copyWith(
                           color: Palette.disable,
                           height: 1,
@@ -93,71 +125,117 @@ class TeacherMeetCard extends StatelessWidget {
                 )
               ],
             ),
-            AppSize.verticalSpace[3],
-            Row(
-              children: [
-                Flexible(
-                  flex: 1,
-                  child: Container(
-                    height: 4,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                        AppSize.space[3],
-                      ),
-                      color: Palette.success,
-                    ),
-                  ),
-                ),
-                AppSize.horizontalSpace[0],
-                Flexible(
-                  flex: 2,
-                  child: Container(
-                    height: 4,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                        AppSize.space[3],
-                      ),
-                      color: Palette.warning,
-                    ),
-                  ),
-                ),
-                AppSize.horizontalSpace[0],
-                Flexible(
-                  flex: 3,
-                  child: Container(
-                    height: 4,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                        AppSize.space[3],
-                      ),
-                      color: Palette.danger,
-                    ),
-                  ),
-                ),
-              ],
+            Spacer(),
+            _BuildMeetStat(
+              listStatisticData: statProv.listStatisticData!,
             ),
-            AppSize.verticalSpace[2],
-            Row(
-              children: [
-                const _DetailCoursePercent(
-                  absentStatus: AbsentStatus.hadir,
-                  value: 12,
-                ),
-                AppSize.horizontalSpace[2],
-                const _DetailCoursePercent(
-                  absentStatus: AbsentStatus.izin,
-                  value: 2,
-                ),
-                AppSize.horizontalSpace[2],
-                const _DetailCoursePercent(
-                  absentStatus: AbsentStatus.tidakHadir,
-                  value: 4,
-                ),
-              ],
-            )
           ],
         ),
       ),
+    );
+  }
+}
+
+class _BuildMeetStat extends StatelessWidget {
+  final List<StatisticData> listStatisticData;
+  const _BuildMeetStat({
+    required this.listStatisticData,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final statData = ReusableFuntionHelper.getStatisticValue(listStatisticData);
+    int maxVal = 0;
+    statData.values.map((e) => maxVal += e);
+    return Column(
+      children: [
+        Row(
+          children: [
+            if (statData[1] != 0)
+              Flexible(
+                flex: statData[1]!,
+                child: Container(
+                  height: 4,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(
+                      AppSize.space[3],
+                    ),
+                    color: Palette.success,
+                  ),
+                ),
+              ),
+            if (statData[3] != 0) ...[
+              AppSize.horizontalSpace[0],
+              Flexible(
+                flex: statData[3]!,
+                child: Container(
+                  height: 4,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(
+                      AppSize.space[3],
+                    ),
+                    color: Palette.warning,
+                  ),
+                ),
+              ),
+            ],
+            if (statData[4] != 0) ...[
+              AppSize.horizontalSpace[0],
+              Flexible(
+                flex: statData[4]!,
+                child: Container(
+                  height: 4,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(
+                      AppSize.space[3],
+                    ),
+                    color: Colors.blue,
+                  ),
+                ),
+              ),
+            ],
+            if (statData[2] != 0) ...[
+              AppSize.horizontalSpace[0],
+              Flexible(
+                flex: statData[2]!,
+                child: Container(
+                  height: 4,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(
+                      AppSize.space[3],
+                    ),
+                    color: Palette.danger,
+                  ),
+                ),
+              ),
+            ]
+          ],
+        ),
+        AppSize.verticalSpace[2],
+        Row(
+          children: [
+            _DetailCoursePercent(
+              absentStatus: AbsentStatus.hadir,
+              value: statData[1]!,
+            ),
+            AppSize.horizontalSpace[2],
+            _DetailCoursePercent(
+              absentStatus: AbsentStatus.sakit,
+              value: statData[3]!,
+            ),
+            AppSize.horizontalSpace[2],
+            _DetailCoursePercent(
+              absentStatus: AbsentStatus.izin,
+              value: statData[4]!,
+            ),
+            AppSize.horizontalSpace[2],
+            _DetailCoursePercent(
+              absentStatus: AbsentStatus.tidakHadir,
+              value: statData[2]!,
+            ),
+          ],
+        )
+      ],
     );
   }
 }
@@ -189,9 +267,10 @@ class _DetailCoursePercent extends StatelessWidget {
         title: 'Hadir',
         color: Palette.success,
       ),
-      AbsentStatus.izin: AbsentData(title: 'Izin', color: Palette.warning),
+      AbsentStatus.sakit: AbsentData(title: 'Sakit', color: Palette.warning),
+      AbsentStatus.izin: AbsentData(title: 'Izin', color: Colors.blue),
       AbsentStatus.tidakHadir:
-          AbsentData(title: 'Tidak Hadir', color: Palette.danger),
+          AbsentData(title: 'Tanpa Keterangan', color: Palette.danger),
     };
 
     return Column(

@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:e_con/core/utils/failure.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
+import 'package:e_con/src/data/models/cpl_lecturer/statistic_data.dart';
 import 'package:e_con/src/data/models/profile/student_data.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
 
@@ -25,4 +26,6 @@ abstract class CplLecturerRepository {
       {required DateTime expiredDate, required int meetingId});
 
   Future<Either<Failure, MeetingData>> getMeetingData({required int meetingId});
+  Future<Either<Failure, List<StatisticData>>> getAttendanceStatisticData(
+      {required int meetingId});
 }

@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
+import 'package:e_con/src/data/models/cpl_lecturer/statistic_data.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/create_new_meeting.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/delete_meeting.dart';
+import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/get_attendance_statistic.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/get_list_meeting.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/get_meeting_data.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/get_validation_code.dart';
@@ -19,16 +21,17 @@ class MeetingCourseNotifier extends ChangeNotifier {
   final GetValidationCode getValidationCodeUsecase;
   final SetAttendanceExpiredDate setAttendanceExpiredDateUsecase;
   final GetMeetingData getMeetingDataUsecase;
+  final GetAttendanceStatistic getAttendanceStatisticUsecase;
 
-  MeetingCourseNotifier({
-    required this.getListMeetingUsecase,
-    required this.createNewMeetingUsecase,
-    required this.updateMeetingUsecase,
-    required this.deleteMeetingUsecase,
-    required this.getValidationCodeUsecase,
-    required this.setAttendanceExpiredDateUsecase,
-    required this.getMeetingDataUsecase,
-  });
+  MeetingCourseNotifier(
+      {required this.getListMeetingUsecase,
+      required this.createNewMeetingUsecase,
+      required this.updateMeetingUsecase,
+      required this.deleteMeetingUsecase,
+      required this.getValidationCodeUsecase,
+      required this.setAttendanceExpiredDateUsecase,
+      required this.getMeetingDataUsecase,
+      required this.getAttendanceStatisticUsecase});
 
   String _error = '';
   String get error => _error;
@@ -189,6 +192,27 @@ class MeetingCourseNotifier extends ChangeNotifier {
     }, (r) {
       _meetingData = r;
       _getMeetingDataState = RequestState.success;
+    });
+    notifyListeners();
+  }
+
+  List<StatisticData>? get listStatisticData => _listStatistcData;
+  List<StatisticData>? _listStatistcData;
+  RequestState _listStatisticState = RequestState.init;
+  RequestState get listStatisticState => _listStatisticState;
+
+  Future<void> getListAttendanceStatistic({
+    required int meetingId,
+  }) async {
+    _listStatisticState = RequestState.loading;
+    notifyListeners();
+
+    final res = await getAttendanceStatisticUsecase.execute(meetingId);
+    res.fold((l) {
+      _listStatisticState = RequestState.error;
+    }, (r) {
+      _listStatistcData = r;
+      _listStatisticState = RequestState.success;
     });
     notifyListeners();
   }

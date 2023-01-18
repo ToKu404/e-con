@@ -1,5 +1,6 @@
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/src/data/models/attendance/student_data_attendance_data.dart';
+import 'package:e_con/src/data/models/cpl_lecturer/statistic_data.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -25,6 +26,14 @@ class ReusableFuntionHelper {
       dateTime.day,
     );
     return initDate.isAtSameMomentAs(expiredDate);
+  }
+
+  static Map<int, int> getStatisticValue(List<StatisticData> statistics) {
+    final result = {1: 0, 2: 0, 3: 0, 4: 0};
+    for (int i = 0; i < statistics.length; i++) {
+      result[statistics[i].attendance!.id!] = statistics[i].score!;
+    }
+    return result;
   }
 
   static StudentAttendanceStat getAttendanceStat(
