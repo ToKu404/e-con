@@ -3,16 +3,11 @@ import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/helpers/reusable_function_helper.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
-import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/data/models/attendance/helpers/attendance_value.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/statistic_data.dart';
-import 'package:e_con/src/presentations/features/menu/lecturer/providers/meeting_course_notifier.dart';
-import 'package:e_con/src/presentations/widgets/custom_shimmer.dart';
-import 'package:e_con/src/presentations/widgets/placeholders/card_placeholder.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class TeacherMeetCard extends StatefulWidget {
   final MeetingData meetingData;
@@ -29,26 +24,7 @@ class TeacherMeetCard extends StatefulWidget {
 
 class _TeacherMeetCardState extends State<TeacherMeetCard> {
   @override
-  void initState() {
-    super.initState();
-    Future.microtask(() {
-      Provider.of<MeetingCourseNotifier>(context, listen: false)
-        ..getListAttendanceStatistic(meetingId: widget.meetingData.id);
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final statProv = context.watch<MeetingCourseNotifier>();
-    if (statProv.listStatisticState == RequestState.loading ||
-        statProv.listStatisticData == null) {
-      return Padding(
-        padding: EdgeInsets.only(bottom: AppSize.space[2]),
-        child: CustomShimmer(
-          child: CardPlaceholder(height: 120, horizontalPadding: 0),
-        ),
-      );
-    }
     return InkWell(
       onTap: () async {
         Navigator.pushNamed(context, AppRoute.detailMeet, arguments: {
@@ -91,7 +67,7 @@ class _TeacherMeetCardState extends State<TeacherMeetCard> {
                       Text(
                         'Pertemuan ${widget.meetingData.meetingNumber}',
                         style: kTextHeme.subtitle1?.copyWith(
-                          color: Palette.primary,
+                          color: Palette.primaryVariant,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -105,29 +81,34 @@ class _TeacherMeetCardState extends State<TeacherMeetCard> {
                     ],
                   ),
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(
-                      AppSize.space[5],
+                Builder(builder: (context) {
+                  final statusMeeting =
+                      ReusableFuntionHelper.checkStatusMeeting(
+                          widget.meetingData.date!);
+                  return Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                        AppSize.space[5],
+                      ),
+                      color: statusMeeting.color,
                     ),
-                    color: Palette.primary,
-                  ),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: AppSize.space[3],
-                    vertical: AppSize.space[1],
-                  ),
-                  child: Text(
-                    'Selesai',
-                    style: kTextHeme.overline?.copyWith(
-                      color: Colors.white,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: AppSize.space[3],
+                      vertical: AppSize.space[1],
                     ),
-                  ),
-                )
+                    child: Text(
+                      statusMeeting.status,
+                      style: kTextHeme.overline?.copyWith(
+                        color: Colors.white,
+                      ),
+                    ),
+                  );
+                })
               ],
             ),
             Spacer(),
             _BuildMeetStat(
-              listStatisticData: statProv.listStatisticData!,
+              listStatisticData: widget.meetingData.listAttendanceType!,
             ),
           ],
         ),

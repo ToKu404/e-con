@@ -267,9 +267,10 @@ class _TeacherMeetDetailPageState extends State<TeacherMeetDetailPage> {
                                 'meetingNumber': meetingNumber,
                               });
                         }
+                        return;
                       }
-                      return;
                     }
+
                     meetingData.setMeetingNumber = meetingNumber;
                     Navigator.pushNamed(context, AppRoute.genBarcode,
                         arguments: {

@@ -61,12 +61,12 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
   Future<Either<Failure, bool>> setAttendanceByStudent(
       {required int meetingId,
       required int studentId,
-      required int attendanceTypeId}) async {
+      required String validationCode}) async {
     try {
       final result = await attendanceDataSource.setAttendanceByStudent(
         meetingId: meetingId,
         studentId: studentId,
-        attendanceTypeId: attendanceTypeId,
+        validationCode: validationCode,
       );
       return Right(result);
     } catch (e) {

@@ -270,8 +270,11 @@ class _AttendanceDetailSectionState extends State<AttendanceDetailSection> {
                         attendanceProvider.setAttendanceByStudent(
                           meetingId: qrResult.meetingData.id,
                           studentId: studentData.id!,
-                          attendanceTypeId: 1,
+                          validationCode: qrResult.validationCode,
                         );
+                        print(qrResult.meetingData.id);
+                        print(studentData.id!);
+                        print(qrResult.validationCode);
                       },
                     ),
                     AppSize.verticalSpace[5],

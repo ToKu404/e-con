@@ -1,16 +1,9 @@
-import 'package:e_con/injection.dart' as di;
 import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/data/models/user/user_credential.dart';
 import 'package:e_con/src/data/models/user/helper/user_role_type.dart';
 import 'package:e_con/src/presentations/features/login/pages/login_page.dart';
 import 'package:e_con/src/presentations/features/login/provider/get_user_notifier.dart';
-import 'package:e_con/src/presentations/features/menu/student/pages/scan_qr/provider/qr_notifier.dart';
-import 'package:e_con/src/presentations/features/menu/student/providers/student_profile_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/student/student_main_page.dart';
-import 'package:e_con/src/presentations/features/menu/lecturer/providers/course_student_notifier.dart';
-import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecture_courses_notifier.dart';
-import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecture_profile_notifier.dart';
-import 'package:e_con/src/presentations/features/menu/lecturer/providers/meeting_course_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/teacher_main_page.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_error.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';

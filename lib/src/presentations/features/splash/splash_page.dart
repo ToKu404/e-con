@@ -20,14 +20,15 @@ class _SplashPageState extends State<SplashPage> {
   void didChangeDependencies() {
     // Will change page after two second
     super.didChangeDependencies();
-    Timer(
-      const Duration(seconds: 5),
-      () => Navigator.pushNamedAndRemoveUntil(
-        context,
-        AppRoute.wrapper,
-        (route) => false,
-      ),
-    );
+    Timer(const Duration(seconds: 5), () {
+      if (mounted) {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          AppRoute.wrapper,
+          (route) => false,
+        );
+      }
+    });
   }
 
   @override

@@ -47,8 +47,6 @@ class ProfileDataSourceImpl implements ProfileDataSource {
       },
     );
 
-    print(responseData.body);
-
     if (responseData.statusCode == 200) {
       final dataResponse = DataResponse<Map<String, dynamic>>.fromJson(
               jsonDecode(responseData.body))
@@ -82,9 +80,6 @@ class ProfileDataSourceImpl implements ProfileDataSource {
         "Cookie": session,
       },
     );
-
-    print(responseData.body);
-
     if (responseData.statusCode == 200) {
       final dataResponse = DataResponse<Map<String, dynamic>>.fromJson(
               jsonDecode(responseData.body))

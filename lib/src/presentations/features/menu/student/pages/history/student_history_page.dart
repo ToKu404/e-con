@@ -54,8 +54,8 @@ class _AppBarSectionState extends State<_AppBarSection> {
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(.15),
-            offset: const Offset(1, 0),
-            blurRadius: 6,
+            offset: const Offset(1, 2),
+            blurRadius: 1,
           ),
         ],
       ),

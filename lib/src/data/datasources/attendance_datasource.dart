@@ -17,7 +17,7 @@ abstract class AttendanceDataSource {
   Future<bool> setAttendanceByStudent({
     required int meetingId,
     required int studentId,
-    required int attendanceTypeId,
+    required String validationCode,
   });
   Future<List<AttendanceData>> getListAttendance({
     required int meetingId,
@@ -70,29 +70,32 @@ class AttendanceDataSourceImpl implements AttendanceDataSource {
     final map = {
       'query': query,
     };
-
-    final responseData = await client.get(
-      Uri.parse(
-        '${ApiService.baseUrlCPL}/class-record/attendance/all-by-meetingid/${meetingId}',
-      ).replace(queryParameters: map),
-      headers: {
-        "Cookie": credential!.session ?? '',
-      },
-    );
-
-    if (responseData.statusCode == 200) {
-      print(meetingId);
-      Iterable dataResponse =
-          DataResponse<List<dynamic>>.fromJson(jsonDecode(responseData.body))
-              .data;
-      return List<AttendanceData>.from(
-        dataResponse.map(
-          (e) => AttendanceData.fromJson(e),
-        ),
+    try {
+      final responseData = await client.get(
+        Uri.parse(
+          '${ApiService.baseUrlCPL}/class-record/attendance/all-by-meetingid/${meetingId}',
+        ).replace(queryParameters: map),
+        headers: {
+          "Cookie": credential!.session ?? '',
+        },
       );
-    } else if (responseData.statusCode == 404) {
-      throw DataNotFoundException();
-    } else {
+      responseData.body;
+      if (responseData.statusCode == 200) {
+        Iterable dataResponse =
+            DataResponse<List<dynamic>>.fromJson(jsonDecode(responseData.body))
+                .data;
+        return List<AttendanceData>.from(
+          dataResponse.map(
+            (e) => AttendanceData.fromJson(e),
+          ),
+        );
+      } else if (responseData.statusCode == 404) {
+        throw DataNotFoundException();
+      } else {
+        throw ServerException();
+      }
+    } catch (e) {
+      print('disini');
       throw ServerException();
     }
   }
@@ -104,7 +107,7 @@ class AttendanceDataSourceImpl implements AttendanceDataSource {
 
     final responseData = await client.get(
       Uri.parse(
-        '${ApiService.baseUrlCPL}/class-record/student/attendance/all-by-classid/${classId}',
+        '${ApiService.baseUrlCPL}/class-record/attendance/all-by-classid/${classId}',
       ),
       headers: {
         "Cookie": credential!.session ?? '',
@@ -130,26 +133,28 @@ class AttendanceDataSourceImpl implements AttendanceDataSource {
   Future<bool> setAttendanceByStudent(
       {required int meetingId,
       required int studentId,
-      required int attendanceTypeId}) async {
+      required String validationCode}) async {
     try {
       final credential = await authPreferenceHelper.getUser();
 
       final map = {
         'meetingId': meetingId,
         'studentId': studentId,
-        'attendanceTypeId': attendanceTypeId,
+        'validationCode': validationCode,
       };
       final response = await client.post(
-        Uri.parse(
-          '${ApiService.baseUrlCPL}/class-record/attendance',
-        ),
-        headers: {
-          'Content-Type': 'application/json',
-          "Cookie": credential!.session ?? '',
-        },
-        body: jsonEncode(map),
-      );
+          Uri.parse(
+            '${ApiService.baseUrlCPL}/class-record/student/validate-attendance',
+          ).replace(
+              queryParameters:
+                  map.map((key, value) => MapEntry(key, value.toString()))),
+          headers: {
+            'Content-Type': 'application/json',
+            "Cookie": credential!.session ?? '',
+          },
+          body: jsonEncode(map));
       print(response.body);
+
       return response.statusCode == 200;
     } catch (e) {
       print(e.toString());

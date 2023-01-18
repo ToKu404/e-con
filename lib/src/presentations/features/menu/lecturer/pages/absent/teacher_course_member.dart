@@ -4,10 +4,8 @@ import 'package:e_con/core/helpers/reusable_function_helper.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/data/models/attendance/student_attendance_data.dart';
-import 'package:e_con/src/data/models/profile/student_data.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_empty.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_error.dart';
-import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
 import 'package:e_con/src/presentations/widgets/custom_shimmer.dart';
 import 'package:e_con/src/presentations/widgets/placeholders/card_placeholder.dart';
 import 'package:flutter/material.dart';
@@ -158,9 +156,9 @@ class CourseParticipantCard extends StatelessWidget {
                   width: 40,
                   height: 40,
                   child: CircularProgressIndicator(
-                    color: Palette.success,
+                    color: attendanceStatusCard.statusColor,
                     strokeWidth: 5,
-                    backgroundColor: Palette.disable,
+                    backgroundColor: Palette.field,
                     value: attendanceStatusCard.percent / 100,
                   ),
                 ),

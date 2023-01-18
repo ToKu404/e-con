@@ -65,6 +65,18 @@ class ReusableFuntionHelper {
     }
     return StudentAttendanceStat(percent: percent, statusColor: statusColor);
   }
+
+  static StatusMeeting checkStatusMeeting(DateTime date) {
+    DateTime now = DateTime.now();
+    now = DateTime(now.year, now.month, now.day);
+    if (date.isAtSameMomentAs(now)) {
+      return StatusMeeting(color: Palette.primary, status: 'Aktif');
+    } else if (date.isBefore(now)) {
+      return StatusMeeting(color: Palette.teritory, status: 'Selesai');
+    } else {
+      return StatusMeeting(color: Palette.disable, status: 'Belum Mulai');
+    }
+  }
 }
 
 class StudentAttendanceStat {
@@ -72,4 +84,11 @@ class StudentAttendanceStat {
   final Color statusColor;
 
   StudentAttendanceStat({required this.percent, required this.statusColor});
+}
+
+class StatusMeeting {
+  final String status;
+  final Color color;
+
+  StatusMeeting({required this.color, required this.status});
 }

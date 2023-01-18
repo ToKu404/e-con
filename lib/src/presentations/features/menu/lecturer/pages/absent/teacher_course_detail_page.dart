@@ -231,7 +231,8 @@ class TitleSection extends StatelessWidget {
           AppSize.verticalSpace[4],
           _BuildCourseTile(
             iconPath: 'assets/icons/class.svg',
-            title: 'Kelas $className',
+            title: '$className',
+            type: 'Kelas',
           ),
           // AppSize.verticalSpace[2],
           // _BuildCourseTile(
@@ -242,6 +243,7 @@ class TitleSection extends StatelessWidget {
           _BuildCourseTile(
             iconPath: 'assets/icons/schedule.svg',
             title: courseDate,
+            type: 'Jadwal',
           ),
           AppSize.verticalSpace[4],
           CustomButton(
@@ -262,28 +264,46 @@ class TitleSection extends StatelessWidget {
 class _BuildCourseTile extends StatelessWidget {
   final String title;
   final String iconPath;
+  final String type;
   const _BuildCourseTile({
     required this.title,
     required this.iconPath,
+    required this.type,
   });
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        SvgPicture.asset(
-          iconPath,
-          width: 24,
-          height: 24,
-          color: Palette.black,
+        Container(
+          padding: EdgeInsets.all(4.0),
+          decoration: BoxDecoration(
+              color: Palette.primary, borderRadius: BorderRadius.circular(4.0)),
+          child: SvgPicture.asset(
+            iconPath,
+            width: 18,
+            height: 18,
+            color: Palette.white,
+          ),
         ),
         AppSize.horizontalSpace[2],
         Expanded(
-          child: Text(
-            title,
-            style: kTextHeme.subtitle1?.copyWith(
-              color: Palette.black,
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                type,
+                style: kTextHeme.subtitle2?.copyWith(
+                  color: Palette.disable,
+                ),
+              ),
+              Text(
+                title,
+                style: kTextHeme.subtitle1?.copyWith(
+                  color: Palette.black,
+                ),
+              ),
+            ],
           ),
         ),
       ],

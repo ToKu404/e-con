@@ -20,6 +20,6 @@ abstract class AttendanceRepository {
   Future<Either<Failure, bool>> setAttendanceByStudent({
     required int meetingId,
     required int studentId,
-    required int attendanceTypeId,
+    required String validationCode,
   });
 }

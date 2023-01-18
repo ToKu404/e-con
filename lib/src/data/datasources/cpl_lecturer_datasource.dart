@@ -70,31 +70,36 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
 
   @override
   Future<List<MeetingData>> getListMeeting(int classId) async {
-    final credential = await authPreferenceHelper.getUser();
-    final responseData = await client.get(
-      Uri.parse(
-          '${ApiService.baseUrlCPL}/class-record/meeting/all-by-classid/$classId'),
-      headers: {
-        "Cookie": credential!.session ?? '',
-      },
-    );
-
-    if (responseData.statusCode == 200) {
-      Iterable dataResponse =
-          DataResponse<List<dynamic>>.fromJson(jsonDecode(responseData.body))
-              .data;
-
-      return List<MeetingData>.from(
-        dataResponse.map(
-          (e) => MeetingData.fromJson(e),
-        ),
+    try {
+      final credential = await authPreferenceHelper.getUser();
+      final responseData = await client.get(
+        Uri.parse(
+            '${ApiService.baseUrlCPL}/class-record/meeting/all-by-classid/$classId'),
+        headers: {
+          "Cookie": credential!.session ?? '',
+        },
       );
-    } else if (responseData.statusCode == 401) {
-      throw UnauthenticateException();
-    } else if (responseData.statusCode == 404) {
-      throw DataNotFoundException();
-    } else {
-      throw AuthException();
+
+      if (responseData.statusCode == 200) {
+        Iterable dataResponse =
+            DataResponse<List<dynamic>>.fromJson(jsonDecode(responseData.body))
+                .data;
+
+        return List<MeetingData>.from(
+          dataResponse.map(
+            (e) => MeetingData.fromJson(e),
+          ),
+        );
+      } else if (responseData.statusCode == 401) {
+        throw UnauthenticateException();
+      } else if (responseData.statusCode == 404) {
+        throw DataNotFoundException();
+      } else {
+        throw AuthException();
+      }
+    } catch (e) {
+      print(e.toString());
+      throw ServerException();
     }
   }
 
@@ -238,24 +243,30 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
 
   @override
   Future<MeetingData> getMeetingData({required int meetingId}) async {
-    final credential = await authPreferenceHelper.getUser();
-    final responseData = await client.get(
-      Uri.parse('${ApiService.baseUrlCPL}/class-record/meeting/${meetingId}'),
-      headers: {
-        "Cookie": credential!.session ?? '',
-      },
-    );
+    try {
+      final credential = await authPreferenceHelper.getUser();
+      final responseData = await client.get(
+        Uri.parse('${ApiService.baseUrlCPL}/class-record/meeting/${meetingId}'),
+        headers: {
+          "Cookie": credential!.session ?? '',
+        },
+      );
 
-    if (responseData.statusCode == 200) {
-      final dataResponse = DataResponse<Map<String, dynamic>>.fromJson(
-              jsonDecode(responseData.body))
-          .data;
+      if (responseData.statusCode == 200) {
+        final dataResponse = DataResponse<Map<String, dynamic>>.fromJson(
+                jsonDecode(responseData.body))
+            .data;
+  
+        final meetingData = MeetingData.fromJson(dataResponse);
+        return meetingData;
+      } else if (responseData.statusCode == 404) {
+        throw DataNotFoundException();
+      } else {
+        throw ServerException();
+      }
+    } catch (e) {
+      print('disini jg');
 
-      final meetingData = MeetingData.fromJson(dataResponse);
-      return meetingData;
-    } else if (responseData.statusCode == 404) {
-      throw DataNotFoundException();
-    } else {
       throw ServerException();
     }
   }
@@ -263,29 +274,33 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
   @override
   Future<List<StatisticData>> getAttendanceStatisticData(
       {required int meetingId}) async {
-    final credential = await authPreferenceHelper.getUser();
+    try {
+      final credential = await authPreferenceHelper.getUser();
 
-    final responseData = await client.get(
-      Uri.parse(
-        '${ApiService.baseUrlCPL}/class-record/meeting/${meetingId}/statistics',
-      ),
-      headers: {
-        "Cookie": credential!.session ?? '',
-      },
-    );
-    print(responseData.body);
-    if (responseData.statusCode == 200) {
-      Iterable dataResponse =
-          DataResponse<List<dynamic>>.fromJson(jsonDecode(responseData.body))
-              .data;
-      return List<StatisticData>.from(
-        dataResponse.map(
-          (e) => StatisticData.fromJson(e),
+      final responseData = await client.get(
+        Uri.parse(
+          '${ApiService.baseUrlCPL}/class-record/meeting/${meetingId}/statistics',
         ),
+        headers: {
+          "Cookie": credential!.session ?? '',
+        },
       );
-    } else if (responseData.statusCode == 404) {
-      throw DataNotFoundException();
-    } else {
+      if (responseData.statusCode == 200) {
+        Iterable dataResponse =
+            DataResponse<List<dynamic>>.fromJson(jsonDecode(responseData.body))
+                .data;
+        return List<StatisticData>.from(
+          dataResponse.map(
+            (e) => StatisticData.fromJson(e),
+          ),
+        );
+      } else if (responseData.statusCode == 404) {
+        throw DataNotFoundException();
+      } else {
+        throw ServerException();
+      }
+    } catch (e) {
+      print(e.toString());
       throw ServerException();
     }
   }

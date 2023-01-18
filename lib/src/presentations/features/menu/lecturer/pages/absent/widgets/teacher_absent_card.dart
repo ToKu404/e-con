@@ -61,24 +61,25 @@ class TeacherAbsentCard extends StatelessWidget {
                             ),
                           ),
                           AppSize.verticalSpace[3],
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: AppSize.space[3],
-                              vertical: AppSize.space[1],
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(
-                                AppSize.space[5],
+                          if (clazzData.semesterData?.name != null)
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: AppSize.space[3],
+                                vertical: AppSize.space[1],
                               ),
-                              color: Palette.primary,
-                            ),
-                            child: Text(
-                              'Berjalan',
-                              style: kTextHeme.subtitle2?.copyWith(
-                                color: Colors.white,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(
+                                  AppSize.space[5],
+                                ),
+                                color: Palette.primary,
+                              ),
+                              child: Text(
+                                clazzData.semesterData?.name ?? '',
+                                style: kTextHeme.subtitle2?.copyWith(
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
-                          ),
                         ],
                       ),
                     ],
