@@ -9,8 +9,9 @@ import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
 import 'package:http/http.dart' as http;
 
 abstract class CplStudentDataSource {
-  Future<List<ClazzData>> getListStudentClass();
-  Future<List<AttendanceData>> getListStudentAttendance({required int classId});
+  Future<List<ClazzData>?> getListStudentClass();
+  Future<List<AttendanceData>?> getListStudentAttendance(
+      {required int classId});
 }
 
 class CplStudentDataSourceImpl implements CplStudentDataSource {
@@ -21,15 +22,18 @@ class CplStudentDataSourceImpl implements CplStudentDataSource {
       {required this.client, required this.authPreferenceHelper});
 
   @override
-  Future<List<ClazzData>> getListStudentClass() async {
+  Future<List<ClazzData>?> getListStudentClass() async {
+    print('ca');
     try {
       final credential = await authPreferenceHelper.getUser();
       final responseData = await client.get(
-        Uri.parse('${ApiService.baseUrlCPL}/student/classes'),
+        Uri.parse('${ApiService.baseUrlCPL}/class-record/student/classes'),
         headers: {
           "Cookie": credential!.session ?? '',
         },
       );
+
+      print(responseData.body);
 
       if (responseData.statusCode == 200) {
         Iterable dataResponse =
@@ -51,13 +55,13 @@ class CplStudentDataSourceImpl implements CplStudentDataSource {
   }
 
   @override
-  Future<List<AttendanceData>> getListStudentAttendance(
+  Future<List<AttendanceData>?> getListStudentAttendance(
       {required int classId}) async {
     try {
       final credential = await authPreferenceHelper.getUser();
       final responseData = await client.get(
         Uri.parse(
-            '${ApiService.baseUrlCPL}/student/attendance/all-by-classid/${classId}'),
+            '${ApiService.baseUrlCPL}/class-record/student/attendance/all-by-classid/${classId}'),
         headers: {
           "Cookie": credential!.session ?? '',
         },

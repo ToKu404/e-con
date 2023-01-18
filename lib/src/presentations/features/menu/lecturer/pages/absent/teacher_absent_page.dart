@@ -1,8 +1,9 @@
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
+import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
-import 'package:e_con/src/presentations/features/menu/lecturer/pages/absent/widgets/teacher_absent_card.dart';
+import 'package:e_con/src/presentations/features/menu/widgets/class_card.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecture_courses_notifier.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_error.dart';
 import 'package:e_con/src/presentations/widgets/custom_shimmer.dart';
@@ -86,8 +87,11 @@ class _TeacherAbsentPageState extends State<TeacherAbsentPage> {
                   itemCount: courseProvider.listCourse?.length,
                   itemBuilder: (context, index) {
                     final data = courseProvider.listCourse!.elementAt(index);
-                    return TeacherAbsentCard(
+                    return ClassCard(
                       clazzData: data,
+                      onTap: () => Navigator.pushNamed(
+                          context, AppRoute.detailCourse,
+                          arguments: data),
                     );
                   },
                 );

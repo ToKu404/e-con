@@ -4,14 +4,17 @@ import 'package:e_con/core/helpers/auth_preference_helper.dart';
 import 'package:e_con/src/data/datasources/attendance_datasource.dart';
 import 'package:e_con/src/data/datasources/auth_datasource.dart';
 import 'package:e_con/src/data/datasources/cpl_lecturer_datasource.dart';
+import 'package:e_con/src/data/datasources/cpl_student_datasource.dart';
 import 'package:e_con/src/data/datasources/profile_datasource.dart';
 import 'package:e_con/src/data/repositories/attendance_repository_impl.dart';
 import 'package:e_con/src/data/repositories/auth_repository_impl.dart';
 import 'package:e_con/src/data/repositories/cpl_lecturer_repository_impl.dart';
+import 'package:e_con/src/data/repositories/cpl_student_repository_impl.dart';
 import 'package:e_con/src/data/repositories/profile_repository_impl.dart';
 import 'package:e_con/src/domain/repositories/attendance_repository.dart';
 import 'package:e_con/src/domain/repositories/auth_repository.dart';
 import 'package:e_con/src/domain/repositories/cpl_lecturer_repository.dart';
+import 'package:e_con/src/domain/repositories/cpl_student_repository.dart';
 import 'package:e_con/src/domain/repositories/profile_repository.dart';
 import 'package:e_con/src/domain/usecases/attendance_usecases/get_list_attendance.dart';
 import 'package:e_con/src/domain/usecases/attendance_usecases/get_list_student_attendance.dart';
@@ -27,6 +30,8 @@ import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/get_meeting_data
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/get_validation_code.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/set_attendance_validation_code.dart';
 import 'package:e_con/src/domain/usecases/cpl_lecturer_usecases/update_meeting.dart';
+import 'package:e_con/src/domain/usecases/cpl_student_usecases/get_list_student_attendance_history.dart';
+import 'package:e_con/src/domain/usecases/cpl_student_usecases/get_list_student_classes.dart';
 import 'package:e_con/src/domain/usecases/profile_usecases/get_lecture_data.dart';
 import 'package:e_con/src/domain/usecases/profile_usecases/get_profile_picture.dart';
 import 'package:e_con/src/domain/usecases/profile_usecases/get_student_data.dart';
@@ -38,6 +43,7 @@ import 'package:e_con/src/presentations/features/login/provider/auth_notifier.da
 import 'package:e_con/src/presentations/features/login/provider/get_user_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/providers/attendance_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/providers/profile_picture_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/student/pages/history/provider/attendance_history_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/scan_qr/provider/qr_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/student/providers/student_profile_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/course_student_notifier.dart';
@@ -72,6 +78,11 @@ void init() {
       attendanceDataSource: locator(),
     ),
   );
+  locator.registerLazySingleton<CplStudentRepository>(
+    () => CplStudentRepositoryImpl(
+      cplStudentLecturer: locator(),
+    ),
+  );
 
   // Datasource
   locator.registerLazySingleton<AuthDataSource>(
@@ -95,6 +106,12 @@ void init() {
   );
   locator.registerLazySingleton<AttendanceDataSource>(
     () => AttendanceDataSourceImpl(
+      client: locator(),
+      authPreferenceHelper: locator(),
+    ),
+  );
+  locator.registerLazySingleton<CplStudentDataSource>(
+    () => CplStudentDataSourceImpl(
       client: locator(),
       authPreferenceHelper: locator(),
     ),
@@ -131,11 +148,11 @@ void init() {
       cplLecturerRepository: locator(),
     ),
   );
-  locator.registerLazySingleton(
-    () => GetListStudent(
-      cplLecturerRepository: locator(),
-    ),
-  );
+  // locator.registerLazySingleton(
+  //   () => GetListStudent(
+  //     cplLecturerRepository: locator(),
+  //   ),
+  // );
   locator.registerLazySingleton(
     () => GetListMeeting(
       cplLecturerRepository: locator(),
@@ -200,6 +217,16 @@ void init() {
   locator.registerLazySingleton(
     () => GetProfilePicture(
       profileRepository: locator(),
+    ),
+  );
+  locator.registerLazySingleton(
+    () => GetListStudentAttendanceHistory(
+      cplStudentRepository: locator(),
+    ),
+  );
+  locator.registerLazySingleton(
+    () => GetListStudentClasses(
+      cplStudentRepository: locator(),
     ),
   );
 
@@ -270,6 +297,13 @@ void init() {
   locator.registerFactory(
     () => QrNotifier(
       getMeetingDataUsecase: locator(),
+    ),
+  );
+
+  locator.registerFactory(
+    () => AttendanceHistoryNotifier(
+      getListStudentAttendanceUsecase: locator(),
+      getListStudentClasses: locator(),
     ),
   );
 

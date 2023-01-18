@@ -34,16 +34,16 @@ class CplLecturerRepositoryImpl implements CplLecturerRepository {
     }
   }
 
-  @override
-  Future<Either<Failure, List<StudentData>?>> getListStudent(
-      int classId) async {
-    try {
-      final result = await cplLecturerDataSource.getListStudent(classId);
-      return Right(result);
-    } on DataNotFoundException {
-      return Left(EmptyFailure('Belum ada peserta matakuliah ini'));
-    }
-  }
+  // @override
+  // Future<Either<Failure, List<StudentData>?>> getListStudent(
+  //     int classId) async {
+  //   try {
+  //     final result = await cplLecturerDataSource.getListStudent(classId);
+  //     return Right(result);
+  //   } on DataNotFoundException {
+  //     return Left(EmptyFailure('Belum ada peserta matakuliah ini'));
+  //   }
+  // }
 
   @override
   Future<Either<Failure, bool>> createNewMeeting(

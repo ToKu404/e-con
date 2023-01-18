@@ -11,7 +11,7 @@ class CplStudentRepositoryImpl implements CplStudentRepository {
   CplStudentRepositoryImpl({required this.cplStudentLecturer});
 
   @override
-  Future<Either<Failure, List<AttendanceData>>> getListStudentAttendance(
+  Future<Either<Failure, List<AttendanceData>?>> getListStudentAttendance(
       {required int classId}) async {
     try {
       final result =
@@ -23,7 +23,7 @@ class CplStudentRepositoryImpl implements CplStudentRepository {
   }
 
   @override
-  Future<Either<Failure, List<ClazzData>>> getListStudentClass() async {
+  Future<Either<Failure, List<ClazzData>?>> getListStudentClass() async {
     try {
       final result = await cplStudentLecturer.getListStudentClass();
       return Right(result);

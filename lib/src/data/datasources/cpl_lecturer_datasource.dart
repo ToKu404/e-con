@@ -14,7 +14,7 @@ import 'package:intl/intl.dart';
 abstract class CplLecturerDataSource {
   Future<ClazzContent> getListClazz();
   Future<List<MeetingData>> getListMeeting(int classId);
-  Future<List<StudentData>> getListStudent(int classId);
+  // Future<List<StudentData>> getListStudent(int classId);
   Future<bool> createNewMeeting({
     required int classId,
     required String topic,
@@ -46,7 +46,7 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
   Future<ClazzContent> getListClazz() async {
     final credential = await authPreferenceHelper.getUser();
     final responseData = await client.get(
-      Uri.parse('${ApiService.baseUrlCPL}/class-record/classes'),
+      Uri.parse('${ApiService.baseUrlCPL}/class-record/lecturer/classes'),
       headers: {
         "Cookie": credential!.session ?? '',
       },
@@ -103,34 +103,34 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
     }
   }
 
-  @override
-  Future<List<StudentData>> getListStudent(int classId) async {
-    final credential = await authPreferenceHelper.getUser();
-    final responseData = await client.get(
-      Uri.parse(
-          '${ApiService.baseUrlCPL}/class-record/student/all-by-classid/$classId'),
-      headers: {
-        "Cookie": credential!.session ?? '',
-      },
-    );
+  // @override
+  // Future<List<StudentData>> getListStudent(int classId) async {
+  //   final credential = await authPreferenceHelper.getUser();
+  //   final responseData = await client.get(
+  //     Uri.parse(
+  //         '${ApiService.baseUrlCPL}/class-record/all-by-classid/$classId'),
+  //     headers: {
+  //       "Cookie": credential!.session ?? '',
+  //     },
+  //   );
 
-    if (responseData.statusCode == 200) {
-      Iterable dataResponse =
-          DataResponse<List<dynamic>>.fromJson(jsonDecode(responseData.body))
-              .data;
-      return List<StudentData>.from(
-        dataResponse.map(
-          (e) => StudentData.fromJson(e),
-        ),
-      );
-    } else if (responseData.statusCode == 401) {
-      throw UnauthenticateException();
-    } else if (responseData.statusCode == 404) {
-      throw DataNotFoundException();
-    } else {
-      throw AuthException();
-    }
-  }
+  //   if (responseData.statusCode == 200) {
+  //     Iterable dataResponse =
+  //         DataResponse<List<dynamic>>.fromJson(jsonDecode(responseData.body))
+  //             .data;
+  //     return List<StudentData>.from(
+  //       dataResponse.map(
+  //         (e) => StudentData.fromJson(e),
+  //       ),
+  //     );
+  //   } else if (responseData.statusCode == 401) {
+  //     throw UnauthenticateException();
+  //   } else if (responseData.statusCode == 404) {
+  //     throw DataNotFoundException();
+  //   } else {
+  //     throw AuthException();
+  //   }
+  // }
 
   @override
   Future<bool> createNewMeeting(
@@ -256,7 +256,7 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
         final dataResponse = DataResponse<Map<String, dynamic>>.fromJson(
                 jsonDecode(responseData.body))
             .data;
-  
+
         final meetingData = MeetingData.fromJson(dataResponse);
         return meetingData;
       } else if (responseData.statusCode == 404) {

@@ -5,15 +5,15 @@ import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
 import 'package:flutter/material.dart';
 
-class TeacherAbsentCard extends StatelessWidget {
+class ClassCard extends StatelessWidget {
+  final VoidCallback onTap;
   final ClazzData clazzData;
-  const TeacherAbsentCard({super.key, required this.clazzData});
+  const ClassCard({super.key, required this.clazzData, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, AppRoute.detailCourse,
-          arguments: clazzData),
+      onTap: onTap,
       child: Container(
         width: AppSize.getAppWidth(context),
         margin: EdgeInsets.only(

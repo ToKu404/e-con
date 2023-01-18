@@ -1,6 +1,7 @@
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
 import 'package:e_con/src/presentations/features/login/pages/login_page.dart';
+import 'package:e_con/src/presentations/features/menu/student/pages/history/student_meeting_history_page.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/scan_qr/student_absent_page.dart';
 import 'package:e_con/src/presentations/features/menu/student/student_main_page.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/pages/absent/teacher_add_meeting_page.dart';
@@ -58,6 +59,13 @@ Route? routesHandler(RouteSettings settings) {
           classId: settings.arguments as int,
         ),
       );
+    case AppRoute.listStudentClasses:
+      return MaterialPageRoute(
+        builder: (_) => StudentMeetingHistoryPage(
+          clazzData: settings.arguments as ClazzData,
+        ),
+      );
+
     case AppRoute.teacherProfile:
       return MaterialPageRoute(
         builder: (_) => const TeacherSettingPage(),

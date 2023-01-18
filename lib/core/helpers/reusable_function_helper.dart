@@ -66,6 +66,21 @@ class ReusableFuntionHelper {
     return StudentAttendanceStat(percent: percent, statusColor: statusColor);
   }
 
+  static Color getAttendanceColor(int type) {
+    switch (type) {
+      case 1:
+        return Palette.success;
+      case 2:
+        return Palette.danger;
+      case 3:
+        return Palette.warning;
+      case 4:
+        return Colors.blue;
+      default:
+        return Palette.disable;
+    }
+  }
+
   static StatusMeeting checkStatusMeeting(DateTime date) {
     DateTime now = DateTime.now();
     now = DateTime(now.year, now.month, now.day);
