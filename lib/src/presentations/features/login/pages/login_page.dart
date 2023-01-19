@@ -8,7 +8,7 @@ import 'package:e_con/src/presentations/features/login/provider/auth_notifier.da
 import 'package:e_con/src/presentations/features/login/provider/error_field_checker.dart';
 import 'package:e_con/src/presentations/features/login/widgets/password_field.dart';
 import 'package:e_con/src/presentations/features/login/widgets/username_field.dart';
-import 'package:e_con/src/presentations/reusable_pages/check_internet_single.dart';
+import 'package:e_con/src/presentations/reusable_pages/check_internet_realtime.dart';
 import 'package:e_con/src/presentations/widgets/custom_button.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
 import 'package:e_con/src/presentations/widgets/header_logo.dart';
@@ -92,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
           return Scaffold(
             backgroundColor: Palette.white,
             body: SafeArea(
-              child: CheckInternetSingle(
+              child: CheckInternetRealtime(
                 child: CustomScrollView(
                   slivers: [
                     SliverFillRemaining(

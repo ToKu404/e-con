@@ -25,7 +25,7 @@ class _LecturerAbsentPageState extends State<LecturerAbsentPage> {
         Column(
           children: [
             SizedBox(
-              height: 55,
+              height: 60,
             ),
             Expanded(
               child: Builder(builder: (c) {

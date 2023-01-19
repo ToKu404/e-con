@@ -13,18 +13,14 @@ class StudentNotifPage extends StatelessWidget {
         Column(
           children: const [
             SizedBox(
-              height: 2,
+              height: 60,
             ),
             Expanded(
               child: _BodySection(),
             ),
           ],
         ),
-        const Positioned(
-          left: 0,
-          top: 0,
-          child: _AppBarSection(),
-        )
+        _AppBarSection()
       ],
     );
   }
@@ -36,7 +32,8 @@ class _AppBarSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(AppSize.space[4]),
+      height: 60,
+      padding: EdgeInsets.symmetric(horizontal: AppSize.space[4]),
       width: AppSize.getAppWidth(context),
       decoration: BoxDecoration(color: Colors.white, boxShadow: [
         BoxShadow(
@@ -46,8 +43,10 @@ class _AppBarSection extends StatelessWidget {
         ),
       ]),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
                 'Notifikasi',
@@ -77,35 +76,6 @@ class _AppBarSection extends StatelessWidget {
               ),
             ],
           ),
-          // Row(
-          //   children: [
-          //     Chip(
-          //       label: Row(
-          //         children: [
-          //           Text(
-          //             'Terbaru',
-          //             style: kTextHeme.subtitle2?.copyWith(
-          //               color: Palette.onPrimary,
-          //             ),
-          //           ),
-          //           const Icon(
-          //             Icons.keyboard_arrow_down_rounded,
-          //             color: Palette.onPrimary,
-          //           )
-          //         ],
-          //       ),
-          //     ),
-          //     AppSize.horizontalSpace[1],
-          //     Chip(
-          //       label: Text(
-          //         'Belum Dibaca',
-          //         style: kTextHeme.subtitle2?.copyWith(
-          //           color: Palette.onPrimary,
-          //         ),
-          //       ),
-          //     )
-          //   ],
-          // )
         ],
       ),
     );

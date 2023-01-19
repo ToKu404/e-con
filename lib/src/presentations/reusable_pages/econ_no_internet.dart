@@ -5,7 +5,9 @@ import 'package:flutter_svg/svg.dart';
 
 class EconNoInternet extends StatelessWidget {
   final bool withScaffold;
-  const EconNoInternet({super.key, this.withScaffold = false});
+  final VoidCallback onReload;
+  const EconNoInternet(
+      {super.key, this.withScaffold = false, required this.onReload});
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +44,20 @@ class EconNoInternet extends StatelessWidget {
             fontSize: 14,
             color: Palette.disable,
           ),
-        )
+        ),
+        SizedBox(
+          height: 32,
+        ),
+        IconButton(
+          onPressed: onReload,
+          style: IconButton.styleFrom(
+            backgroundColor: Palette.primaryVariant,
+          ),
+          icon: Icon(
+            Icons.replay_outlined,
+            color: Palette.white,
+          ),
+        ),
       ],
     ));
   }

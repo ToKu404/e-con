@@ -3,15 +3,15 @@ import 'package:e_con/src/presentations/blocs/realtime_internet_check/realtime_i
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CheckInternetSingle extends StatefulWidget {
+class CheckInternetRealtime extends StatefulWidget {
   final Widget child;
-  const CheckInternetSingle({super.key, required this.child});
+  const CheckInternetRealtime({super.key, required this.child});
 
   @override
-  State<CheckInternetSingle> createState() => _CheckInternetSingleState();
+  State<CheckInternetRealtime> createState() => _CheckInternetRealtimeState();
 }
 
-class _CheckInternetSingleState extends State<CheckInternetSingle> {
+class _CheckInternetRealtimeState extends State<CheckInternetRealtime> {
   @override
   void initState() {
     super.initState();

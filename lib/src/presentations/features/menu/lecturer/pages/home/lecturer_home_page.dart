@@ -4,14 +4,16 @@ import 'package:e_con/core/helpers/reusable_function_helper.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
+import 'package:e_con/src/presentations/blocs/onetime_internet_check/onetime_internet_check_cubit.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/pages/home/widgets/teacher_task_card.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecturer_today_meeting_notifier.dart';
+import 'package:e_con/src/presentations/reusable_pages/econ_no_internet.dart';
 import 'package:e_con/src/presentations/widgets/custom_shimmer.dart';
 import 'package:e_con/src/presentations/widgets/default_appbar.dart';
 import 'package:e_con/src/presentations/widgets/header_logo.dart';
 import 'package:e_con/src/presentations/widgets/placeholders/card_placeholder.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LecturerHomePage extends StatefulWidget {
   const LecturerHomePage({super.key});
@@ -22,8 +24,14 @@ class LecturerHomePage extends StatefulWidget {
 
 class _LecturerHomePageState extends State<LecturerHomePage> {
   @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<OnetimeInternetCheckCubit>(context)
+        .onCheckConnectionOnetime();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final provider = context.watch<LecturerTodayMeetingNotifier>();
     return Stack(
       children: [
         Column(
@@ -32,92 +40,120 @@ class _LecturerHomePageState extends State<LecturerHomePage> {
               height: 60,
             ),
             Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 16,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Pengingat Harian',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Palette.black,
-                              height: 1.2,
-                            ),
-                          ),
-                          Text(
-                            ReusableFuntionHelper.datetimeToString(
-                                DateTime.now()),
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.normal,
-                              color: Palette.black,
-                            ),
-                          ),
-                        ],
+              child: Builder(builder: (context) {
+                return SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 16,
                       ),
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Divider(),
-                    Builder(builder: (context) {
-                      if (provider.state == RequestState.loading ||
-                          provider.listMeetingData == null) {
-                        return CustomShimmer(
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: 12,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Pengingat Harian',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Palette.black,
+                                height: 1.2,
                               ),
-                              CardPlaceholder(
-                                height: 80,
+                            ),
+                            Text(
+                              ReusableFuntionHelper.datetimeToString(
+                                  DateTime.now()),
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.normal,
+                                color: Palette.black,
                               ),
-                              AppSize.verticalSpace[3],
-                              CardPlaceholder(
-                                height: 100,
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Divider(),
+                      Builder(builder: (context) {
+                        final provider =
+                            context.watch<LecturerTodayMeetingNotifier>();
+                        return BlocBuilder<OnetimeInternetCheckCubit,
+                                OnetimeInternetCheckState>(
+                            builder: (context, state) {
+                          if (state is OnetimeInternetCheckLost) {
+                            return EconNoInternet(
+                              onReload: () {
+                                BlocProvider.of<OnetimeInternetCheckCubit>(
+                                        context)
+                                    .onCheckConnectionOnetime();
+                              },
+                            );
+                          }
+                          if (provider.state == RequestState.loading ||
+                              provider.listMeetingData == null) {
+                            return CustomShimmer(
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    height: 12,
+                                  ),
+                                  CardPlaceholder(
+                                    height: 80,
+                                  ),
+                                  AppSize.verticalSpace[3],
+                                  CardPlaceholder(
+                                    height: 100,
+                                  ),
+                                  AppSize.verticalSpace[3],
+                                  CardPlaceholder(
+                                    height: 100,
+                                  ),
+                                  AppSize.verticalSpace[3],
+                                  CardPlaceholder(
+                                    height: 100,
+                                  ),
+                                  AppSize.verticalSpace[3],
+                                  CardPlaceholder(
+                                    height: 100,
+                                  ),
+                                  AppSize.verticalSpace[3],
+                                ],
                               ),
-                              AppSize.verticalSpace[3],
-                              CardPlaceholder(
-                                height: 100,
-                              ),
-                              AppSize.verticalSpace[3],
-                              CardPlaceholder(
-                                height: 100,
-                              ),
-                              AppSize.verticalSpace[3],
-                              CardPlaceholder(
-                                height: 100,
-                              ),
-                              AppSize.verticalSpace[3],
-                            ],
-                          ),
-                        );
-                      }
+                            );
+                          }
 
-                      return ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        padding: EdgeInsets.only(top: 12),
-                        shrinkWrap: true,
-                        itemCount: provider.listMeetingData?.length,
-                        itemBuilder: (context, index) {
-                          return TeacherTaskCard(
-                            meetingData: provider.listMeetingData![index],
+                          if (provider.listMeetingData!.isEmpty) {
+                            return Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Text(
+                                'Belum ada aktivitas yang dijadwalkan hari ini',
+                                style: TextStyle(
+                                  color: Palette.disable,
+                                ),
+                              ),
+                            );
+                          }
+                          return ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            padding: EdgeInsets.only(top: 12),
+                            shrinkWrap: true,
+                            itemCount: provider.listMeetingData?.length,
+                            itemBuilder: (context, index) {
+                              return TeacherTaskCard(
+                                meetingData: provider.listMeetingData![index],
+                              );
+                            },
                           );
-                        },
-                      );
-                    }),
-                  ],
-                ),
-              ),
+                        });
+                      }),
+                    ],
+                  ),
+                );
+              }),
             ),
           ],
         ),

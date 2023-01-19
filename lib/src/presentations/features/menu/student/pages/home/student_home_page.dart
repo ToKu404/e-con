@@ -326,17 +326,19 @@ class _ActivityBodyState extends State<ActivityBody> {
     final listMeeting = provider.listMeetingData;
 
     return ConstrainedBox(
-      constraints: BoxConstraints(minHeight: 7200),
-      child: ListView.builder(
-        itemCount: listMeeting.length,
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (context, index) {
-          return StudentTaskCard(
-            meetingData: listMeeting[index],
-          );
-        },
-      ),
+      constraints: BoxConstraints(minHeight: 490),
+      child: Builder(builder: (context) {
+        return ListView.builder(
+          itemCount: listMeeting.length,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemBuilder: (context, index) {
+            return StudentTaskCard(
+              meetingData: listMeeting[index],
+            );
+          },
+        );
+      }),
     );
   }
 }

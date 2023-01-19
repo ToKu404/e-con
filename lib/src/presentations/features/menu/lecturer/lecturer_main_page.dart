@@ -1,13 +1,9 @@
 import 'package:e_con/core/constants/color_const.dart';
-import 'package:e_con/core/constants/size_const.dart';
-import 'package:e_con/core/routes/app_routes.dart';
-import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/pages/absent/lecturer_absent_page.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/pages/home/lecturer_home_page.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/pages/setting/lecturer_setting_page.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecture_profile_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/providers/profile_picture_notifier.dart';
-import 'package:e_con/src/presentations/widgets/header_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
