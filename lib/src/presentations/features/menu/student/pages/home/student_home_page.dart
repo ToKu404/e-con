@@ -1,11 +1,16 @@
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
+import 'package:e_con/core/helpers/reusable_function_helper.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
+import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/home/widgets/student_task_card.dart';
-import 'package:e_con/src/presentations/widgets/default_appbar.dart';
+import 'package:e_con/src/presentations/features/menu/student/providers/student_activity_notifier.dart';
+import 'package:e_con/src/presentations/widgets/custom_shimmer.dart';
 import 'package:e_con/src/presentations/widgets/header_logo.dart';
+import 'package:e_con/src/presentations/widgets/placeholders/card_placeholder.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 class StudentHomePage extends StatefulWidget {
@@ -18,38 +23,46 @@ class StudentHomePage extends StatefulWidget {
 class _StudentHomePageState extends State<StudentHomePage> {
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
+    return const CustomScrollView(
       slivers: [
-        DefaultAppBar(
-          title: '',
-          action: Padding(
-            padding: EdgeInsets.only(right: AppSize.space[2]),
-            child: ElevatedButton.icon(
-              label: Text(
-                'Buka SIFA',
-                style: kTextHeme.subtitle1?.copyWith(color: Palette.white),
-              ),
-              style: ElevatedButton.styleFrom(
-                elevation: 0,
-                backgroundColor: Palette.primaryVariant,
-              ),
-              onPressed: () {
-                Navigator.pushNamed(context, AppRoutes.cplWebview);
-              },
-              icon: const Icon(
-                Icons.open_in_new,
-                size: 16,
-                color: Palette.white,
-              ),
-            ),
-          ),
-          leading: Padding(
-            padding: EdgeInsets.only(left: AppSize.space[2]),
-            child: HeaderLogo(),
-          ),
-        ),
+        _AppBarSection(),
         _NotifSection(),
         _ActivitySection(),
+      ],
+    );
+  }
+}
+
+class _AppBarSection extends StatelessWidget {
+  const _AppBarSection();
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverAppBar(
+      pinned: true,
+      title: const HeaderLogo(),
+      actions: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ElevatedButton.icon(
+            label: Text(
+              'Buka SIFA',
+              style: kTextHeme.subtitle1?.copyWith(color: Palette.white),
+            ),
+            style: ElevatedButton.styleFrom(
+              elevation: 0,
+              backgroundColor: Palette.primaryVariant.withOpacity(.7),
+            ),
+            onPressed: () {
+              Navigator.pushNamed(context, AppRoutes.cplWebview);
+            },
+            icon: const Icon(
+              Icons.open_in_new,
+              size: 16,
+              color: Palette.white,
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -60,20 +73,14 @@ class _ActivitySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ValueNotifier<int> selectIndex = ValueNotifier(0);
+    final listWeekly = ReusableFuntionHelper.getWeeklyActivityData();
+
+    final ValueNotifier<WeeklyActivity> selectWeekly =
+        ValueNotifier(ReusableFuntionHelper.getTodayActivityData());
     final ValueNotifier<bool?> isRightSwap = ValueNotifier(null);
 
-    final dayName = [
-      'Sen',
-      'Sel',
-      'Rab',
-      'Kam',
-      'Jum',
-      'Sab',
-      'Min',
-    ];
     return ValueListenableBuilder(
-      valueListenable: selectIndex,
+      valueListenable: selectWeekly,
       builder: (context, val, _) {
         return MultiSliver(
           children: [
@@ -102,18 +109,19 @@ class _ActivitySection extends StatelessWidget {
                     ),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: dayName.map((e) {
+                      children: listWeekly.map((e) {
                         return Expanded(
                           child: InkWell(
                             onTap: () {
-                              selectIndex.value = dayName.indexOf(e);
+                              selectWeekly.value = e;
+                              Provider.of<StudentActivityNotifier>(context,
+                                  listen: false)
+                                ..fetchAllMeetingByDate(date: e.date);
                             },
                             child: Container(
                               height: 32,
                               decoration: BoxDecoration(
-                                color: val == dayName.indexOf(e)
-                                    ? Palette.primary
-                                    : null,
+                                color: val == e ? Palette.primary : null,
                                 borderRadius: BorderRadius.only(
                                   bottomLeft: Radius.circular(
                                     AppSize.space[4],
@@ -125,7 +133,7 @@ class _ActivitySection extends StatelessWidget {
                               ),
                               child: Center(
                                 child: Text(
-                                  e,
+                                  e.dateName,
                                   style: kTextHeme.subtitle2,
                                 ),
                               ),
@@ -146,22 +154,30 @@ class _ActivitySection extends StatelessWidget {
                   valueListenable: isRightSwap,
                   builder: (context, isRight, _) {
                     return GestureDetector(
-                        onHorizontalDragUpdate: (details) {
-                          int sensitivity = 12;
-                          if (details.delta.dx > sensitivity && val != 0) {
-                            isRightSwap.value = true;
-                          } else if (details.delta.dx < -sensitivity &&
-                              val != 6) {
-                            isRightSwap.value = false;
-                          }
-                        },
-                        onHorizontalDragEnd: (details) {
-                          if (isRight != null) {
-                            selectIndex.value = isRight ? val - 1 : val + 1;
-                            isRightSwap.value = null;
-                          }
-                        },
-                        child: const ActivityBody());
+                      onHorizontalDragUpdate: (details) {
+                        int sensitivity = 12;
+                        if (details.delta.dx > sensitivity && val != 0) {
+                          isRightSwap.value = true;
+                        } else if (details.delta.dx < -sensitivity &&
+                            val != 6) {
+                          isRightSwap.value = false;
+                        }
+                      },
+                      onHorizontalDragEnd: (details) {
+                        if (isRight != null) {
+                          selectWeekly.value = isRight
+                              ? listWeekly[listWeekly.indexOf(val) - 1]
+                              : listWeekly[listWeekly.indexOf(val) + 1];
+                          isRightSwap.value = null;
+                          Provider.of<StudentActivityNotifier>(context,
+                              listen: false)
+                            ..fetchAllMeetingByDate(date: val.date);
+                        }
+                      },
+                      child: ActivityBody(
+                        date: val.date,
+                      ),
+                    );
                   }),
             ),
             SliverToBoxAdapter(
@@ -257,18 +273,70 @@ class _NotifSection extends StatelessWidget {
   }
 }
 
-class ActivityBody extends StatelessWidget {
-  const ActivityBody({super.key});
+class ActivityBody extends StatefulWidget {
+  final DateTime date;
+  const ActivityBody({super.key, required this.date});
+
+  @override
+  State<ActivityBody> createState() => _ActivityBodyState();
+}
+
+class _ActivityBodyState extends State<ActivityBody> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      Provider.of<StudentActivityNotifier>(context, listen: false)
+        ..fetchAllMeetingByDate(date: widget.date);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: 10,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemBuilder: (context, index) {
-        return const StudentTaskCard();
-      },
+    final provider = context.watch<StudentActivityNotifier>();
+    if (provider.state == RequestState.loading) {
+      return CustomShimmer(
+          child: Column(
+        children: [
+          AppSize.verticalSpace[3],
+          CardPlaceholder(
+            height: 70,
+            horizontalPadding: AppSize.space[4],
+          ),
+          AppSize.verticalSpace[3],
+          CardPlaceholder(
+            height: 70,
+            horizontalPadding: AppSize.space[4],
+          ),
+          AppSize.verticalSpace[3],
+          CardPlaceholder(
+            height: 70,
+            horizontalPadding: AppSize.space[4],
+          ),
+          AppSize.verticalSpace[3],
+          CardPlaceholder(
+            height: 70,
+            horizontalPadding: AppSize.space[4],
+          ),
+          AppSize.verticalSpace[3],
+        ],
+      ));
+    }
+
+    final listMeeting = provider.listMeetingData;
+
+    return ConstrainedBox(
+      constraints: BoxConstraints(minHeight: 7200),
+      child: ListView.builder(
+        itemCount: listMeeting.length,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: (context, index) {
+          return StudentTaskCard(
+            meetingData: listMeeting[index],
+          );
+        },
+      ),
     );
   }
 }

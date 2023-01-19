@@ -1,6 +1,7 @@
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/src/data/models/attendance/student_data_attendance_data.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/statistic_data.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -72,7 +73,7 @@ class ReusableFuntionHelper {
     return StudentAttendanceStat(percent: percent, statusColor: statusColor);
   }
 
-  /// get attendance color by type 
+  /// get attendance color by type
   static Color getAttendanceColor(int type) {
     switch (type) {
       case 1:
@@ -100,6 +101,68 @@ class ReusableFuntionHelper {
       return MeetingStatus(color: Palette.disable, status: 'Belum Mulai');
     }
   }
+
+  /// check status of meeting
+  static List<WeeklyActivity> getWeeklyActivityData() {
+    DateTime now = DateTime.now();
+    now = DateTime(now.year, now.month, now.day);
+    final dayNameNow = DateFormat('EEEE', "id_ID").format(now);
+
+    final dayName = [
+      'Sen',
+      'Sel',
+      'Rab',
+      'Kam',
+      'Jum',
+      'Sab',
+      'Min',
+    ];
+    int index = 1;
+    for (var i = 1; i <= dayName.length; i++) {
+      if (dayName[i - 1] == dayNameNow.substring(0, 3)) {
+        index = i;
+        break;
+      }
+    }
+    List<WeeklyActivity> listWeekly = [];
+
+    for (var i = 1; i <= dayName.length; i++) {
+      DateTime? date;
+      if (index > i) {
+        date = now.subtract(Duration(days: index - i));
+      } else if (index == i) {
+        date = now;
+      } else {
+        date = now.add(Duration(days: i - index));
+      }
+      listWeekly.add(WeeklyActivity(date: date, dateName: dayName[i - 1]));
+    }
+    for (var element in listWeekly) {
+      print(
+          '${element.dateName} ${DateFormat('dd MMMM yyyy', "id_ID").format(element.date)}');
+    }
+    return listWeekly;
+  }
+
+  static WeeklyActivity getTodayActivityData() {
+    DateTime now = DateTime.now();
+    now = DateTime(now.year, now.month, now.day);
+    final dayNameNow = DateFormat('EEEE', "id_ID").format(now);
+    return WeeklyActivity(
+        date: now,
+        dateName: dayNameNow[0].toUpperCase() +
+            dayNameNow.substring(1, 3).toLowerCase());
+  }
+}
+
+class WeeklyActivity extends Equatable {
+  final String dateName;
+  final DateTime date;
+
+  WeeklyActivity({required this.date, required this.dateName});
+
+  @override
+  List<Object?> get props => [dateName];
 }
 
 class StudentAttendanceStat {

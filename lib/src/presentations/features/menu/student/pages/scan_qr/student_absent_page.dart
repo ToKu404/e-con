@@ -233,9 +233,6 @@ class _AttendanceDetailSectionState extends State<AttendanceDetailSection> {
                           studentId: studentData.id!,
                           validationCode: qrResult.validationCode,
                         );
-                        print(qrResult.meetingData.id);
-                        print(studentData.id!);
-                        print(qrResult.validationCode);
                       },
                     ),
                     AppSize.verticalSpace[5],

@@ -12,7 +12,7 @@ import 'package:e_con/src/presentations/features/menu/lecturer/pages/absent/lect
 import 'package:e_con/src/presentations/features/menu/lecturer/pages/absent/lecturer_gen_barcode_page.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/pages/absent/lecturer_meet_page.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/pages/setting/lecturer_setting_page.dart';
-import 'package:e_con/src/presentations/features/menu/lecturer/teacher_main_page.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/lecturer_main_page.dart';
 import 'package:e_con/src/presentations/features/splash/wrapper.dart';
 import 'package:e_con/src/presentations/features/webview/web_view_page.dart';
 import 'package:flutter/material.dart';

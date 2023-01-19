@@ -26,14 +26,12 @@ class ActivityDataSourceImpl implements ActivityDataSource {
   Future<List<MeetingData>?> fetchAllMeetingByDate({DateTime? date}) async {
     try {
       final credential = await authPreferenceHelper.getUser();
-      final uri = Uri.parse(
-          '${ApiService.baseUrlCPL}/class-record/meeting/all-by-date');
-      if (date != null) {
-        final map = {
-          'date': DateFormat('dd.MM.yyyy').format(date),
-        };
-        uri.replace(queryParameters: map);
-      }
+
+      final uri =
+          Uri.parse('${ApiService.baseUrlCPL}/class-record/meeting/all-by-date')
+              .replace(queryParameters: {
+        'date': DateFormat('dd.MM.yyyy').format(date ?? DateTime.now()),
+      });
 
       final responseData = await client.get(
         uri,
@@ -43,6 +41,7 @@ class ActivityDataSourceImpl implements ActivityDataSource {
       );
 
       print(responseData.body);
+
       if (responseData.statusCode == 200) {
         Iterable dataResponse =
             DataResponse<List<dynamic>>.fromJson(jsonDecode(responseData.body))
@@ -57,7 +56,6 @@ class ActivityDataSourceImpl implements ActivityDataSource {
         throw ServerException();
       }
     } catch (e) {
-      print(e.toString());
       throw ServerException();
     }
   }

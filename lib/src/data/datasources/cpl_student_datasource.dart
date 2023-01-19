@@ -83,7 +83,6 @@ class CplStudentDataSourceImpl implements CplStudentDataSource {
         throw ServerException();
       }
     } catch (e) {
-      print(e.toString());
       throw ServerException();
     }
   }

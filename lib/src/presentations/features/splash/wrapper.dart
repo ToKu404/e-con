@@ -4,7 +4,7 @@ import 'package:e_con/src/data/models/user/helper/user_role_type.dart';
 import 'package:e_con/src/presentations/features/login/pages/login_page.dart';
 import 'package:e_con/src/presentations/features/login/provider/get_user_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/student/student_main_page.dart';
-import 'package:e_con/src/presentations/features/menu/lecturer/teacher_main_page.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/lecturer_main_page.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_error.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
 import 'package:flutter/material.dart';

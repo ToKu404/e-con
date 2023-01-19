@@ -3,14 +3,12 @@ import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
 import 'package:e_con/src/domain/usecases/activity_usecases/get_all_meeting_by_date.dart';
 import 'package:flutter/material.dart';
 
-class LecturerTodayMeetingNotifier extends ChangeNotifier {
+class StudentActivityNotifier extends ChangeNotifier {
   final GetAllMeetingByDate getAllMeetingByDate;
 
-  LecturerTodayMeetingNotifier({
+  StudentActivityNotifier({
     required this.getAllMeetingByDate,
-  }) {
-    fetchAllMeetingByDate();
-  }
+  });
 
   String _error = '';
   String get error => _error;
@@ -18,19 +16,20 @@ class LecturerTodayMeetingNotifier extends ChangeNotifier {
   RequestState _state = RequestState.init;
   RequestState get state => _state;
 
-  List<MeetingData>? _listMeetingData;
-  List<MeetingData>? get listMeetingData => _listMeetingData;
+  List<MeetingData> _listMeetingData = [];
+  List<MeetingData> get listMeetingData => _listMeetingData;
 
-  Future<void> fetchAllMeetingByDate() async {
+  Future<void> fetchAllMeetingByDate({DateTime? date}) async {
+    _listMeetingData.clear();
     _state = RequestState.loading;
     notifyListeners();
-    final result = await getAllMeetingByDate.execute(dateTime: null);
+    final result = await getAllMeetingByDate.execute(dateTime: date);
 
     result.fold((l) {
       _error = l.message;
       _state = RequestState.error;
     }, (r) {
-      _listMeetingData = r;
+      _listMeetingData = r ?? [];
       _state = RequestState.success;
     });
     notifyListeners();

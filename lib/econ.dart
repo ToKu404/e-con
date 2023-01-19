@@ -23,6 +23,7 @@ import 'src/presentations/blocs/realtime_internet_check/realtime_internet_check_
 import 'src/presentations/features/menu/lecturer/providers/lecturer_today_meeting_notifier.dart';
 import 'src/presentations/features/menu/providers/profile_picture_notifier.dart';
 import 'src/presentations/blocs/onetime_internet_check/onetime_internet_check_cubit.dart';
+import 'src/presentations/features/menu/student/providers/student_activity_notifier.dart';
 
 class EconApp extends StatelessWidget {
   const EconApp({super.key});
@@ -85,6 +86,9 @@ class EconApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => di.locator<LecturerTodayMeetingNotifier>(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => di.locator<StudentActivityNotifier>(),
         ),
       ],
       child: MaterialApp(

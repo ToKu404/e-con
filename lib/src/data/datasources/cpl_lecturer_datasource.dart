@@ -102,7 +102,6 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
         throw AuthException();
       }
     } catch (e) {
-      print(e.toString());
       throw ServerException();
     }
   }
@@ -294,7 +293,6 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
         throw ServerException();
       }
     } catch (e) {
-      print(e.toString());
       throw ServerException();
     }
   }

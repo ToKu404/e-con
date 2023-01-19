@@ -1,5 +1,6 @@
 import 'package:e_con/src/presentations/blocs/realtime_internet_check/realtime_internet_check_cubit.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecturer_today_meeting_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/student/providers/student_activity_notifier.dart';
 import 'package:get_it/get_it.dart';
 import 'package:e_con/src/presentations/features/login/provider/auth_notifier.dart';
 import 'package:e_con/src/presentations/features/login/provider/get_user_notifier.dart';
@@ -92,6 +93,11 @@ void injectProvider(GetIt locator) {
   );
   locator.registerFactory(
     () => LecturerTodayMeetingNotifier(
+      getAllMeetingByDate: locator(),
+    ),
+  );
+  locator.registerFactory(
+    () => StudentActivityNotifier(
       getAllMeetingByDate: locator(),
     ),
   );

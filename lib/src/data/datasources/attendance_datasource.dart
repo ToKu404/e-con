@@ -168,11 +168,9 @@ class AttendanceDataSourceImpl implements AttendanceDataSource {
             "Cookie": credential!.session ?? '',
           },
           body: jsonEncode(map));
-      print(response.body);
 
       return response.statusCode == 200;
     } catch (e) {
-      print(e.toString());
       return false;
     }
   }
