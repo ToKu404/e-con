@@ -31,7 +31,9 @@ class _InputDateFieldState extends State<InputDateField> {
           initialDate: widget.controller.text.isEmpty
               ? DateTime.now()
               : ReusableFuntionHelper.stringToDateTime(widget.controller.text),
-          firstDate: DateTime.now(),
+          firstDate: DateTime.now().subtract(
+            Duration(days: 30),
+          ),
           lastDate: DateTime.now().add(
             const Duration(
               days: 30,

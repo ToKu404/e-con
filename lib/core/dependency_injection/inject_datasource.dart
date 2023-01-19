@@ -1,3 +1,4 @@
+import 'package:e_con/src/data/datasources/activity_datasource.dart';
 import 'package:e_con/src/data/datasources/attendance_datasource.dart';
 import 'package:e_con/src/data/datasources/auth_datasource.dart';
 import 'package:e_con/src/data/datasources/cpl_lecturer_datasource.dart';
@@ -34,6 +35,12 @@ void injectDatasource(GetIt locator) {
   );
   locator.registerLazySingleton<CplStudentDataSource>(
     () => CplStudentDataSourceImpl(
+      client: locator(),
+      authPreferenceHelper: locator(),
+    ),
+  );
+  locator.registerLazySingleton<ActivityDataSource>(
+    () => ActivityDataSourceImpl(
       client: locator(),
       authPreferenceHelper: locator(),
     ),

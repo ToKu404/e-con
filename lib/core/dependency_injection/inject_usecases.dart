@@ -1,3 +1,4 @@
+import 'package:e_con/src/domain/usecases/activity_usecases/get_all_meeting_by_date.dart';
 import 'package:e_con/src/domain/usecases/attendance_usecases/get_list_attendance.dart';
 import 'package:e_con/src/domain/usecases/attendance_usecases/get_list_student_attendance.dart';
 import 'package:e_con/src/domain/usecases/attendance_usecases/set_attendance.dart';
@@ -137,6 +138,13 @@ void injectUsecases(GetIt locator) {
   locator.registerLazySingleton(
     () => GetListStudentClasses(
       cplStudentRepository: locator(),
+    ),
+  );
+
+  // Activity Usecase
+  locator.registerLazySingleton(
+    () => GetAllMeetingByDate(
+      activityRepository: locator(),
     ),
   );
 }

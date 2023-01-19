@@ -1,12 +1,12 @@
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/themes/text_theme.dart';
+import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
 import 'package:flutter/material.dart';
 
 class TeacherTaskCard extends StatelessWidget {
-  const TeacherTaskCard({
-    super.key,
-  });
+  final MeetingData meetingData;
+  const TeacherTaskCard({super.key, required this.meetingData});
 
   @override
   Widget build(BuildContext context) {
@@ -26,11 +26,11 @@ class TeacherTaskCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '10:00 AM',
+                  '${meetingData.clazzData!.startTime} AM',
                   style: kTextHeme.headline5,
                 ),
                 Text(
-                  '12:00 AM',
+                  '${meetingData.clazzData!.endTime}  AM',
                   style: kTextHeme.subtitle1?.copyWith(
                     color: Palette.disable,
                     height: 1,
@@ -67,13 +67,14 @@ class TeacherTaskCard extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Aljabar Terapan',
+                                  meetingData
+                                      .clazzData!.courseData!.courseName!,
                                   style: kTextHeme.subtitle1?.copyWith(
                                     color: Palette.primary,
                                   ),
                                 ),
                                 Text(
-                                  'Pertemuan 6',
+                                  meetingData.topics ?? '',
                                   style: kTextHeme.subtitle2?.copyWith(
                                     color: Palette.onPrimary,
                                     height: 1.2,
@@ -81,7 +82,7 @@ class TeacherTaskCard extends StatelessWidget {
                                 ),
                                 AppSize.verticalSpace[3],
                                 Text(
-                                  'Kelas A',
+                                  'Kelas ${meetingData.clazzData!.name}',
                                   style: kTextHeme.subtitle1?.copyWith(
                                     color: Palette.onPrimary,
                                   ),

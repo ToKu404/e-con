@@ -4,8 +4,7 @@ import 'package:e_con/src/data/models/attendance/attendance_data.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
 
-abstract class CplStudentRepository {
-  Future<Either<Failure, List<ClazzData>?>> getListStudentClass();
-  Future<Either<Failure, List<AttendanceData>?>> getListStudentAttendance(
-      {required int classId});
+abstract class ActivityRepository {
+  Future<Either<Failure, List<MeetingData>?>> fetchAllMeetingByDate(
+      {required DateTime? date});
 }

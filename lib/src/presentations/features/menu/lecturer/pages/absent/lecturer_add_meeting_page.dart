@@ -2,6 +2,7 @@ import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecturer_today_meeting_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/meeting_course_notifier.dart';
 import 'package:e_con/src/presentations/widgets/custom_button.dart';
 import 'package:e_con/src/presentations/widgets/fields/input_date_field.dart';
@@ -116,6 +117,9 @@ class _LecturerAddMeetingPageState extends State<LecturerAddMeetingPage> {
                                   topic: topicController.text,
                                   meetingDate: meetingDate!);
                               await prov.getListMeeting(classId: classData.id!);
+                              final activityProv =
+                                  context.read<LecturerTodayMeetingNotifier>();
+                              activityProv.fetchAllMeetingByDate();
                               if (mounted) {
                                 Navigator.pop(context);
                               }

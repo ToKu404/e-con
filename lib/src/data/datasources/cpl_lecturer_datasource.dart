@@ -258,8 +258,6 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
         throw ServerException();
       }
     } catch (e) {
-      print('disini jg');
-
       throw ServerException();
     }
   }

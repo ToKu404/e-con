@@ -5,9 +5,11 @@ import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/pages/home/widgets/teacher_task_card.dart';
-import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecture_courses_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecturer_today_meeting_notifier.dart';
+import 'package:e_con/src/presentations/widgets/custom_shimmer.dart';
 import 'package:e_con/src/presentations/widgets/default_appbar.dart';
 import 'package:e_con/src/presentations/widgets/header_logo.dart';
+import 'package:e_con/src/presentations/widgets/placeholders/card_placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,7 +23,7 @@ class LecturerHomePage extends StatefulWidget {
 class _LecturerHomePageState extends State<LecturerHomePage> {
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<LectureCourseNotifier>();
+    final provider = context.watch<LecturerTodayMeetingNotifier>();
     return Stack(
       children: [
         Column(
@@ -69,17 +71,47 @@ class _LecturerHomePageState extends State<LecturerHomePage> {
                     Divider(),
                     Builder(builder: (context) {
                       if (provider.state == RequestState.loading ||
-                          provider.listClazz == null) {
-                        return Center();
+                          provider.listMeetingData == null) {
+                        return CustomShimmer(
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 12,
+                              ),
+                              CardPlaceholder(
+                                height: 80,
+                              ),
+                              AppSize.verticalSpace[3],
+                              CardPlaceholder(
+                                height: 100,
+                              ),
+                              AppSize.verticalSpace[3],
+                              CardPlaceholder(
+                                height: 100,
+                              ),
+                              AppSize.verticalSpace[3],
+                              CardPlaceholder(
+                                height: 100,
+                              ),
+                              AppSize.verticalSpace[3],
+                              CardPlaceholder(
+                                height: 100,
+                              ),
+                              AppSize.verticalSpace[3],
+                            ],
+                          ),
+                        );
                       }
 
                       return ListView.builder(
                         physics: NeverScrollableScrollPhysics(),
                         padding: EdgeInsets.only(top: 12),
                         shrinkWrap: true,
-                        itemCount: 10,
+                        itemCount: provider.listMeetingData?.length,
                         itemBuilder: (context, index) {
-                          return const TeacherTaskCard();
+                          return TeacherTaskCard(
+                            meetingData: provider.listMeetingData![index],
+                          );
                         },
                       );
                     }),
