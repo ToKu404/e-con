@@ -16,7 +16,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
   @override
   Future<Either<Failure, StudentData?>> getStudentData() async {
     try {
-      final result = await profileDataSource.getStudentData();
+      final result = await profileDataSource.singleStudentProfile();
       return Right(result);
     } on LocalDatabaseException {
       return const Left(AuthFailure('Terdapat masalah pada data user'));
@@ -30,7 +30,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
   @override
   Future<Either<Failure, LectureData?>> getLectureData() async {
     try {
-      final result = await profileDataSource.getLectureData();
+      final result = await profileDataSource.singleLecturerProfile();
       return Right(result);
     } on LocalDatabaseException {
       return const Left(AuthFailure('Terdapat masalah pada data user'));
@@ -44,7 +44,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
   @override
   Future<Either<Failure, Uint8List?>> getProfilePicture() async {
     try {
-      final result = await profileDataSource.getProfilePicture();
+      final result = await profileDataSource.getUserProfilePicture();
       return Right(result);
     } catch (e) {
       return Left(ServerFailure(e.toString()));

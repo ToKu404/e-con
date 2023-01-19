@@ -1,8 +1,5 @@
-import 'dart:async';
-
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
-import 'package:e_con/core/helpers/reusable_function_helper.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/meeting_course_notifier.dart';
@@ -12,15 +9,15 @@ import 'package:e_con/src/presentations/widgets/fields/input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class TeacherAddMeetingPage extends StatefulWidget {
+class LecturerAddMeetingPage extends StatefulWidget {
   final ClazzData clazzData;
-  const TeacherAddMeetingPage({super.key, required this.clazzData});
+  const LecturerAddMeetingPage({super.key, required this.clazzData});
 
   @override
-  State<TeacherAddMeetingPage> createState() => _TeacherAddMeetingPageState();
+  State<LecturerAddMeetingPage> createState() => _LecturerAddMeetingPageState();
 }
 
-class _TeacherAddMeetingPageState extends State<TeacherAddMeetingPage> {
+class _LecturerAddMeetingPageState extends State<LecturerAddMeetingPage> {
   final TextEditingController topicController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
   DateTime? meetingDate;
@@ -36,7 +33,6 @@ class _TeacherAddMeetingPageState extends State<TeacherAddMeetingPage> {
   Widget build(BuildContext context) {
     final classData = widget.clazzData;
     return Scaffold(
-      // resizeToAvoidBottomInset: false,
       backgroundColor: Palette.background,
       appBar: AppBar(
         leading: IconButton(

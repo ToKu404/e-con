@@ -27,7 +27,7 @@ class _TeacherMeetCardState extends State<TeacherMeetCard> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
-        Navigator.pushNamed(context, AppRoute.detailMeet, arguments: {
+        Navigator.pushNamed(context, AppRoutes.detailMeet, arguments: {
           'meetingId': widget.meetingData.id,
           'classData': widget.classData,
           'meetingNumber': widget.meetingData.meetingNumber,

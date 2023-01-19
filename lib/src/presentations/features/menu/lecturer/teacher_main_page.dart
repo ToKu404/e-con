@@ -2,9 +2,9 @@ import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
-import 'package:e_con/src/presentations/features/menu/lecturer/pages/absent/teacher_absent_page.dart';
-import 'package:e_con/src/presentations/features/menu/lecturer/pages/activity/teacher_activity_page.dart';
-import 'package:e_con/src/presentations/features/menu/lecturer/pages/setting/teacher_setting_page.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/pages/absent/lecturer_absent_page.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/pages/home/lecturer_home_page.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/pages/setting/lecturer_setting_page.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecture_profile_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/providers/profile_picture_notifier.dart';
 import 'package:e_con/src/presentations/widgets/header_logo.dart';
@@ -59,9 +59,9 @@ class _TeacherMainPageState extends State<TeacherMainPage>
   }
 
   final listMenu = [
-    TeacherActivityPage(),
-    TeacherAbsentPage(),
-    TeacherSettingPage()
+    LecturerHomePage(),
+    LecturerAbsentPage(),
+    LecturerSettingPage()
   ];
 
   final List<SalomonBottomBarItem> items = [
@@ -96,93 +96,6 @@ class _TeacherMainPageState extends State<TeacherMainPage>
             unselectedItemColor: Palette.disable,
             currentIndex: selectIndex,
             onTap: (i) => setState(() => selectIndex = i)),
-      ),
-    );
-  }
-}
-
-class _AppBarSection extends StatefulWidget {
-  @override
-  State<_AppBarSection> createState() => _AppBarSectionState();
-}
-
-class _AppBarSectionState extends State<_AppBarSection> {
-  TabBar get _tabBar {
-    return TabBar(
-      // indicatorColor: Palette.primary,
-      indicator: const BoxDecoration(
-        color: Palette.primary,
-      ),
-
-      tabs: [
-        Tab(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.access_time_sharp,
-                size: 18,
-              ),
-              AppSize.horizontalSpace[1],
-              Text(
-                'Kegiatan',
-                style: kTextHeme.subtitle2?.copyWith(color: Colors.white),
-              )
-            ],
-          ),
-        ),
-        Tab(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.assignment_outlined,
-                size: 18,
-              ),
-              AppSize.horizontalSpace[1],
-              Text(
-                'Absensi',
-                style: kTextHeme.subtitle2?.copyWith(color: Colors.white),
-              )
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverAppBar(
-      pinned: true,
-      floating: true,
-      title: const HeaderLogo(),
-      actions: [
-        IconButton(
-          onPressed: () {
-            Navigator.pushNamed(context, AppRoute.cplWebview);
-          },
-          icon: const Icon(
-            Icons.badge_rounded,
-            color: Palette.primary,
-          ),
-        ),
-        IconButton(
-          onPressed: () {
-            Navigator.pushNamed(context, AppRoute.teacherProfile);
-          },
-          icon: const Icon(
-            Icons.settings_outlined,
-            color: Palette.primary,
-          ),
-        )
-      ],
-      bottom: PreferredSize(
-        preferredSize: _tabBar.preferredSize,
-        child: ColoredBox(
-          color: Palette.disable.withOpacity(.5),
-          child: _tabBar,
-        ),
       ),
     );
   }

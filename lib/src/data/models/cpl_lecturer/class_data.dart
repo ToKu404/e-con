@@ -1,6 +1,5 @@
 import 'package:e_con/src/data/models/cpl_lecturer/course_data.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/semester_data.dart';
-import 'package:e_con/src/data/models/cpl_lecturer/time_data.dart';
 import 'package:equatable/equatable.dart';
 
 class ClazzData extends Equatable {

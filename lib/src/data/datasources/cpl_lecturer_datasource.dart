@@ -6,15 +6,13 @@ import 'package:e_con/core/responses/data_response.dart';
 import 'package:e_con/core/services/api_service.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/classs_content.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/statistic_data.dart';
-import 'package:e_con/src/data/models/profile/student_data.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 abstract class CplLecturerDataSource {
-  Future<ClazzContent> getListClazz();
-  Future<List<MeetingData>> getListMeeting(int classId);
-  // Future<List<StudentData>> getListStudent(int classId);
+  Future<ClazzContent> fetchLecturerClasses();
+  Future<List<MeetingData>> fetchMeetingByClassId(int classId);
   Future<bool> createNewMeeting({
     required int classId,
     required String topic,
@@ -27,11 +25,11 @@ abstract class CplLecturerDataSource {
     DateTime? meetingDate,
     required meetingId,
   });
-  Future<String> getValidationCode({required int meetingId});
+  Future<String> getMeetingValidationCode({required int meetingId});
   Future<bool> setAttendanceExpiredDate(
       {required DateTime expiredDate, required int meetingId});
-  Future<MeetingData> getMeetingData({required int meetingId});
-  Future<List<StatisticData>> getAttendanceStatisticData(
+  Future<MeetingData> singleMeetingData({required int meetingId});
+  Future<List<StatisticData>> singleMeetingAttendanceStatistic(
       {required int meetingId});
 }
 
@@ -42,8 +40,11 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
   CplLecturerDataSourceImpl(
       {required this.client, required this.authPreferenceHelper});
 
+  /// Digunakan untuk mendapatkan list class yang diajar oleh dosen bersangkutan
+  /// https://api.cpl.npedigihouse.tech/api/swagger-ui/index.html#/class-record-controller/findLecturerClasses
+  /// GET
   @override
-  Future<ClazzContent> getListClazz() async {
+  Future<ClazzContent> fetchLecturerClasses() async {
     final credential = await authPreferenceHelper.getUser();
     final responseData = await client.get(
       Uri.parse('${ApiService.baseUrlCPL}/class-record/lecturer/classes'),
@@ -68,8 +69,11 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
     }
   }
 
+  /// Digunakan untuk mendapatkan list meeting berdasrkan kelas tertentu yang diajar dosen
+  /// https://api.cpl.npedigihouse.tech/api/swagger-ui/index.html#/class-record-controller/findAllMeetingByClassId
+  /// Get
   @override
-  Future<List<MeetingData>> getListMeeting(int classId) async {
+  Future<List<MeetingData>> fetchMeetingByClassId(int classId) async {
     try {
       final credential = await authPreferenceHelper.getUser();
       final responseData = await client.get(
@@ -103,35 +107,9 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
     }
   }
 
-  // @override
-  // Future<List<StudentData>> getListStudent(int classId) async {
-  //   final credential = await authPreferenceHelper.getUser();
-  //   final responseData = await client.get(
-  //     Uri.parse(
-  //         '${ApiService.baseUrlCPL}/class-record/all-by-classid/$classId'),
-  //     headers: {
-  //       "Cookie": credential!.session ?? '',
-  //     },
-  //   );
-
-  //   if (responseData.statusCode == 200) {
-  //     Iterable dataResponse =
-  //         DataResponse<List<dynamic>>.fromJson(jsonDecode(responseData.body))
-  //             .data;
-  //     return List<StudentData>.from(
-  //       dataResponse.map(
-  //         (e) => StudentData.fromJson(e),
-  //       ),
-  //     );
-  //   } else if (responseData.statusCode == 401) {
-  //     throw UnauthenticateException();
-  //   } else if (responseData.statusCode == 404) {
-  //     throw DataNotFoundException();
-  //   } else {
-  //     throw AuthException();
-  //   }
-  // }
-
+  /// Digunakan untuk membuat meeting baru pada kelas tertentu
+  /// https://api.cpl.npedigihouse.tech/api/swagger-ui/index.html#/class-record-controller/createMeeting
+  /// Post
   @override
   Future<bool> createNewMeeting(
       {required int classId,
@@ -157,6 +135,9 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
     return response.statusCode == 200;
   }
 
+  /// Digunakan untuk menghapus meeting tertentu
+  /// https://api.cpl.npedigihouse.tech/api/swagger-ui/index.html#/class-record-controller/deleteMeeting
+  /// Delete
   @override
   Future<bool> deleteMeeting({required int meetingId}) async {
     final credential = await authPreferenceHelper.getUser();
@@ -172,6 +153,9 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
     return response.statusCode == 200;
   }
 
+  /// Digunakan untuk memperbaharui meeting tertentu
+  /// https://api.cpl.npedigihouse.tech/api/swagger-ui/index.html#/class-record-controller/updateMeeting
+  /// Put
   @override
   Future<bool> updateMeeting(
       {int? classId,
@@ -198,8 +182,11 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
     return response.statusCode == 200;
   }
 
+  /// Digunakn untuk memperoleh kode validasi dari meeeting untuk membuat absensi
+  /// https://api.cpl.npedigihouse.tech/api/swagger-ui/index.html#/class-record-controller/findMeetingValidationCode
+  /// Get
   @override
-  Future<String> getValidationCode({required int meetingId}) async {
+  Future<String> getMeetingValidationCode({required int meetingId}) async {
     final credential = await authPreferenceHelper.getUser();
 
     final responseData = await client.get(
@@ -219,6 +206,9 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
     }
   }
 
+  /// Digunakan untuk mengatur expired date dari tiap absen meeting
+  /// https://api.cpl.npedigihouse.tech/api/swagger-ui/index.html#/class-record-controller/setMeetingValidationCodeExpireDateTime
+  /// Put
   @override
   Future<bool> setAttendanceExpiredDate(
       {required DateTime expiredDate, required int meetingId}) async {
@@ -241,8 +231,11 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
     return response.statusCode == 200;
   }
 
+  /// Digunakan untuk memperoleh data meeting berdasarkan meeting id
+  /// https://api.cpl.npedigihouse.tech/api/swagger-ui/index.html#/class-record-controller/findMeeting
+  /// Get
   @override
-  Future<MeetingData> getMeetingData({required int meetingId}) async {
+  Future<MeetingData> singleMeetingData({required int meetingId}) async {
     try {
       final credential = await authPreferenceHelper.getUser();
       final responseData = await client.get(
@@ -271,8 +264,11 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
     }
   }
 
+  /// Get Single Meeting Attendance Statistic
+  /// https://api.cpl.npedigihouse.tech/api/swagger-ui/index.html#/class-record-controller/findMeetingStatistics
+  /// Get
   @override
-  Future<List<StatisticData>> getAttendanceStatisticData(
+  Future<List<StatisticData>> singleMeetingAttendanceStatistic(
       {required int meetingId}) async {
     try {
       final credential = await authPreferenceHelper.getUser();

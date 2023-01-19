@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 
+/// for convert image from repaint boundary
 Future<Uint8List?> captureWidget(BuildContext context) async {
   final box = context.findRenderObject() as RenderRepaintBoundary;
   final image = await box.toImage(pixelRatio: 4.0);
@@ -16,6 +17,7 @@ Future<Uint8List?> captureWidget(BuildContext context) async {
   return bytes;
 }
 
+/// for take image from galery
 Future<bool> takePicture(Uint8List image) async {
   try {
     await ImageGallerySaver.saveImage(
@@ -29,7 +31,7 @@ Future<bool> takePicture(Uint8List image) async {
   }
 }
 
-
+/// save image to temp
 Future<String> saveFileToTemp(Uint8List bytes) async {
   late String filePath;
   final tempDir = await getTemporaryDirectory();

@@ -1,4 +1,5 @@
 import 'package:e_con/core/constants/color_const.dart';
+import 'package:e_con/core/constants/path_const.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -27,7 +28,7 @@ class EconError extends StatelessWidget {
           height: 200,
           width: 250,
           child: SvgPicture.asset(
-            'assets/illustrations/error_vector.svg',
+            AssetPath.errorIllustration,
             fit: BoxFit.contain,
           ),
         ),

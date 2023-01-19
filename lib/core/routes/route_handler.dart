@@ -4,14 +4,14 @@ import 'package:e_con/src/presentations/features/login/pages/login_page.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/history/student_meeting_history_page.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/scan_qr/student_absent_page.dart';
 import 'package:e_con/src/presentations/features/menu/student/student_main_page.dart';
-import 'package:e_con/src/presentations/features/menu/lecturer/pages/absent/teacher_add_meeting_page.dart';
-import 'package:e_con/src/presentations/features/menu/lecturer/pages/absent/teacher_barcode_page.dart';
-import 'package:e_con/src/presentations/features/menu/lecturer/pages/absent/teacher_course_detail_page.dart';
-import 'package:e_con/src/presentations/features/menu/lecturer/pages/absent/teacher_course_member.dart';
-import 'package:e_con/src/presentations/features/menu/lecturer/pages/absent/teacher_edit_meeting_page.dart';
-import 'package:e_con/src/presentations/features/menu/lecturer/pages/absent/teacher_gen_barcode_page.dart';
-import 'package:e_con/src/presentations/features/menu/lecturer/pages/absent/teacher_meet_page.dart';
-import 'package:e_con/src/presentations/features/menu/lecturer/pages/setting/teacher_setting_page.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/pages/absent/lecturer_add_meeting_page.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/pages/absent/lecturer_barcode_page.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/pages/absent/lecturer_course_detail_page.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/pages/absent/lecturer_course_member.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/pages/absent/lecturer_edit_meeting_page.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/pages/absent/lecturer_gen_barcode_page.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/pages/absent/lecturer_meet_page.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/pages/setting/lecturer_setting_page.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/teacher_main_page.dart';
 import 'package:e_con/src/presentations/features/splash/wrapper.dart';
 import 'package:e_con/src/presentations/features/webview/web_view_page.dart';
@@ -19,70 +19,70 @@ import 'package:flutter/material.dart';
 
 Route? routesHandler(RouteSettings settings) {
   switch (settings.name) {
-    case AppRoute.login:
+    case AppRoutes.login:
       return MaterialPageRoute(builder: (_) => const LoginPage());
-    case AppRoute.wrapper:
+    case AppRoutes.wrapper:
       return MaterialPageRoute(builder: (_) => const Wrapper());
-    case AppRoute.mainStudent:
+    case AppRoutes.mainStudent:
       return MaterialPageRoute(builder: (_) => const StudentMainPage());
-    case AppRoute.mainTeacher:
+    case AppRoutes.mainTeacher:
       return MaterialPageRoute(builder: (_) => const TeacherMainPage());
-    case AppRoute.absentStudent:
+    case AppRoutes.absentStudent:
       return MaterialPageRoute(builder: (_) => const StudentAbsentPage());
-    case AppRoute.detailCourse:
+    case AppRoutes.detailCourse:
       return MaterialPageRoute(
-        builder: (_) => TeacherCourseDetailPage(
+        builder: (_) => LecturerCourseDetailPage(
           clazzData: settings.arguments as ClazzData,
         ),
       );
-    case AppRoute.detailMeet:
+    case AppRoutes.detailMeet:
       return MaterialPageRoute(
-        builder: (_) => TeacherMeetDetailPage(
+        builder: (_) => LecturerMeetDetailPage(
           args: settings.arguments as Map,
         ),
       );
-    case AppRoute.genBarcode:
+    case AppRoutes.genBarcode:
       return MaterialPageRoute(
-        builder: (_) => TeacherGenBarcodePage(
+        builder: (_) => LecturerGenBarcodePage(
           args: settings.arguments as Map,
         ),
       );
-    case AppRoute.barcodeAbsent:
+    case AppRoutes.barcodeAbsent:
       return MaterialPageRoute(
-        builder: (_) => TeacherBarcodePage(
+        builder: (_) => LecturerBarcodePage(
           args: settings.arguments as Map,
         ),
       );
-    case AppRoute.listStudent:
+    case AppRoutes.listStudent:
       return MaterialPageRoute(
-        builder: (_) => TeacherCourseMember(
+        builder: (_) => LecturerCourseMember(
           classId: settings.arguments as int,
         ),
       );
-    case AppRoute.listStudentClasses:
+    case AppRoutes.listStudentClasses:
       return MaterialPageRoute(
         builder: (_) => StudentMeetingHistoryPage(
           clazzData: settings.arguments as ClazzData,
         ),
       );
 
-    case AppRoute.teacherProfile:
+    case AppRoutes.teacherProfile:
       return MaterialPageRoute(
-        builder: (_) => const TeacherSettingPage(),
+        builder: (_) => const LecturerSettingPage(),
       );
-    case AppRoute.addNewMeeting:
+    case AppRoutes.addNewMeeting:
       return MaterialPageRoute(
-        builder: (_) => TeacherAddMeetingPage(
+        builder: (_) => LecturerAddMeetingPage(
           clazzData: settings.arguments as ClazzData,
         ),
       );
-    case AppRoute.editMeeting:
+    case AppRoutes.editMeeting:
       return MaterialPageRoute(
-        builder: (_) => TeacherEditMeetingPage(
+        builder: (_) => LecturerEditMeetingPage(
           args: settings.arguments as Map,
         ),
       );
-    case AppRoute.cplWebview:
+    case AppRoutes.cplWebview:
       return MaterialPageRoute(
         builder: (_) => const WebViewPage(),
       );

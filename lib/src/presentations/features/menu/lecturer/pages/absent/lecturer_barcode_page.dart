@@ -2,7 +2,7 @@ import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/helpers/reusable_function_helper.dart';
 import 'package:e_con/core/routes/app_routes.dart';
-import 'package:e_con/core/services/backround_service.dart';
+import 'package:e_con/core/services/image_service.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
@@ -15,22 +15,22 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
-class TeacherBarcodeKey {
+class LecturerBarcodeKey {
   static final GlobalKey repaintKeyQr = GlobalKey(debugLabel: 'rqr');
 }
 
-class TeacherBarcodePage extends StatefulWidget {
+class LecturerBarcodePage extends StatefulWidget {
   final Map args;
-  const TeacherBarcodePage({
+  const LecturerBarcodePage({
     super.key,
     required this.args,
   });
 
   @override
-  State<TeacherBarcodePage> createState() => _TeacherBarcodePageState();
+  State<LecturerBarcodePage> createState() => _LecturerBarcodePageState();
 }
 
-class _TeacherBarcodePageState extends State<TeacherBarcodePage> {
+class _LecturerBarcodePageState extends State<LecturerBarcodePage> {
   late ClazzData clazzData;
   late int meetingId;
   late int meetingNumber;
@@ -94,7 +94,7 @@ class _TeacherBarcodePageState extends State<TeacherBarcodePage> {
               color: Colors.white,
             ),
             onPressed: () {
-              Navigator.pushNamed(context, AppRoute.genBarcode, arguments: {
+              Navigator.pushNamed(context, AppRoutes.genBarcode, arguments: {
                 'meetingData': meetingData,
                 'classData': clazzData,
                 'isEdit': true,
@@ -110,7 +110,7 @@ class _TeacherBarcodePageState extends State<TeacherBarcodePage> {
           children: [
             Expanded(
               child: RepaintBoundary(
-                key: TeacherBarcodeKey.repaintKeyQr,
+                key: LecturerBarcodeKey.repaintKeyQr,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -186,7 +186,7 @@ class _TeacherBarcodePageState extends State<TeacherBarcodePage> {
               text: 'Bagikan',
               onTap: () async {
                 final byte = await captureWidget(
-                  TeacherBarcodeKey.repaintKeyQr.currentContext!,
+                  LecturerBarcodeKey.repaintKeyQr.currentContext!,
                 );
 
                 if (byte == null || byte.isEmpty) {
@@ -208,7 +208,7 @@ class _TeacherBarcodePageState extends State<TeacherBarcodePage> {
               text: 'Unduh',
               onTap: () async {
                 final byte = await captureWidget(
-                  TeacherBarcodeKey.repaintKeyQr.currentContext!,
+                  LecturerBarcodeKey.repaintKeyQr.currentContext!,
                 );
 
                 if (byte == null || byte.isEmpty) {

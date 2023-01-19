@@ -10,18 +10,19 @@ import 'package:e_con/src/presentations/widgets/fields/input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class TeacherEditMeetingPage extends StatefulWidget {
+class LecturerEditMeetingPage extends StatefulWidget {
   final Map args;
-  const TeacherEditMeetingPage({
+  const LecturerEditMeetingPage({
     super.key,
     required this.args,
   });
 
   @override
-  State<TeacherEditMeetingPage> createState() => _TeacherEditMeetingPageState();
+  State<LecturerEditMeetingPage> createState() =>
+      _LecturerEditMeetingPageState();
 }
 
-class _TeacherEditMeetingPageState extends State<TeacherEditMeetingPage> {
+class _LecturerEditMeetingPageState extends State<LecturerEditMeetingPage> {
   late ClazzData classData;
   late String topic;
   late DateTime date;

@@ -4,8 +4,8 @@ import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/presentations/features/login/provider/auth_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecture_profile_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/providers/profile_picture_notifier.dart';
-import 'package:e_con/src/presentations/features/menu/student/providers/student_profile_notifier.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_error.dart';
 import 'package:e_con/src/presentations/widgets/default_appbar.dart';
 import 'package:e_con/src/presentations/widgets/dialog/show_confirmation.dart';
@@ -13,8 +13,8 @@ import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class StudentSettingPage extends StatelessWidget {
-  const StudentSettingPage({super.key});
+class LecturerSettingPage extends StatelessWidget {
+  const LecturerSettingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,6 @@ class StudentSettingPage extends StatelessWidget {
             onPressed: () async {
               final logoutConfirmation = await showConfirmation(
                   context: context, title: 'Apakah anda serius ingin keluar?');
-
               if (logoutConfirmation) {
                 await context.read<AuthNotifier>()
                   ..logOut();
@@ -40,30 +39,28 @@ class StudentSettingPage extends StatelessWidget {
             icon: Icon(Icons.exit_to_app),
           ),
         ),
-        Expanded(
-          child: ProfileSection(),
-        )
+        Expanded(child: _ProfileSection()),
       ],
     );
   }
 }
 
-class ProfileSection extends StatelessWidget {
-  const ProfileSection({super.key});
+class _ProfileSection extends StatelessWidget {
+  const _ProfileSection();
 
   @override
   Widget build(BuildContext context) {
-    final profileProvider = context.watch<StudentProfileNotifier>();
+    final profileProvider = context.watch<LectureProfileNotifier>();
     final profilePictureProvider = context.watch<ProfilePictureNotifier>();
 
     if (profileProvider.state == RequestState.loading ||
-        profileProvider.studentData == null ||
+        profileProvider.lectureData == null ||
         profilePictureProvider.state == RequestState.loading) {
       return EconLoading();
     } else if (profileProvider.state == RequestState.error) {
       return EconError(errorMessage: profileProvider.error);
     }
-    final studentData = profileProvider.studentData!;
+    final lectureData = profileProvider.lectureData!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -111,7 +108,7 @@ class ProfileSection extends StatelessWidget {
                 child: profilePictureProvider.profilePicture == null
                     ? Center(
                         child: Text(
-                          studentData.name![0],
+                          lectureData.name![0],
                           style: TextStyle(
                             fontSize: 40,
                             fontWeight: FontWeight.w600,
@@ -130,14 +127,14 @@ class ProfileSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                studentData.name ?? '',
+                lectureData.name ?? '',
                 style: kTextHeme.headline2?.copyWith(
                     color: Palette.black,
                     fontWeight: FontWeight.w500,
                     height: 1.1),
               ),
               Text(
-                'NIM. ${studentData.nim ?? ''}',
+                'NIP. ${lectureData.idNumber ?? ''}',
                 style: kTextHeme.headline6?.copyWith(
                     color: Palette.black,
                     fontWeight: FontWeight.normal,
@@ -157,7 +154,7 @@ class ProfileSection extends StatelessWidget {
                 style: kTextHeme.subtitle1?.copyWith(color: Palette.disable),
               ),
               Text(
-                studentData.major?.degree ?? '',
+                lectureData.major?.degree ?? '',
                 style: kTextHeme.subtitle1?.copyWith(
                     color: Palette.black,
                     fontWeight: FontWeight.w500,
@@ -170,7 +167,7 @@ class ProfileSection extends StatelessWidget {
                 style: kTextHeme.subtitle1?.copyWith(color: Palette.disable),
               ),
               Text(
-                studentData.major?.name ?? '',
+                lectureData.major?.name ?? '',
                 style: kTextHeme.subtitle1?.copyWith(
                     color: Palette.black,
                     fontWeight: FontWeight.w500,
@@ -183,7 +180,7 @@ class ProfileSection extends StatelessWidget {
                 style: kTextHeme.subtitle1?.copyWith(color: Palette.disable),
               ),
               Text(
-                studentData.major?.departmentData?.departmentName ?? '',
+                lectureData.major?.departmentData?.departmentName ?? '',
                 style: kTextHeme.subtitle1?.copyWith(
                     color: Palette.black,
                     fontWeight: FontWeight.w500,

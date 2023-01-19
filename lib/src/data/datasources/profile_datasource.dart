@@ -9,12 +9,11 @@ import 'package:e_con/src/data/models/profile/student_data.dart';
 import 'package:e_con/src/data/models/profile/student_home.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'package:jwt_decode/jwt_decode.dart';
 
 abstract class ProfileDataSource {
-  Future<StudentData> getStudentData();
-  Future<LectureData> getLectureData();
-  Future<Uint8List?> getProfilePicture();
+  Future<StudentData> singleStudentProfile();
+  Future<LectureData> singleLecturerProfile();
+  Future<Uint8List?> getUserProfilePicture();
 }
 
 class ProfileDataSourceImpl implements ProfileDataSource {
@@ -26,19 +25,18 @@ class ProfileDataSourceImpl implements ProfileDataSource {
     required this.authPreferenceHelper,
   });
 
+  /// Mendapatkan data profile dosen
+  /// https://api.cpl.npedigihouse.tech/api/swagger-ui/index.html#/dosen-authority-controller/menuNilaiDosenProfile
+  /// Get
   @override
-  Future<LectureData> getLectureData() async {
-    // String token = '';
+  Future<LectureData> singleLecturerProfile() async {
     String session = '';
     try {
       final userCredential = await authPreferenceHelper.getUser();
-      // token = userCredential!.token ?? '';
       session = userCredential!.session ?? '';
     } catch (e) {
       throw LocalDatabaseException();
     }
-
-    // Map<String, dynamic> payload = Jwt.parseJwt(token);
 
     final responseData = await client.get(
       Uri.parse('${ApiService.baseUrlCPL}/dosen-authority/profile'),
@@ -60,19 +58,18 @@ class ProfileDataSourceImpl implements ProfileDataSource {
     }
   }
 
+  /// Mendapatkan data profile student
+  /// https://api.cpl.npedigihouse.tech/api/swagger-ui/index.html#/mahasiswa-authority-controller/home
+  /// Get
   @override
-  Future<StudentData> getStudentData() async {
-    // String token = '';
+  Future<StudentData> singleStudentProfile() async {
     String session = '';
     try {
       final userCredential = await authPreferenceHelper.getUser();
-      // token = userCredential!.token ?? '';
       session = userCredential!.session ?? '';
     } catch (e) {
       throw LocalDatabaseException();
     }
-
-    // Map<String, dynamic> payload = Jwt.parseJwt(token);
 
     final responseData = await client.get(
       Uri.parse('${ApiService.baseUrlCPL}/mahasiswa-authority/home'),
@@ -93,8 +90,11 @@ class ProfileDataSourceImpl implements ProfileDataSource {
     }
   }
 
+  /// Mendaptatkan foto profile user yang login
+  /// https://api.cpl.npedigihouse.tech/api/swagger-ui/index.html#/user-controller/downloadProfilePicture
+  /// Get
   @override
-  Future<Uint8List?> getProfilePicture() async {
+  Future<Uint8List?> getUserProfilePicture() async {
     final credential = await authPreferenceHelper.getUser();
     final responseData = await client.get(
       Uri.parse('${ApiService.baseUrlCPL}/user/profile-picture'),

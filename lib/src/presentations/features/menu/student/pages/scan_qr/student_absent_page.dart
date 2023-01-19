@@ -1,4 +1,5 @@
 import 'package:e_con/core/constants/color_const.dart';
+import 'package:e_con/core/constants/path_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/helpers/reusable_function_helper.dart';
 import 'package:e_con/core/themes/text_theme.dart';
@@ -11,6 +12,7 @@ import 'package:e_con/src/presentations/features/menu/student/providers/student_
 import 'package:e_con/src/presentations/reusable_pages/econ_error.dart';
 import 'package:e_con/src/presentations/widgets/custom_button.dart';
 import 'package:e_con/src/presentations/widgets/custom_shimmer.dart';
+import 'package:e_con/src/presentations/widgets/default_appbar.dart';
 import 'package:e_con/src/presentations/widgets/placeholders/text_placeholder.dart';
 import 'package:e_con/src/presentations/widgets/success_modal.dart';
 import 'package:flutter/material.dart';
@@ -29,51 +31,17 @@ class StudentAbsentPage extends StatelessWidget {
           children: [
             Column(
               children: const [
-                _AppBarSection(),
+                SizedBox(
+                  height: 60,
+                ),
                 Expanded(
                   child: _BodySection(),
                 ),
               ],
             ),
-            const Positioned(
-              left: 0,
-              top: 0,
-              child: _AppBarSection(),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _AppBarSection extends StatelessWidget {
-  const _AppBarSection();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: AppSize.space[4],
-        vertical: AppSize.space[2],
-      ),
-      width: AppSize.getAppWidth(context),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(.15),
-            offset: const Offset(1, 0),
-            blurRadius: 6,
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IconButton(
+            DefaultAppBar(
+              title: 'Scan Absen',
+              leading: IconButton(
                 onPressed: () {
                   final qrProvider = context.read<QrNotifier>();
 
@@ -86,23 +54,16 @@ class _AppBarSection extends StatelessWidget {
                   size: 24,
                 ),
               ),
-              Text(
-                'Scan Absen',
-                style: kTextHeme.headline5?.copyWith(
-                  color: Palette.primary,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(
+              action: const SizedBox(
                 width: 50,
                 height: 50,
                 child: RippleAnimation(
                   size: 15,
                 ),
               ),
-            ],
-          ),
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
@@ -247,19 +208,19 @@ class _AttendanceDetailSectionState extends State<AttendanceDetailSection> {
                   children: [
                     _buildAbsentTile(
                       title: studentData.name!,
-                      iconPath: 'assets/icons/user.svg',
+                      iconPath: AssetPath.iconUser,
                     ),
                     AppSize.verticalSpace[1],
                     _buildAbsentTile(
                       title:
                           '${qrResult.meetingData.clazzData!.startTime} - ${qrResult.meetingData.clazzData!.endTime}',
-                      iconPath: 'assets/icons/time.svg',
+                      iconPath: AssetPath.iconTime,
                     ),
                     AppSize.verticalSpace[1],
                     _buildAbsentTile(
                       title: ReusableFuntionHelper.datetimeToString(
                           qrResult.meetingData.date!),
-                      iconPath: 'assets/icons/date.svg',
+                      iconPath: AssetPath.iconDate,
                     ),
                     AppSize.verticalSpace[5],
                     CustomButton(

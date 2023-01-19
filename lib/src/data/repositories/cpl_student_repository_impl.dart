@@ -14,8 +14,8 @@ class CplStudentRepositoryImpl implements CplStudentRepository {
   Future<Either<Failure, List<AttendanceData>?>> getListStudentAttendance(
       {required int classId}) async {
     try {
-      final result =
-          await cplStudentLecturer.getListStudentAttendance(classId: classId);
+      final result = await cplStudentLecturer.fetchStudentAttendanceByClass(
+          classId: classId);
       return Right(result);
     } catch (e) {
       return Left(ServerFailure(e.toString()));
@@ -25,7 +25,7 @@ class CplStudentRepositoryImpl implements CplStudentRepository {
   @override
   Future<Either<Failure, List<ClazzData>?>> getListStudentClass() async {
     try {
-      final result = await cplStudentLecturer.getListStudentClass();
+      final result = await cplStudentLecturer.fetchStudentClasses();
       return Right(result);
     } catch (e) {
       return Left(ServerFailure(e.toString()));

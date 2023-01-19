@@ -9,8 +9,8 @@ import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
 import 'package:http/http.dart' as http;
 
 abstract class CplStudentDataSource {
-  Future<List<ClazzData>?> getListStudentClass();
-  Future<List<AttendanceData>?> getListStudentAttendance(
+  Future<List<ClazzData>?> fetchStudentClasses();
+  Future<List<AttendanceData>?> fetchStudentAttendanceByClass(
       {required int classId});
 }
 
@@ -21,9 +21,11 @@ class CplStudentDataSourceImpl implements CplStudentDataSource {
   CplStudentDataSourceImpl(
       {required this.client, required this.authPreferenceHelper});
 
+  /// Mendapatkan list class dari mahasiswa
+  /// https://api.cpl.npedigihouse.tech/api/swagger-ui/index.html#/class-record-controller/findStudentClasses
+  /// Get
   @override
-  Future<List<ClazzData>?> getListStudentClass() async {
-    print('ca');
+  Future<List<ClazzData>?> fetchStudentClasses() async {
     try {
       final credential = await authPreferenceHelper.getUser();
       final responseData = await client.get(
@@ -32,8 +34,6 @@ class CplStudentDataSourceImpl implements CplStudentDataSource {
           "Cookie": credential!.session ?? '',
         },
       );
-
-      print(responseData.body);
 
       if (responseData.statusCode == 200) {
         Iterable dataResponse =
@@ -49,13 +49,15 @@ class CplStudentDataSourceImpl implements CplStudentDataSource {
         throw ServerException();
       }
     } catch (e) {
-      print(e.toString());
       throw ServerException();
     }
   }
 
+  /// Digunakan untuk mendapatkan list attendance dari student berdasrkan kelas tertentu
+  ///  https://api.cpl.npedigihouse.tech/api/swagger-ui/index.html#/class-record-controller/findAllStudentAttendancesByClassId
+  /// Get
   @override
-  Future<List<AttendanceData>?> getListStudentAttendance(
+  Future<List<AttendanceData>?> fetchStudentAttendanceByClass(
       {required int classId}) async {
     try {
       final credential = await authPreferenceHelper.getUser();

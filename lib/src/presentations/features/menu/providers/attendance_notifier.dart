@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 class AttendanceNotifier extends ChangeNotifier {
   final SetAttendance setAttendanceUsecase;
   final SetAttendanceByStudent setAttendanceByStudentUsecase;
-
   final GetListAttendance getListAttendanceUsecase;
 
   AttendanceNotifier({

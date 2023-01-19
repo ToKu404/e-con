@@ -19,7 +19,7 @@ class LectureCourseNotifier extends ChangeNotifier {
   RequestState get state => _state;
 
   List<ClazzData>? _listCourse;
-  List<ClazzData>? get listCourse => _listCourse;
+  List<ClazzData>? get listClazz => _listCourse;
 
   Future<void> getListCourses() async {
     _state = RequestState.loading;

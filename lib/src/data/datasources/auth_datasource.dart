@@ -25,6 +25,10 @@ class AuthDataSourceImpl implements AuthDataSource {
   AuthDataSourceImpl(
       {required this.client, required this.authPreferenceHelper});
 
+  /// Digunakan untuk login ke CPL dan Tugas Akhir
+  /// Cpl :  https://api.cpl.npedigihouse.tech/api/swagger-ui/index.html#/auth-controller/login
+  /// Tugas Akhir : https://api.sifa.npedigihouse.tech/docs/#/default/post_api_v0_users_login
+  /// POST
   @override
   Future<UserCredential> signIn(String username, String password) async {
     try {
@@ -72,6 +76,10 @@ class AuthDataSourceImpl implements AuthDataSource {
     }
   }
 
+  /// Digunakan untuk mengambil usercredential dan melakukan pengecekan expired token dan session
+  /// CPL :  https://api.cpl.npedigihouse.tech/api/swagger-ui/index.html#/auth-controller/getCredential
+  /// Tugas Akhir Dosen : https://api.sifa.npedigihouse.tech/docs/#/default/get_api_v0_lecturers__nim_
+  /// Tugas Akhir Mahasiswa : https://api.sifa.npedigihouse.tech/docs/#/default/get_api_v0_students__nim_
   @override
   Future<UserCredential?> getUser() async {
     try {
@@ -121,6 +129,7 @@ class AuthDataSourceImpl implements AuthDataSource {
     }
   }
 
+  /// Digunakan untuk logout dengan menghapus credential di sharedpreferences
   @override
   Future<bool> logOut() {
     try {

@@ -4,7 +4,9 @@ import 'package:e_con/src/data/models/cpl_lecturer/statistic_data.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+/// A collection of functions that are reusable
 class ReusableFuntionHelper {
+  /// Convert DateTime to String
   static String datetimeToString(DateTime date,
       {bool isShowTime = false, String? format}) {
     return isShowTime
@@ -12,12 +14,14 @@ class ReusableFuntionHelper {
         : DateFormat(format ?? 'EEEE, dd MMMM yyyy', "id_ID").format(date);
   }
 
+  /// Convert String to DateTime
   static DateTime stringToDateTime(String date, {bool isShowTime = false}) {
     return isShowTime
         ? DateFormat('HH:MM, dd MMMM yyyy', "id_ID").parse(date)
         : DateFormat("EEEE, dd MMMM yyyy", "id_ID").parse(date);
   }
 
+  /// Check if expired date same moment with datetime now
   static bool isInitialExpiredDate(DateTime expiredDate) {
     final dateTime = expiredDate;
     final initDate = DateTime(
@@ -28,6 +32,7 @@ class ReusableFuntionHelper {
     return initDate.isAtSameMomentAs(expiredDate);
   }
 
+  /// calculate value of statistic attendance
   static Map<int, int> getStatisticValue(List<StatisticData> statistics) {
     final result = {1: 0, 2: 0, 3: 0, 4: 0};
     for (int i = 0; i < statistics.length; i++) {
@@ -36,6 +41,7 @@ class ReusableFuntionHelper {
     return result;
   }
 
+  /// convert student statistic attendance to percent and color
   static StudentAttendanceStat getAttendanceStat(
       {required List<StudentDataAttendanceData> attendances}) {
     int percent = 100;
@@ -66,6 +72,7 @@ class ReusableFuntionHelper {
     return StudentAttendanceStat(percent: percent, statusColor: statusColor);
   }
 
+  /// get attendance color by type 
   static Color getAttendanceColor(int type) {
     switch (type) {
       case 1:
@@ -81,15 +88,16 @@ class ReusableFuntionHelper {
     }
   }
 
-  static StatusMeeting checkStatusMeeting(DateTime date) {
+  /// check status of meeting
+  static MeetingStatus checkStatusMeeting(DateTime date) {
     DateTime now = DateTime.now();
     now = DateTime(now.year, now.month, now.day);
     if (date.isAtSameMomentAs(now)) {
-      return StatusMeeting(color: Palette.primary, status: 'Aktif');
+      return MeetingStatus(color: Palette.primary, status: 'Aktif');
     } else if (date.isBefore(now)) {
-      return StatusMeeting(color: Palette.teritory, status: 'Selesai');
+      return MeetingStatus(color: Palette.teritory, status: 'Selesai');
     } else {
-      return StatusMeeting(color: Palette.disable, status: 'Belum Mulai');
+      return MeetingStatus(color: Palette.disable, status: 'Belum Mulai');
     }
   }
 }
@@ -101,9 +109,8 @@ class StudentAttendanceStat {
   StudentAttendanceStat({required this.percent, required this.statusColor});
 }
 
-class StatusMeeting {
+class MeetingStatus {
   final String status;
   final Color color;
-
-  StatusMeeting({required this.color, required this.status});
+  MeetingStatus({required this.color, required this.status});
 }

@@ -7,7 +7,6 @@ import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
 abstract class CplLecturerRepository {
   Future<Either<Failure, List<ClazzData>?>> getListCourse();
   Future<Either<Failure, List<MeetingData>?>> getListMeeting(int classId);
-  // Future<Either<Failure, List<StudentData>?>> getListStudent(int classId);
   Future<Either<Failure, bool>> createNewMeeting({
     required int classId,
     required String topic,

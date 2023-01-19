@@ -1,4 +1,5 @@
 import 'package:e_con/core/constants/color_const.dart';
+import 'package:e_con/core/constants/path_const.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +17,6 @@ class AttendanceValue extends Equatable {
   });
 
   @override
-  // TODO: implement props
   List<Object?> get props => [id];
 }
 
@@ -24,22 +24,22 @@ class AttendanceValueHelper {
   static final _dataAttendance = [
     AttendanceValue(
         color: Palette.success,
-        iconPath: 'assets/icons/smile.svg',
+        iconPath: AssetPath.iconAttend,
         id: 1,
         status: 'Hadir'),
     AttendanceValue(
         color: Palette.disable,
-        iconPath: 'assets/icons/unhappy.svg',
+        iconPath: AssetPath.iconNotAttend,
         id: 2,
         status: 'Alpa'),
     AttendanceValue(
         color: Palette.warning,
-        iconPath: 'assets/icons/sick.svg',
+        iconPath: AssetPath.iconSick,
         id: 3,
         status: 'Sakit'),
     AttendanceValue(
-        color: Colors.blue,
-        iconPath: 'assets/icons/natural.svg',
+        color: Palette.secondary,
+        iconPath: AssetPath.iconPermission,
         id: 4,
         status: 'Izin'),
   ];

@@ -2,6 +2,8 @@ import 'package:e_con/src/data/models/user/user_credential.dart';
 import 'package:e_con/src/data/models/user/helper/user_role_type.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// Auth Preferences Helper
+/// Save auth session and token on shared prefrences
 class AuthPreferenceHelper {
   static AuthPreferenceHelper? _preferenceHelper;
   AuthPreferenceHelper._instance() {
@@ -24,15 +26,12 @@ class AuthPreferenceHelper {
     return pr;
   }
 
+  // Key
   static const userTokenKey = 'USER_TOKEN';
   static const userSessionKey = 'USER_SESSION';
   static const userRoleKey = 'USER_ROLE';
 
-  Future<bool> isUserTokenExist() async {
-    final pr = await preferences;
-    return pr!.containsKey(userTokenKey) ? true : false;
-  }
-
+  /// For Save User Credential Data
   Future<bool> setUserData(UserCredential user) async {
     final pr = await preferences;
     try {
@@ -45,6 +44,7 @@ class AuthPreferenceHelper {
     }
   }
 
+  /// For Get Use Credential Data
   Future<UserCredential?> getUser() async {
     final pr = await preferences;
     if (pr!.containsKey(userTokenKey)) {
@@ -59,6 +59,7 @@ class AuthPreferenceHelper {
     }
   }
 
+  /// For Delete User Credential Data
   Future<bool> removeUserData() async {
     final pr = await preferences;
     try {

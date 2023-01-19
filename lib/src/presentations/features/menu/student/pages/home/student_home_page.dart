@@ -3,6 +3,7 @@ import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/home/widgets/student_task_card.dart';
+import 'package:e_con/src/presentations/widgets/default_appbar.dart';
 import 'package:e_con/src/presentations/widgets/header_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -17,46 +18,38 @@ class StudentHomePage extends StatefulWidget {
 class _StudentHomePageState extends State<StudentHomePage> {
   @override
   Widget build(BuildContext context) {
-    return const CustomScrollView(
+    return CustomScrollView(
       slivers: [
-        _AppBarSection(),
-        _NotifSection(),
-        _ActivitySection(),
-      ],
-    );
-  }
-}
-
-class _AppBarSection extends StatelessWidget {
-  const _AppBarSection();
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverAppBar(
-      pinned: true,
-      title: const HeaderLogo(),
-      actions: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ElevatedButton.icon(
-            label: Text(
-              'Buka SIFA',
-              style: kTextHeme.subtitle1?.copyWith(color: Palette.white),
-            ),
-            style: ElevatedButton.styleFrom(
-              elevation: 0,
-              backgroundColor: Palette.primaryVariant.withOpacity(.7),
-            ),
-            onPressed: () {
-              Navigator.pushNamed(context, AppRoute.cplWebview);
-            },
-            icon: const Icon(
-              Icons.open_in_new,
-              size: 16,
-              color: Palette.white,
+        DefaultAppBar(
+          title: '',
+          action: Padding(
+            padding: EdgeInsets.only(right: AppSize.space[2]),
+            child: ElevatedButton.icon(
+              label: Text(
+                'Buka SIFA',
+                style: kTextHeme.subtitle1?.copyWith(color: Palette.white),
+              ),
+              style: ElevatedButton.styleFrom(
+                elevation: 0,
+                backgroundColor: Palette.primaryVariant,
+              ),
+              onPressed: () {
+                Navigator.pushNamed(context, AppRoutes.cplWebview);
+              },
+              icon: const Icon(
+                Icons.open_in_new,
+                size: 16,
+                color: Palette.white,
+              ),
             ),
           ),
+          leading: Padding(
+            padding: EdgeInsets.only(left: AppSize.space[2]),
+            child: HeaderLogo(),
+          ),
         ),
+        _NotifSection(),
+        _ActivitySection(),
       ],
     );
   }

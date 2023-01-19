@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+// Reusable Data Response
 class DataResponse<T> extends Equatable {
   const DataResponse({required this.data, this.message, this.status});
 

@@ -24,7 +24,7 @@ class _SplashPageState extends State<SplashPage> {
       if (mounted) {
         Navigator.pushNamedAndRemoveUntil(
           context,
-          AppRoute.wrapper,
+          AppRoutes.wrapper,
           (route) => false,
         );
       }

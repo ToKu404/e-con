@@ -12,7 +12,9 @@ class StudentNotifPage extends StatelessWidget {
       children: [
         Column(
           children: const [
-            _AppBarSection(),
+            SizedBox(
+              height: 2,
+            ),
             Expanded(
               child: _BodySection(),
             ),

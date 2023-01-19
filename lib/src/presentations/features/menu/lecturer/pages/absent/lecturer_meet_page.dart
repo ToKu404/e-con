@@ -19,15 +19,15 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
-class TeacherMeetDetailPage extends StatefulWidget {
+class LecturerMeetDetailPage extends StatefulWidget {
   final Map args;
-  const TeacherMeetDetailPage({super.key, required this.args});
+  const LecturerMeetDetailPage({super.key, required this.args});
 
   @override
-  State<TeacherMeetDetailPage> createState() => _TeacherMeetDetailPageState();
+  State<LecturerMeetDetailPage> createState() => _LecturerMeetDetailPageState();
 }
 
-class _TeacherMeetDetailPageState extends State<TeacherMeetDetailPage> {
+class _LecturerMeetDetailPageState extends State<LecturerMeetDetailPage> {
   late int meetingId;
   late int meetingNumber;
   late ClazzData classData;
@@ -91,7 +91,7 @@ class _TeacherMeetDetailPageState extends State<TeacherMeetDetailPage> {
                 return [
                   PopupMenuItem(
                     value: () async {
-                      Navigator.pushNamed(context, AppRoute.editMeeting,
+                      Navigator.pushNamed(context, AppRoutes.editMeeting,
                           arguments: {
                             'classData': classData,
                             'topic': meetingData.topics,
@@ -259,7 +259,7 @@ class _TeacherMeetDetailPageState extends State<TeacherMeetDetailPage> {
                             meetingId: meetingData.id);
 
                         if (provider.validationCode != null) {
-                          Navigator.pushNamed(context, AppRoute.barcodeAbsent,
+                          Navigator.pushNamed(context, AppRoutes.barcodeAbsent,
                               arguments: {
                                 'meetingId': meetingData.id,
                                 'classData': classData,
@@ -272,7 +272,7 @@ class _TeacherMeetDetailPageState extends State<TeacherMeetDetailPage> {
                     }
 
                     meetingData.setMeetingNumber = meetingNumber;
-                    Navigator.pushNamed(context, AppRoute.genBarcode,
+                    Navigator.pushNamed(context, AppRoutes.genBarcode,
                         arguments: {
                           'meetingData': meetingData,
                           'classData': classData,
@@ -440,35 +440,9 @@ class _CustomAppBarState extends State<_CustomAppBar> {
                       AppSize.space[3],
                     ),
                   ),
-                  // errorText: !state.isEmailValid
-                  //     ? 'Please ensure the email entered is valid'
-                  //     : null,
-                  // labelText: 'Email',
                 ),
               ),
             ),
-            // AppSize.verticalSpace[3],
-            // SingleChildScrollView(
-            //   scrollDirection: Axis.horizontal,
-            //   child: Row(
-            //     children: [
-            //       AppSize.horizontalSpace[3],
-            //       const CustomChip(
-            //         title: 'Nama',
-            //         haveShowMore: true,
-            //       ),
-            //       const CustomChip(
-            //         title: 'Hadir',
-            //       ),
-            //       const CustomChip(
-            //         title: 'Izin',
-            //       ),
-            //       const CustomChip(
-            //         title: 'Sakit',
-            //       ),
-            //     ],
-            //   ),
-            // ),
             AppSize.verticalSpace[5],
           ],
         ),
@@ -477,52 +451,6 @@ class _CustomAppBarState extends State<_CustomAppBar> {
   }
 }
 
-class CustomChip extends StatelessWidget {
-  final String title;
-  final bool haveShowMore;
-  const CustomChip({
-    super.key,
-    required this.title,
-    this.haveShowMore = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(right: AppSize.space[2]),
-      width: 100,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(
-          AppSize.space[4],
-        ),
-        border: Border.all(
-          color: Palette.disable,
-        ),
-      ),
-      padding: EdgeInsets.symmetric(
-        horizontal: AppSize.space[3],
-        vertical: AppSize.space[1],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            title,
-            style: kTextHeme.subtitle2?.copyWith(
-              color: Palette.onPrimary,
-            ),
-          ),
-          if (haveShowMore)
-            const Icon(
-              Icons.keyboard_arrow_down_rounded,
-              size: 16,
-              color: Palette.onPrimary,
-            ),
-        ],
-      ),
-    );
-  }
-}
 
 class AbsentStatisticCard extends StatelessWidget {
   final int value;

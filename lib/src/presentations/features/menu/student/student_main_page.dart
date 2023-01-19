@@ -1,5 +1,6 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:e_con/core/constants/color_const.dart';
+import 'package:e_con/core/constants/path_const.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/src/presentations/features/menu/providers/profile_picture_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/history/student_history_page.dart';
@@ -64,14 +65,14 @@ class _StudentMainPageState extends State<StudentMainPage>
             icon: Padding(
               padding: const EdgeInsets.all(2.0),
               child: SvgPicture.asset(
-                'assets/icons/home_outlined_icon.svg',
+                AssetPath.iconHome,
                 color: Palette.disable,
               ),
             ),
             activeIcon: Padding(
               padding: const EdgeInsets.all(2.0),
               child: SvgPicture.asset(
-                'assets/icons/home_fill_icon.svg',
+                AssetPath.iconHomeActive,
                 color: Palette.primaryVariant,
               ),
             ),
@@ -80,14 +81,14 @@ class _StudentMainPageState extends State<StudentMainPage>
             icon: Padding(
               padding: const EdgeInsets.all(2.0),
               child: SvgPicture.asset(
-                'assets/icons/notif_outlined_icon.svg',
+                AssetPath.iconNotif,
                 color: Palette.disable,
               ),
             ),
             activeIcon: Padding(
               padding: const EdgeInsets.all(2.0),
               child: SvgPicture.asset(
-                'assets/icons/notif_fill_icon.svg',
+                AssetPath.iconNotifActive,
                 color: Palette.primaryVariant,
               ),
             ),
@@ -97,7 +98,7 @@ class _StudentMainPageState extends State<StudentMainPage>
               backgroundColor: Palette.primary,
               child: Center(
                 child: SvgPicture.asset(
-                  'assets/icons/qr.svg',
+                  AssetPath.iconQr,
                   width: 24,
                   height: 24,
                 ),
@@ -108,14 +109,14 @@ class _StudentMainPageState extends State<StudentMainPage>
             icon: Padding(
               padding: const EdgeInsets.all(2.0),
               child: SvgPicture.asset(
-                'assets/icons/history_outlined_icon.svg',
+                AssetPath.iconHistory,
                 color: Palette.disable,
               ),
             ),
             activeIcon: Padding(
               padding: const EdgeInsets.all(2.0),
               child: SvgPicture.asset(
-                'assets/icons/history_fill_icon.svg',
+                AssetPath.iconHistoryActive,
                 color: Palette.primaryVariant,
               ),
             ),
@@ -124,14 +125,14 @@ class _StudentMainPageState extends State<StudentMainPage>
             icon: Padding(
               padding: const EdgeInsets.all(2.0),
               child: SvgPicture.asset(
-                'assets/icons/user_outlined.svg',
+                AssetPath.iconProfile,
                 color: Palette.disable,
               ),
             ),
             activeIcon: Padding(
               padding: const EdgeInsets.all(2.0),
               child: SvgPicture.asset(
-                'assets/icons/user_filled.svg',
+                AssetPath.iconProfileActive,
                 color: Palette.primaryVariant,
               ),
             ),
@@ -144,7 +145,7 @@ class _StudentMainPageState extends State<StudentMainPage>
             if (status.isGranted) {
               Navigator.pushNamed(
                 context,
-                AppRoute.absentStudent,
+                AppRoutes.absentStudent,
               );
             }
             tabController!.index = 0;

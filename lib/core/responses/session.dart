@@ -1,3 +1,5 @@
+
+/// get cookie from header
 class Session {
   static String? getCookie(Map<String, String> headers) {
     String? rawCookie = headers['set-cookie'];

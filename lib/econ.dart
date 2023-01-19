@@ -2,7 +2,7 @@ import 'package:e_con/core/app/settings.dart';
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/routes/route_handler.dart';
 import 'package:e_con/core/utils/observer.dart';
-import 'package:e_con/injection.dart' as di;
+import 'package:e_con/core/dependency_injection/init.dart' as di;
 import 'package:e_con/src/presentations/features/login/provider/auth_notifier.dart';
 import 'package:e_con/src/presentations/features/login/provider/get_user_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/providers/attendance_notifier.dart';
@@ -73,7 +73,6 @@ class EconApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => di.locator<CourseStudentNotifier>(),
         ),
-        // Student
         ChangeNotifierProvider(
           create: (_) => di.locator<StudentProfileNotifier>(),
         ),

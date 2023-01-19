@@ -9,21 +9,21 @@ import 'package:e_con/src/data/models/attendance/student_attendance_data.dart';
 import 'package:http/http.dart' as http;
 
 abstract class AttendanceDataSource {
-  Future<bool> setAttendance(
+  Future<bool> updateAttendanceStatus(
       {required int meetingId,
       required int studentId,
       required int attendanceTypeId,
       required int attendanceId});
-  Future<bool> setAttendanceByStudent({
+  Future<bool> attendByStudent({
     required int meetingId,
     required int studentId,
     required String validationCode,
   });
-  Future<List<AttendanceData>> getListAttendance({
+  Future<List<AttendanceData>> fetchAllStudentAttendanceByMeeting({
     required int meetingId,
     required String? query,
   });
-  Future<List<StudentAttendanceData>> getListStudentAttendance({
+  Future<List<StudentAttendanceData>> fetchAllStudentAttendanceByClass({
     required int classId,
   });
 }
@@ -35,7 +35,11 @@ class AttendanceDataSourceImpl implements AttendanceDataSource {
   AttendanceDataSourceImpl(
       {required this.client, required this.authPreferenceHelper});
   @override
-  Future<bool> setAttendance(
+
+  /// Digunakan oleh role dosen untuk merubah status absensi
+  /// https://api.cpl.npedigihouse.tech/api/swagger-ui/index.html#/class-record-controller/updateAttendance
+  /// METHOD : PUT
+  Future<bool> updateAttendanceStatus(
       {required int meetingId,
       required int studentId,
       required int attendanceTypeId,
@@ -48,6 +52,7 @@ class AttendanceDataSourceImpl implements AttendanceDataSource {
       'attendanceTypeId': attendanceTypeId,
       'id': attendanceId
     };
+
     final response = await client.put(
       Uri.parse(
         '${ApiService.baseUrlCPL}/class-record/attendance/${attendanceId}',
@@ -61,8 +66,13 @@ class AttendanceDataSourceImpl implements AttendanceDataSource {
     return response.statusCode == 200;
   }
 
+  /// Digunakan oleh dosen untuk mendapatkan list mahasiswa dan absensinya berdasarkan id pertemuan
+  /// https://api.cpl.npedigihouse.tech/api/swagger-ui/index.html#/class-record-controller/findAllAttendanceByMeetingId
+  /// Method : Get
+  /// Terdapat fitur Search
+
   @override
-  Future<List<AttendanceData>> getListAttendance({
+  Future<List<AttendanceData>> fetchAllStudentAttendanceByMeeting({
     required int meetingId,
     required String? query,
   }) async {
@@ -95,13 +105,15 @@ class AttendanceDataSourceImpl implements AttendanceDataSource {
         throw ServerException();
       }
     } catch (e) {
-      print('disini');
       throw ServerException();
     }
   }
 
+  /// Digunakan oleh role dosen untuk mendapatkan seluruh list mahasiswa yang terdaftar di kelas tersebut beserta attendancenya
+  /// https://api.cpl.npedigihouse.tech/api/swagger-ui/index.html#/class-record-controller/findAllAttendanceByClassId
+  /// Method : Get
   @override
-  Future<List<StudentAttendanceData>> getListStudentAttendance(
+  Future<List<StudentAttendanceData>> fetchAllStudentAttendanceByClass(
       {required int classId}) async {
     final credential = await authPreferenceHelper.getUser();
 
@@ -129,8 +141,11 @@ class AttendanceDataSourceImpl implements AttendanceDataSource {
     }
   }
 
+  /// Digunakan oleh role student untuk merubah status absensi menjadi attend
+  /// https://api.cpl.npedigihouse.tech/api/swagger-ui/index.html#/class-record-controller/validateAndUpdateStudentAttendance
+  /// Method : Post
   @override
-  Future<bool> setAttendanceByStudent(
+  Future<bool> attendByStudent(
       {required int meetingId,
       required int studentId,
       required String validationCode}) async {

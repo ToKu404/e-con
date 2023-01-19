@@ -1,4 +1,5 @@
 import 'package:e_con/core/constants/color_const.dart';
+import 'package:e_con/core/constants/path_const.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -25,7 +26,7 @@ class EconNoInternet extends StatelessWidget {
           height: 200,
           width: 250,
           child: SvgPicture.asset(
-            'assets/illustrations/no_connection_vector.svg',
+            AssetPath.disconnectIllustration,
             fit: BoxFit.contain,
           ),
         ),

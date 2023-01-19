@@ -1,4 +1,5 @@
 import 'package:e_con/core/constants/color_const.dart';
+import 'package:e_con/core/constants/path_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
@@ -15,16 +16,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
-class TeacherCourseDetailPage extends StatefulWidget {
+class LecturerCourseDetailPage extends StatefulWidget {
   final ClazzData clazzData;
-  const TeacherCourseDetailPage({super.key, required this.clazzData});
+  const LecturerCourseDetailPage({super.key, required this.clazzData});
 
   @override
-  State<TeacherCourseDetailPage> createState() =>
-      _TeacherCourseDetailPageState();
+  State<LecturerCourseDetailPage> createState() =>
+      _LecturerCourseDetailPageState();
 }
 
-class _TeacherCourseDetailPageState extends State<TeacherCourseDetailPage> {
+class _LecturerCourseDetailPageState extends State<LecturerCourseDetailPage> {
   @override
   void initState() {
     super.initState();
@@ -82,7 +83,7 @@ class _TeacherCourseDetailPageState extends State<TeacherCourseDetailPage> {
               ),
               label: Text('Tambah Pertemuan'),
               onPressed: () {
-                Navigator.pushNamed(context, AppRoute.addNewMeeting,
+                Navigator.pushNamed(context, AppRoutes.addNewMeeting,
                     arguments: widget.clazzData);
               },
             ),
@@ -131,7 +132,7 @@ class _TeacherCourseDetailPageState extends State<TeacherCourseDetailPage> {
                         Column(
                           children: [
                             state
-                                ? TitleSection(
+                                ? _TitleSection(
                                     className: widget.clazzData.name ?? '',
                                     courseName: widget
                                             .clazzData.courseData!.courseName ??
@@ -169,7 +170,7 @@ class _TeacherCourseDetailPageState extends State<TeacherCourseDetailPage> {
                         Column(
                           children: [
                             state
-                                ? TitleSection(
+                                ? _TitleSection(
                                     className: widget.clazzData.name ?? '',
                                     courseName: widget
                                             .clazzData.courseData!.courseName ??
@@ -192,14 +193,14 @@ class _TeacherCourseDetailPageState extends State<TeacherCourseDetailPage> {
   }
 }
 
-class TitleSection extends StatelessWidget {
+class _TitleSection extends StatelessWidget {
   final int classId;
   final String courseName;
   final String className;
   final String semesterName;
   final int totalStudent;
   final String courseDate;
-  const TitleSection({
+  const _TitleSection({
     required this.className,
     required this.courseName,
     required this.semesterName,
@@ -230,18 +231,13 @@ class TitleSection extends StatelessWidget {
         children: [
           AppSize.verticalSpace[4],
           _BuildCourseTile(
-            iconPath: 'assets/icons/class.svg',
+            iconPath: AssetPath.iconClasses,
             title: '$className',
             type: 'Kelas',
           ),
-          // AppSize.verticalSpace[2],
-          // _BuildCourseTile(
-          //   iconPath: 'assets/icons/school.svg',
-          //   title: semesterName,
-          // ),
           AppSize.verticalSpace[2],
           _BuildCourseTile(
-            iconPath: 'assets/icons/schedule.svg',
+            iconPath: AssetPath.iconSchedule,
             title: courseDate,
             type: 'Jadwal',
           ),
@@ -249,11 +245,11 @@ class TitleSection extends StatelessWidget {
           CustomButton(
             text: '$totalStudent Mahasiswa',
             onTap: () {
-              Navigator.pushNamed(context, AppRoute.listStudent,
+              Navigator.pushNamed(context, AppRoutes.listStudent,
                   arguments: classId);
             },
             height: 50,
-            iconPath: 'assets/icons/user.svg',
+            iconPath: AssetPath.iconUser,
           )
         ],
       ),

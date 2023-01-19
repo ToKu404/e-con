@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:e_con/core/constants/color_const.dart';
+import 'package:e_con/core/constants/path_const.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/scan_qr/provider/qr_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -95,7 +96,7 @@ class _ScanQrSectionState extends State<ScanQrSection> {
                     width: 24,
                     height: 24,
                     child: SvgPicture.asset(
-                      'assets/icons/flip_camera_icon.svg',
+                      AssetPath.iconFlipCamera,
                       color: Colors.white,
                       fit: BoxFit.fitHeight,
                     ),
@@ -114,7 +115,7 @@ class _ScanQrSectionState extends State<ScanQrSection> {
                     width: 24,
                     height: 24,
                     child: SvgPicture.asset(
-                      'assets/icons/flash_icon.svg',
+                      AssetPath.iconFlashCamera,
                       color: Colors.white,
                       fit: BoxFit.fitHeight,
                     ),

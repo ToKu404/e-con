@@ -16,7 +16,7 @@ class CplLecturerRepositoryImpl implements CplLecturerRepository {
   @override
   Future<Either<Failure, List<ClazzData>?>> getListCourse() async {
     try {
-      final result = await cplLecturerDataSource.getListClazz();
+      final result = await cplLecturerDataSource.fetchLecturerClasses();
       return Right(result.listClazz);
     } on DataNotFoundException {
       return Left(EmptyFailure('Dosen Belum Memiliki Kelas'));
@@ -27,7 +27,7 @@ class CplLecturerRepositoryImpl implements CplLecturerRepository {
   Future<Either<Failure, List<MeetingData>?>> getListMeeting(
       int classId) async {
     try {
-      final result = await cplLecturerDataSource.getListMeeting(classId);
+      final result = await cplLecturerDataSource.fetchMeetingByClassId(classId);
       return Right(result);
     } on DataNotFoundException {
       return Left(EmptyFailure('Silahkan buat pertemuan terlebih dahulu'));
@@ -93,8 +93,8 @@ class CplLecturerRepositoryImpl implements CplLecturerRepository {
   Future<Either<Failure, String>> getValidationCode(
       {required int meetingId}) async {
     try {
-      final result =
-          await cplLecturerDataSource.getValidationCode(meetingId: meetingId);
+      final result = await cplLecturerDataSource.getMeetingValidationCode(
+          meetingId: meetingId);
       return Right(result);
     } catch (e) {
       return Left(ServerFailure('Terdapat Masalah'));
@@ -118,7 +118,7 @@ class CplLecturerRepositoryImpl implements CplLecturerRepository {
       {required int meetingId}) async {
     try {
       final result =
-          await cplLecturerDataSource.getMeetingData(meetingId: meetingId);
+          await cplLecturerDataSource.singleMeetingData(meetingId: meetingId);
       return Right(result);
     } catch (e) {
       return Left(ServerFailure(e.toString()));
@@ -129,8 +129,8 @@ class CplLecturerRepositoryImpl implements CplLecturerRepository {
   Future<Either<Failure, List<StatisticData>>> getAttendanceStatisticData(
       {required int meetingId}) async {
     try {
-      final result = await cplLecturerDataSource.getAttendanceStatisticData(
-          meetingId: meetingId);
+      final result = await cplLecturerDataSource
+          .singleMeetingAttendanceStatistic(meetingId: meetingId);
       return Right(result);
     } catch (e) {
       return Left(ServerFailure(e.toString()));

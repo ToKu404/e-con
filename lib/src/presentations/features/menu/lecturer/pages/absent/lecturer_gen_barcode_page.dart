@@ -1,4 +1,5 @@
 import 'package:e_con/core/constants/color_const.dart';
+import 'package:e_con/core/constants/path_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/helpers/reusable_function_helper.dart';
 import 'package:e_con/core/routes/app_routes.dart';
@@ -12,16 +13,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
-class TeacherGenBarcodePage extends StatefulWidget {
+class LecturerGenBarcodePage extends StatefulWidget {
   final Map args;
 
-  const TeacherGenBarcodePage({super.key, required this.args});
+  const LecturerGenBarcodePage({super.key, required this.args});
 
   @override
-  State<TeacherGenBarcodePage> createState() => _TeacherGenBarcodePageState();
+  State<LecturerGenBarcodePage> createState() => _LecturerGenBarcodePageState();
 }
 
-class _TeacherGenBarcodePageState extends State<TeacherGenBarcodePage> {
+class _LecturerGenBarcodePageState extends State<LecturerGenBarcodePage> {
   late ClazzData clazzData;
   late MeetingData meetingData;
   late bool isEdit;
@@ -38,7 +39,8 @@ class _TeacherGenBarcodePageState extends State<TeacherGenBarcodePage> {
 
     if (isEdit) {
       dateController.text = ReusableFuntionHelper.datetimeToString(
-          meetingData.validationCodeExpiredDate!, isShowTime: true);
+          meetingData.validationCodeExpiredDate!,
+          isShowTime: true);
       dateTime = meetingData.validationCodeExpiredDate!;
     }
   }
@@ -98,19 +100,19 @@ class _TeacherGenBarcodePageState extends State<TeacherGenBarcodePage> {
                         AppSize.verticalSpace[3],
                         _buildAbsentTile(
                           title: 'Kelas ${clazzData.name} (2019)',
-                          iconPath: 'assets/icons/school.svg',
+                          iconPath: AssetPath.iconSchool,
                         ),
                         AppSize.verticalSpace[1],
                         _buildAbsentTile(
                           title:
                               '${clazzData.startTime} - ${clazzData.endTime} WITA',
-                          iconPath: 'assets/icons/time.svg',
+                          iconPath: AssetPath.iconTime,
                         ),
                         AppSize.verticalSpace[1],
                         _buildAbsentTile(
                           title: ReusableFuntionHelper.datetimeToString(
                               meetingData.date!),
-                          iconPath: 'assets/icons/date.svg',
+                          iconPath: AssetPath.iconDate,
                         ),
                       ],
                     ),
@@ -170,7 +172,7 @@ class _TeacherGenBarcodePageState extends State<TeacherGenBarcodePage> {
                                 return;
                               }
                               Navigator.pushNamed(
-                                  context, AppRoute.barcodeAbsent,
+                                  context, AppRoutes.barcodeAbsent,
                                   arguments: {
                                     'meetingId': meetingData.id,
                                     'classData': clazzData,

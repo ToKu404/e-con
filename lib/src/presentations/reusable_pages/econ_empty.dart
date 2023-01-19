@@ -1,4 +1,5 @@
 import 'package:e_con/core/constants/color_const.dart';
+import 'package:e_con/core/constants/path_const.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -16,7 +17,7 @@ class EconEmpty extends StatelessWidget {
           height: 250,
           width: 250,
           child: SvgPicture.asset(
-            'assets/illustrations/empty_vector.svg',
+            AssetPath.emptyIllustration,
             fit: BoxFit.contain,
           ),
         ),
