@@ -78,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
           } else if (authNotifier.user!.role == UserRole.teacher) {
             Navigator.pushNamedAndRemoveUntil(
               context,
-              AppRoutes.mainTeacher,
+              AppRoutes.mainLecturer,
               (route) => false,
             );
           }

@@ -1,6 +1,7 @@
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/pages/absent/lecturer_absent_page.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/pages/home/lecturer_home_page.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/pages/notif_seminars/notif_seminar_page.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/pages/setting/lecturer_setting_page.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecture_profile_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/providers/profile_picture_notifier.dart';
@@ -56,14 +57,19 @@ class _TeacherMainPageState extends State<TeacherMainPage>
 
   final listMenu = [
     LecturerHomePage(),
+    LecturerNotifSeminarPage(),
     LecturerAbsentPage(),
-    LecturerSettingPage()
+    LecturerSettingPage(),
   ];
 
   final List<SalomonBottomBarItem> items = [
     SalomonBottomBarItem(
       icon: Icon(Icons.home_rounded),
       title: Text('Beranda'),
+    ),
+    SalomonBottomBarItem(
+      icon: Icon(Icons.notifications),
+      title: Text('Notifikasi'),
     ),
     SalomonBottomBarItem(
       icon: Icon(Icons.assignment),

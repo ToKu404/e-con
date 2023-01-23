@@ -3,7 +3,9 @@ import 'package:e_con/src/data/datasources/attendance_datasource.dart';
 import 'package:e_con/src/data/datasources/auth_datasource.dart';
 import 'package:e_con/src/data/datasources/cpl_lecturer_datasource.dart';
 import 'package:e_con/src/data/datasources/cpl_student_datasource.dart';
+import 'package:e_con/src/data/datasources/final_exam_lecturer_datasource.dart';
 import 'package:e_con/src/data/datasources/profile_datasource.dart';
+import 'package:e_con/src/data/repositories/final_exam_lecturer_repository_impl.dart';
 import 'package:get_it/get_it.dart';
 
 void injectDatasource(GetIt locator) {
@@ -41,6 +43,12 @@ void injectDatasource(GetIt locator) {
   );
   locator.registerLazySingleton<ActivityDataSource>(
     () => ActivityDataSourceImpl(
+      client: locator(),
+      authPreferenceHelper: locator(),
+    ),
+  );
+  locator.registerLazySingleton<FinalExamLecturerDataSource>(
+    () => FinalExamLecturerDataSourceImpl(
       client: locator(),
       authPreferenceHelper: locator(),
     ),

@@ -38,7 +38,7 @@ const TextTheme kTextHeme = TextTheme(
   ),
   overline: TextStyle(
     fontFamily: 'Poppins',
-    fontSize: 10,
+    fontSize: 11,
     color: Palette.background,
   ),
 );

@@ -90,60 +90,71 @@ class _BodySection extends StatelessWidget {
     return ListView.builder(
       itemCount: 10,
       itemBuilder: (context, index) {
-        return Container(
-          width: AppSize.getAppWidth(context),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            border: Border(
-              bottom: BorderSide(
-                color: Palette.background,
+        return _StudentNotifCard();
+      },
+    );
+  }
+}
+
+class _StudentNotifCard extends StatelessWidget {
+  const _StudentNotifCard({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: AppSize.getAppWidth(context),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          bottom: BorderSide(
+            color: Palette.background,
+          ),
+        ),
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(
+          AppSize.space[3],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                'Hari Ini',
+                style: kTextHeme.overline?.copyWith(
+                  color: Palette.onPrimary,
+                  height: 1,
+                ),
               ),
             ),
-          ),
-          child: Padding(
-            padding: EdgeInsets.all(
-              AppSize.space[3],
+            Text(
+              'Lorem',
+              style: kTextHeme.subtitle2?.copyWith(
+                color: Palette.disable,
+                height: 1.2,
+              ),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    'Hari Ini',
-                    style: kTextHeme.overline?.copyWith(
-                      color: Palette.onPrimary,
-                      height: 1,
-                    ),
-                  ),
-                ),
-                Text(
-                  'Lorem',
-                  style: kTextHeme.subtitle2?.copyWith(
-                    color: Palette.disable,
-                    height: 1.2,
-                  ),
-                ),
-                Text(
-                  'Lorem Ipsum',
-                  style: kTextHeme.subtitle1?.copyWith(
-                    color: Palette.primary,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  'Lorem 23',
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: kTextHeme.subtitle2?.copyWith(
-                    color: Palette.disable,
-                  ),
-                ),
-              ],
+            Text(
+              'Lorem Ipsum',
+              style: kTextHeme.subtitle1?.copyWith(
+                color: Palette.primary,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-        );
-      },
+            Text(
+              'Lorem 23',
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: kTextHeme.subtitle2?.copyWith(
+                color: Palette.disable,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -7,8 +7,10 @@ import 'package:e_con/core/services/api_service.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/classs_content.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/statistic_data.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
+import 'package:e_con/src/data/models/final_exam/seminar_data.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 
 abstract class CplLecturerDataSource {
   Future<ClazzContent> fetchLecturerClasses();

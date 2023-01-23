@@ -20,6 +20,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 import 'src/presentations/blocs/realtime_internet_check/realtime_internet_check_cubit.dart';
+import 'src/presentations/features/menu/lecturer/providers/lecturer_seminars_notifier.dart';
 import 'src/presentations/features/menu/lecturer/providers/lecturer_today_meeting_notifier.dart';
 import 'src/presentations/features/menu/providers/profile_picture_notifier.dart';
 import 'src/presentations/blocs/onetime_internet_check/onetime_internet_check_cubit.dart';
@@ -89,6 +90,9 @@ class EconApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => di.locator<StudentActivityNotifier>(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => di.locator<LecturerSeminarNotifier>(),
         ),
       ],
       child: MaterialApp(

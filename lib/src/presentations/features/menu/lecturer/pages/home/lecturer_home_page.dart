@@ -5,7 +5,8 @@ import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/presentations/blocs/onetime_internet_check/onetime_internet_check_cubit.dart';
-import 'package:e_con/src/presentations/features/menu/lecturer/pages/home/widgets/teacher_task_card.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/pages/home/widgets/lecturer_task_card.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecturer_seminars_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecturer_today_meeting_notifier.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_no_internet.dart';
 import 'package:e_con/src/presentations/widgets/custom_shimmer.dart';
@@ -81,6 +82,8 @@ class _LecturerHomePageState extends State<LecturerHomePage> {
                       Builder(builder: (context) {
                         final provider =
                             context.watch<LecturerTodayMeetingNotifier>();
+                        final seminarNotifier =
+                            context.watch<LecturerSeminarNotifier>();
                         return BlocBuilder<OnetimeInternetCheckCubit,
                                 OnetimeInternetCheckState>(
                             builder: (context, state) {

@@ -153,6 +153,15 @@ class ReusableFuntionHelper {
         dateName: dayNameNow[0].toUpperCase() +
             dayNameNow.substring(1, 3).toLowerCase());
   }
+
+  static String titleMaker(String title) {
+    final listTitle = title.split(' ');
+    String newTitle = '';
+    for (var t in listTitle) {
+      newTitle += t[0].toUpperCase() + t.substring(1, t.length) + " ";
+    }
+    return newTitle.trim();
+  }
 }
 
 class WeeklyActivity extends Equatable {

@@ -1,6 +1,8 @@
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
 import 'package:e_con/src/presentations/features/login/pages/login_page.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/pages/notif_seminars/notif_seminar_page.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/pages/notif_seminars/seminar_detail_page.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/history/student_meeting_history_page.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/scan_qr/student_absent_page.dart';
 import 'package:e_con/src/presentations/features/menu/student/student_main_page.dart';
@@ -25,7 +27,7 @@ Route? routesHandler(RouteSettings settings) {
       return MaterialPageRoute(builder: (_) => const Wrapper());
     case AppRoutes.mainStudent:
       return MaterialPageRoute(builder: (_) => const StudentMainPage());
-    case AppRoutes.mainTeacher:
+    case AppRoutes.mainLecturer:
       return MaterialPageRoute(builder: (_) => const TeacherMainPage());
     case AppRoutes.absentStudent:
       return MaterialPageRoute(builder: (_) => const StudentAbsentPage());
@@ -85,6 +87,16 @@ Route? routesHandler(RouteSettings settings) {
     case AppRoutes.cplWebview:
       return MaterialPageRoute(
         builder: (_) => const WebViewPage(),
+      );
+    case AppRoutes.lecturerSeminarsNotif:
+      return MaterialPageRoute(
+        builder: (_) => const LecturerNotifSeminarPage(),
+      );
+    case AppRoutes.lecturerDetailSeminar:
+      return MaterialPageRoute(
+        builder: (_) => LecturerSeminarDetailPage(
+          seminarId: settings.arguments as int,
+        ),
       );
   }
   return null;

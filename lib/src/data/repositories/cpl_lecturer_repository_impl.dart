@@ -4,7 +4,6 @@ import 'package:e_con/core/utils/failure.dart';
 import 'package:e_con/src/data/datasources/cpl_lecturer_datasource.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/statistic_data.dart';
-import 'package:e_con/src/data/models/profile/student_data.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
 import 'package:e_con/src/domain/repositories/cpl_lecturer_repository.dart';
 
