@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:e_con/core/helpers/auth_preference_helper.dart';
+import 'package:e_con/core/helpers/notif_helper.dart';
 import 'package:e_con/core/utils/exception.dart';
 import 'package:e_con/core/responses/data_response.dart';
 import 'package:e_con/core/responses/session.dart';
@@ -10,10 +11,7 @@ import 'package:e_con/core/services/api_service.dart';
 import 'package:e_con/src/data/models/user/helper/user_role_type.dart';
 import 'package:e_con/src/data/models/user/user_credential.dart';
 import 'package:http/http.dart' as http;
-import 'package:oauth2/oauth2.dart' as oauth2;
 import 'package:jwt_decode/jwt_decode.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 abstract class AuthDataSource {
   Future<UserCredential> signIn(String username, String password);
@@ -24,9 +22,12 @@ abstract class AuthDataSource {
 class AuthDataSourceImpl implements AuthDataSource {
   final http.Client client;
   final AuthPreferenceHelper authPreferenceHelper;
+  final NotifHelper notifHelper;
 
   AuthDataSourceImpl(
-      {required this.client, required this.authPreferenceHelper});
+      {required this.client,
+      required this.authPreferenceHelper,
+      required this.notifHelper});
 
   /// Digunakan untuk login ke CPL dan Tugas Akhir
   /// Cpl :  https://api.cpl.npedigihouse.tech/api/swagger-ui/index.html#/auth-controller/login
@@ -35,31 +36,24 @@ class AuthDataSourceImpl implements AuthDataSource {
   @override
   Future<UserCredential> signIn(String username, String password) async {
     try {
-      // //TEsting
-      // final url = Uri.parse('localhost:8090/articles');
-      // final authUrl = Uri.parse('http://localhost:9000/oauth2/authorize');
-      // final tokenUrl = Uri.parse('http://localhost:9000/oauth2/token');
+      final userNotifId = await notifHelper.generateUserAppId();
 
-      // final redirectUrl =
-      //     Uri.parse('https://www.thunderclient.com/oauth/callback');
-
-      // final grant = oauth2.AuthorizationCodeGrant(username, authUrl, tokenUrl,
-      //     secret: password);
-
-      // final authorizationUrl = grant.getAuthorizationUrl(redirectUrl);
-
-      // print(authorizationUrl);
-      // await _openAuthorizationServerLogin(authorizationUrl);
+      final map = {
+        'playerID': userNotifId,
+      };
 
       final String basicAuth =
           'Basic ${base64.encode(utf8.encode('$username:$password'))}';
-
       final responseFE = await client.post(
         Uri.parse('${ApiService.baseUrlFinalExam}/users/login'),
         headers: {
           "Authorization": basicAuth,
+          'Content-Type': 'application/json',
         },
+        body: json.encode(map),
       );
+
+      print(responseFE.body);
 
       final responseCPL = await client.post(
         Uri.parse('${ApiService.baseUrlCPL}/login'),
@@ -69,9 +63,6 @@ class AuthDataSourceImpl implements AuthDataSource {
       );
 
       String? cookie = Session.getCookie(responseCPL.headers);
-
-      print(responseCPL.body);
-      print(responseFE.body);
 
       if (responseFE.statusCode == 200 && responseCPL.statusCode == 200) {
         final dataResponse = DataResponse<Map<String, dynamic>>.fromJson(
@@ -133,10 +124,10 @@ class AuthDataSourceImpl implements AuthDataSource {
             },
           );
         }
-        print(response.body);
-        print(responseData.body);
 
         if (responseData.statusCode == 200 && response.statusCode == 200) {
+          // instance notif;
+          await notifHelper.init();
           return credential;
         } else if (responseData.statusCode == 401 ||
             response.statusCode == 401) {

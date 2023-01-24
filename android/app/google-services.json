@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "838209813823",
+    "project_id": "e-con-127ba",
+    "storage_bucket": "e-con-127ba.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:838209813823:android:5e5fad6b03cabcf315678a",
+        "android_client_info": {
+          "package_name": "com.example.e_con"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "838209813823-652dmn0kc68pp9pk6smr2dhdo1p9phju.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDLjx4QQ_q61IbuynGu834hA2IW4U01rQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "838209813823-652dmn0kc68pp9pk6smr2dhdo1p9phju.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "838209813823-gnk2j3qd68rtvfa5sjs0nmq8kt7jic8o.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.eCon"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

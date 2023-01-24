@@ -30,6 +30,7 @@ class AuthPreferenceHelper {
   static const userTokenKey = 'USER_TOKEN';
   static const userSessionKey = 'USER_SESSION';
   static const userRoleKey = 'USER_ROLE';
+  static const userAppId = 'USER_APP_ID';
 
   /// For Save User Credential Data
   Future<bool> setUserData(UserCredential user) async {
@@ -41,6 +42,26 @@ class AuthPreferenceHelper {
       return true;
     } catch (e) {
       return false;
+    }
+  }
+
+  // For Save User App Id for One Signal
+  Future<bool> setUserAppId(String userAppId) async {
+    final pr = await preferences;
+    try {
+      pr!.setString(userAppId, userAppId);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<String?> getUserAppId() async {
+    final pr = await preferences;
+    if (pr!.containsKey(userAppId)) {
+      return pr.getString(userAppId);
+    } else {
+      return null;
     }
   }
 
@@ -66,6 +87,7 @@ class AuthPreferenceHelper {
       pr!.remove(userTokenKey);
       pr.remove(userSessionKey);
       pr.remove(userRoleKey);
+      pr.remove(userAppId);
 
       return true;
     } catch (e) {

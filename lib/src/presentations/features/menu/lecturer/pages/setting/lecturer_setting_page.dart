@@ -3,6 +3,7 @@ import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
+import 'package:e_con/src/presentations/blocs/onetime_internet_check/onetime_internet_check_cubit.dart';
 import 'package:e_con/src/presentations/features/login/provider/auth_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecture_profile_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/providers/profile_picture_notifier.dart';
@@ -11,6 +12,7 @@ import 'package:e_con/src/presentations/widgets/default_appbar.dart';
 import 'package:e_con/src/presentations/widgets/dialog/show_confirmation.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 class LecturerSettingPage extends StatelessWidget {
@@ -45,8 +47,20 @@ class LecturerSettingPage extends StatelessWidget {
   }
 }
 
-class _ProfileSection extends StatelessWidget {
+class _ProfileSection extends StatefulWidget {
   const _ProfileSection();
+
+  @override
+  State<_ProfileSection> createState() => _ProfileSectionState();
+}
+
+class _ProfileSectionState extends State<_ProfileSection> {
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<OnetimeInternetCheckCubit>(context)
+        .onCheckConnectionOnetime();
+  }
 
   @override
   Widget build(BuildContext context) {

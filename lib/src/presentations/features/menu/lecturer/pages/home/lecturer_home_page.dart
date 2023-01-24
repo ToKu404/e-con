@@ -8,6 +8,7 @@ import 'package:e_con/src/presentations/blocs/onetime_internet_check/onetime_int
 import 'package:e_con/src/presentations/features/menu/lecturer/pages/home/widgets/lecturer_task_card.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecturer_seminars_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecturer_today_meeting_notifier.dart';
+import 'package:e_con/src/presentations/reusable_pages/check_internet_onetime.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_no_internet.dart';
 import 'package:e_con/src/presentations/widgets/custom_shimmer.dart';
 import 'package:e_con/src/presentations/widgets/default_appbar.dart';
@@ -84,18 +85,8 @@ class _LecturerHomePageState extends State<LecturerHomePage> {
                             context.watch<LecturerTodayMeetingNotifier>();
                         final seminarNotifier =
                             context.watch<LecturerSeminarNotifier>();
-                        return BlocBuilder<OnetimeInternetCheckCubit,
-                                OnetimeInternetCheckState>(
-                            builder: (context, state) {
-                          if (state is OnetimeInternetCheckLost) {
-                            return EconNoInternet(
-                              onReload: () {
-                                BlocProvider.of<OnetimeInternetCheckCubit>(
-                                        context)
-                                    .onCheckConnectionOnetime();
-                              },
-                            );
-                          }
+
+                        return CheckInternetOnetime(child: (context) {
                           if (provider.state == RequestState.loading ||
                               provider.listMeetingData == null) {
                             return CustomShimmer(
