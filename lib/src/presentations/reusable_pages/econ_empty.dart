@@ -14,7 +14,7 @@ class EconEmpty extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(
-          height: 250,
+          height: 200,
           width: 250,
           child: SvgPicture.asset(
             AssetPath.emptyIllustration,

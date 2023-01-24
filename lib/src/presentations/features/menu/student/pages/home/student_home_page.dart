@@ -4,8 +4,12 @@ import 'package:e_con/core/helpers/reusable_function_helper.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
+import 'package:e_con/src/data/models/final_exam/seminar_data.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/home/widgets/student_task_card.dart';
 import 'package:e_con/src/presentations/features/menu/student/providers/student_activity_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/student/providers/student_final_exam_notifier.dart';
+import 'package:e_con/src/presentations/reusable_pages/econ_empty.dart';
+import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
 import 'package:e_con/src/presentations/widgets/custom_shimmer.dart';
 import 'package:e_con/src/presentations/widgets/header_logo.dart';
 import 'package:e_con/src/presentations/widgets/placeholders/card_placeholder.dart';
@@ -22,11 +26,24 @@ class StudentHomePage extends StatefulWidget {
 
 class _StudentHomePageState extends State<StudentHomePage> {
   @override
+  void initState() {
+    super.initState();
+    Future.microtask(() => {
+          Provider.of<StudentFinalExamNotifier>(context, listen: false)
+            ..getDetailSeminarByStudent(),
+        });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const CustomScrollView(
+    final provider = context.watch<StudentFinalExamNotifier>();
+    return CustomScrollView(
       slivers: [
         _AppBarSection(),
-        _NotifSection(),
+        if (provider.detailSeminar != null)
+          _FinalExamSection(
+            seminarData: provider.detailSeminar!,
+          ),
         _ActivitySection(),
       ],
     );
@@ -190,8 +207,9 @@ class _ActivitySection extends StatelessWidget {
   }
 }
 
-class _NotifSection extends StatelessWidget {
-  const _NotifSection();
+class _FinalExamSection extends StatelessWidget {
+  final SeminarData seminarData;
+  _FinalExamSection({required this.seminarData});
 
   @override
   Widget build(BuildContext context) {
@@ -204,13 +222,13 @@ class _NotifSection extends StatelessWidget {
               children: [
                 RichText(
                   text: TextSpan(
-                    text: 'Pengingat ',
+                    text: 'Informasi ',
                     style: kTextHeme.subtitle1?.copyWith(
                       color: Palette.onPrimary,
                     ),
                     children: [
                       TextSpan(
-                        text: 'Harian',
+                        text: 'Tugas Akhir',
                         style: kTextHeme.subtitle1?.copyWith(
                           color: Palette.primary,
                           fontWeight: FontWeight.w700,
@@ -219,51 +237,42 @@ class _NotifSection extends StatelessWidget {
                     ],
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.only(left: AppSize.space[1]),
-                  padding: EdgeInsets.all(AppSize.space[1]),
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Palette.primaryVariant,
-                  ),
-                  child: Center(
-                    child: Text(
-                      '2',
-                      style: kTextHeme.overline,
-                    ),
-                  ),
-                ),
               ],
             ),
             AppSize.verticalSpace[3],
-            Container(
-              padding: EdgeInsets.all(
-                AppSize.space[3],
-              ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(
+            InkWell(
+              onTap: () => Navigator.pushNamed(
+                  context, AppRoutes.lecturerDetailSeminar,
+                  arguments: seminarData.seminarId),
+              child: Container(
+                padding: EdgeInsets.all(
                   AppSize.space[3],
                 ),
-                color: Palette.primary,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Jadwal Seminar Proposal',
-                    style: kTextHeme.subtitle1?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Palette.white,
-                    ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(
+                    AppSize.space[3],
                   ),
-                  AppSize.verticalSpace[1],
-                  Text(
-                    'Lorem ipsum dolor sit amet consectetur. Egestas proin quis mollis libero viverra auctor. Viverra curabitur nunc lorem euismod odio sapien. Varius iaculis faucibus lorem elit sapien eget blandit purus. Morbi scelerisque consectetur leo mi diam pretium et. Id sit fusce ultrices varius dui. Est non quis nisi morbi ac. Vivamus consequat lobortis arcu volutpat. ',
-                    maxLines: 4,
-                    overflow: TextOverflow.ellipsis,
-                    style: kTextHeme.subtitle2?.copyWith(height: 1.2),
-                  )
-                ],
+                  color: Palette.primary,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Jadwal Seminar Proposal',
+                      style: kTextHeme.subtitle1?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Palette.white,
+                      ),
+                    ),
+                    AppSize.verticalSpace[1],
+                    Text(
+                      'Lorem ipsum dolor sit amet consectetur. Egestas proin quis mollis libero viverra auctor. Viverra curabitur nunc lorem euismod odio sapien. Varius iaculis faucibus lorem elit sapien eget blandit purus. Morbi scelerisque consectetur leo mi diam pretium et. Id sit fusce ultrices varius dui. Est non quis nisi morbi ac. Vivamus consequat lobortis arcu volutpat. ',
+                      maxLines: 4,
+                      overflow: TextOverflow.ellipsis,
+                      style: kTextHeme.subtitle2?.copyWith(height: 1.2),
+                    )
+                  ],
+                ),
               ),
             ),
           ],
@@ -324,6 +333,12 @@ class _ActivityBodyState extends State<ActivityBody> {
     }
 
     final listMeeting = provider.listMeetingData;
+
+    if (listMeeting.isEmpty) {
+      return ConstrainedBox(
+          constraints: BoxConstraints(minHeight: 490),
+          child: EconEmpty(emptyMessage: 'Belum ada kegiatan untuk hari ini'));
+    }
 
     return ConstrainedBox(
       constraints: BoxConstraints(minHeight: 490),

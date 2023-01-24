@@ -8,6 +8,7 @@ import 'package:e_con/src/presentations/features/login/provider/get_user_notifie
 import 'package:e_con/src/presentations/features/menu/providers/attendance_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/history/provider/attendance_history_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/scan_qr/provider/qr_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/student/providers/student_final_exam_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/student/providers/student_profile_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/course_student_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecture_courses_notifier.dart';
@@ -93,6 +94,9 @@ class EconApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => di.locator<LecturerSeminarNotifier>(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => di.locator<StudentFinalExamNotifier>(),
         ),
       ],
       child: MaterialApp(
