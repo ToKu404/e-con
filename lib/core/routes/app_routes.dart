@@ -17,4 +17,5 @@ class AppRoutes {
   static const String editMeeting = '/edit-meeting';
   static const String lecturerSeminarsNotif = '/lecturer-seminar-notif';
   static const String lecturerDetailSeminar = '/lecturer-detail-seminar';
+  static const String studentDetailFinalExam = '/student-detail-final-exam';
 }

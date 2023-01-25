@@ -3,6 +3,7 @@ import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
 import 'package:e_con/src/presentations/features/login/pages/login_page.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/pages/notif_seminars/notif_seminar_page.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/pages/notif_seminars/seminar_detail_page.dart';
+import 'package:e_con/src/presentations/features/menu/student/pages/final_exam/student_final_exam_detail.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/history/student_meeting_history_page.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/scan_qr/student_absent_page.dart';
 import 'package:e_con/src/presentations/features/menu/student/student_main_page.dart';
@@ -98,6 +99,11 @@ Route? routesHandler(RouteSettings settings) {
           seminarId: settings.arguments as int,
         ),
       );
+    case AppRoutes.studentDetailFinalExam:
+      return MaterialPageRoute(
+        builder: (_) => StudentFinalExamDetail(),
+      );
   }
+
   return null;
 }

@@ -49,8 +49,7 @@ class FinalExamHelper {
         color: color,
         message: message,
         onclick: () {
-          Navigator.pushNamed(context, AppRoutes.lecturerDetailSeminar,
-              arguments: activeTrialExam.id);
+          Navigator.pushNamed(context, AppRoutes.studentDetailFinalExam);
         },
       ));
     } else if (listSeminar.isNotEmpty) {
@@ -78,8 +77,7 @@ class FinalExamHelper {
         color: color,
         message: message,
         onclick: () {
-          Navigator.pushNamed(context, AppRoutes.lecturerDetailSeminar,
-              arguments: activeSeminar.seminarId);
+          Navigator.pushNamed(context, AppRoutes.studentDetailFinalExam);
         },
       ));
     } else {
@@ -114,8 +112,7 @@ class FinalExamHelper {
             message: titleMaker(listProposedThesis[i].title ?? ''),
             status: status,
             onclick: () {
-              Navigator.pushNamed(context, AppRoutes.lecturerDetailSeminar,
-                  arguments: listProposedThesis[i].id);
+              Navigator.pushNamed(context, AppRoutes.studentDetailFinalExam);
             },
             color: color,
           ));
