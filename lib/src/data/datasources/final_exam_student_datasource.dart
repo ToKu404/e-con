@@ -4,12 +4,14 @@ import 'package:e_con/core/helpers/auth_preference_helper.dart';
 import 'package:e_con/core/utils/exception.dart';
 import 'package:e_con/core/responses/data_response.dart';
 import 'package:e_con/core/services/api_service.dart';
+import 'package:e_con/src/data/models/final_exam/fe_proposed_thesis.dart';
 import 'package:e_con/src/data/models/final_exam/seminar_data.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decode/jwt_decode.dart';
 
 abstract class FinalExamStudentDataSource {
   Future<SeminarData?> getDetailSeminarByStudent();
+  Future<List<FeProposedThesis>> getProposedThesis();
 }
 
 class FinalExamStudentDataSourceImpl implements FinalExamStudentDataSource {
@@ -50,6 +52,39 @@ class FinalExamStudentDataSourceImpl implements FinalExamStudentDataSource {
       }
     } catch (e) {
       print(e.toString());
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<List<FeProposedThesis>> getProposedThesis() async {
+    try {
+      final credential = await authPreferenceHelper.getUser();
+      Map<String, dynamic> payload = Jwt.parseJwt(credential!.token!);
+
+      final responseData = await client.get(
+        Uri.parse(
+          '${ApiService.baseUrlFinalExam}/students/${payload['username']}/thesis',
+        ),
+        headers: {
+          "Authorization": "Bearer ${credential.token}",
+        },
+      );
+      if (responseData.statusCode == 200) {
+        Iterable dataResponse =
+            DataResponse<List<dynamic>>.fromJson(jsonDecode(responseData.body))
+                .data;
+        return List<FeProposedThesis>.from(
+          dataResponse.map(
+            (e) => FeProposedThesis.fromJson(e),
+          ),
+        );
+      } else if (responseData.statusCode == 404) {
+        throw DataNotFoundException();
+      } else {
+        throw ServerException();
+      }
+    } catch (e) {
       throw ServerException();
     }
   }

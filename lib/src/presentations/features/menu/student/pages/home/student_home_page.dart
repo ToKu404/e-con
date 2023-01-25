@@ -1,15 +1,16 @@
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
+import 'package:e_con/core/helpers/final_exam_helper.dart';
 import 'package:e_con/core/helpers/reusable_function_helper.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
+import 'package:e_con/src/data/models/final_exam/fe_proposed_thesis.dart';
 import 'package:e_con/src/data/models/final_exam/seminar_data.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/home/widgets/student_task_card.dart';
 import 'package:e_con/src/presentations/features/menu/student/providers/student_activity_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/student/providers/student_final_exam_notifier.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_empty.dart';
-import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
 import 'package:e_con/src/presentations/widgets/custom_shimmer.dart';
 import 'package:e_con/src/presentations/widgets/header_logo.dart';
 import 'package:e_con/src/presentations/widgets/placeholders/card_placeholder.dart';
@@ -30,7 +31,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
     super.initState();
     Future.microtask(() => {
           Provider.of<StudentFinalExamNotifier>(context, listen: false)
-            ..getDetailSeminarByStudent(),
+            ..getProposedThesis(),
         });
   }
 
@@ -40,9 +41,9 @@ class _StudentHomePageState extends State<StudentHomePage> {
     return CustomScrollView(
       slivers: [
         _AppBarSection(),
-        if (provider.detailSeminar != null)
+        if (provider.listProposedThesis.isNotEmpty)
           _FinalExamSection(
-            seminarData: provider.detailSeminar!,
+            proposedThesis: provider.listProposedThesis,
           ),
         _ActivitySection(),
       ],
@@ -208,71 +209,153 @@ class _ActivitySection extends StatelessWidget {
 }
 
 class _FinalExamSection extends StatelessWidget {
-  final SeminarData seminarData;
-  _FinalExamSection({required this.seminarData});
+  final List<FeProposedThesis> proposedThesis;
+  _FinalExamSection({required this.proposedThesis});
 
   @override
   Widget build(BuildContext context) {
+    FinalExamHelper.getHomeFinalExamData(
+        context: context, listProposedThesis: proposedThesis);
     return SliverToBoxAdapter(
       child: Padding(
-        padding: EdgeInsets.all(AppSize.space[4]),
+        padding: EdgeInsets.symmetric(vertical: AppSize.space[4]),
         child: Column(
           children: [
-            Row(
-              children: [
-                RichText(
-                  text: TextSpan(
-                    text: 'Informasi ',
-                    style: kTextHeme.subtitle1?.copyWith(
-                      color: Palette.onPrimary,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: AppSize.space[4]),
+              child: Row(
+                children: [
+                  RichText(
+                    text: TextSpan(
+                      text: 'Informasi ',
+                      style: kTextHeme.subtitle1?.copyWith(
+                        color: Palette.onPrimary,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: 'Tugas Akhir',
+                          style: kTextHeme.subtitle1?.copyWith(
+                            color: Palette.primary,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        )
+                      ],
                     ),
-                    children: [
-                      TextSpan(
-                        text: 'Tugas Akhir',
-                        style: kTextHeme.subtitle1?.copyWith(
-                          color: Palette.primary,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      )
-                    ],
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             AppSize.verticalSpace[3],
-            InkWell(
-              onTap: () => Navigator.pushNamed(
-                  context, AppRoutes.lecturerDetailSeminar,
-                  arguments: seminarData.seminarId),
-              child: Container(
-                padding: EdgeInsets.all(
-                  AppSize.space[3],
+            if (listFeObject.length > 1)
+              SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: AppSize.space[4]),
+                scrollDirection: Axis.vertical,
+                child: Row(
+                  children: listFeObject
+                      .map(
+                        (data) => HomeFinalExamCard(proposedThesis: data),
+                      )
+                      .toList(),
                 ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(
-                    AppSize.space[3],
-                  ),
+              )
+            else
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: AppSize.space[4]),
+                child: HomeFinalExamCard(proposedThesis: listFeObject.first),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class HomeFinalExamCard extends StatelessWidget {
+  const HomeFinalExamCard({
+    super.key,
+    required this.proposedThesis,
+  });
+
+  final FinalExamObject proposedThesis;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: proposedThesis.onclick,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Palette.white,
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 10,
+              color: Palette.onPrimary.withOpacity(
+                .34,
+              ),
+            ),
+            BoxShadow(
+              blurRadius: 3.19,
+              color: Palette.onPrimary.withOpacity(
+                .20,
+              ),
+            ),
+            BoxShadow(
+              blurRadius: 1,
+              color: Palette.onPrimary.withOpacity(
+                .13,
+              ),
+            ),
+          ],
+          borderRadius: BorderRadius.circular(
+            AppSize.space[3],
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: 7,
+              width: double.infinity,
+              decoration: BoxDecoration(
                   color: Palette.primary,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Jadwal Seminar Proposal',
-                      style: kTextHeme.subtitle1?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Palette.white,
-                      ),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(AppSize.space[3]),
+                      topRight: Radius.circular(AppSize.space[3]))),
+            ),
+            Padding(
+              padding: EdgeInsets.all(
+                AppSize.space[3],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    proposedThesis.title,
+                    style: kTextHeme.subtitle1?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Palette.onPrimary,
                     ),
-                    AppSize.verticalSpace[1],
-                    Text(
-                      'Lorem ipsum dolor sit amet consectetur. Egestas proin quis mollis libero viverra auctor. Viverra curabitur nunc lorem euismod odio sapien. Varius iaculis faucibus lorem elit sapien eget blandit purus. Morbi scelerisque consectetur leo mi diam pretium et. Id sit fusce ultrices varius dui. Est non quis nisi morbi ac. Vivamus consequat lobortis arcu volutpat. ',
-                      maxLines: 4,
-                      overflow: TextOverflow.ellipsis,
-                      style: kTextHeme.subtitle2?.copyWith(height: 1.2),
-                    )
-                  ],
-                ),
+                  ),
+                  AppSize.verticalSpace[1],
+                  Text(
+                    proposedThesis.message ?? '',
+                    maxLines: 4,
+                    overflow: TextOverflow.ellipsis,
+                    style: kTextHeme.subtitle2
+                        ?.copyWith(height: 1.2, color: Palette.onPrimary),
+                  ),
+                  AppSize.verticalSpace[4],
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(45),
+                      color: Palette.success,
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    child: Text(
+                      proposedThesis.status,
+                      style: kTextHeme.subtitle2,
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

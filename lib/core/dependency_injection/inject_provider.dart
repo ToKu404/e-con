@@ -112,6 +112,7 @@ void injectProvider(GetIt locator) {
   locator.registerFactory(
     () => StudentFinalExamNotifier(
       getDetailSeminarByStudentUsecase: locator(),
+      getProposedThesisUsecase: locator(),
     ),
   );
 }

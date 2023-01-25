@@ -1,5 +1,6 @@
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
+import 'package:e_con/core/helpers/final_exam_helper.dart';
 import 'package:e_con/core/helpers/reusable_function_helper.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
@@ -63,7 +64,7 @@ class _LecturerSeminarDetailPageState extends State<LecturerSeminarDetailPage> {
                 style: kTextHeme.headline4?.copyWith(color: Palette.onPrimary),
               ),
               Text(
-                  "\"${ReusableFuntionHelper.titleMaker(detailSeminar.finalExamData!.title!)}\""),
+                  "\"${FinalExamHelper.titleMaker(detailSeminar.finalExamData!.title!)}\""),
               SizedBox(
                 height: 8,
               ),

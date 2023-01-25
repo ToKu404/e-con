@@ -53,8 +53,6 @@ class AuthDataSourceImpl implements AuthDataSource {
         body: json.encode(map),
       );
 
-      print(responseFE.body);
-
       final responseCPL = await client.post(
         Uri.parse('${ApiService.baseUrlCPL}/login'),
         headers: {
@@ -124,6 +122,8 @@ class AuthDataSourceImpl implements AuthDataSource {
             },
           );
         }
+
+        print("Bearer ${credential.token}");
 
         if (responseData.statusCode == 200 && response.statusCode == 200) {
           // instance notif;
