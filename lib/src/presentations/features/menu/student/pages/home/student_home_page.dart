@@ -6,6 +6,7 @@ import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/data/models/final_exam/fe_proposed_thesis.dart';
+import 'package:e_con/src/data/models/final_exam/fe_seminar.dart';
 import 'package:e_con/src/data/models/final_exam/seminar_data.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/home/widgets/student_task_card.dart';
 import 'package:e_con/src/presentations/features/menu/student/providers/student_activity_notifier.dart';
@@ -32,18 +33,25 @@ class _StudentHomePageState extends State<StudentHomePage> {
     Future.microtask(() => {
           Provider.of<StudentFinalExamNotifier>(context, listen: false)
             ..getProposedThesis(),
+          Provider.of<StudentFinalExamNotifier>(context, listen: false)
+            ..getSeminars(),
         });
   }
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<StudentFinalExamNotifier>();
+    final feProvider = context.watch<StudentFinalExamNotifier>();
+    print(feProvider.listProposedThesis);
+    print(feProvider.seminarsState);
+
     return CustomScrollView(
       slivers: [
         _AppBarSection(),
-        if (provider.listProposedThesis.isNotEmpty)
+        if (feProvider.listProposedThesis.isNotEmpty &&
+            feProvider.seminarsState == RequestState.success)
           _FinalExamSection(
-            proposedThesis: provider.listProposedThesis,
+            proposedThesis: feProvider.listProposedThesis,
+            seminars: feProvider.listSeminar,
           ),
         _ActivitySection(),
       ],
@@ -210,12 +218,16 @@ class _ActivitySection extends StatelessWidget {
 
 class _FinalExamSection extends StatelessWidget {
   final List<FeProposedThesis> proposedThesis;
-  _FinalExamSection({required this.proposedThesis});
+  final List<FeSeminar> seminars;
+
+  _FinalExamSection({required this.proposedThesis, required this.seminars});
 
   @override
   Widget build(BuildContext context) {
-    FinalExamHelper.getHomeFinalExamData(
-        context: context, listProposedThesis: proposedThesis);
+    final listFeObject = FinalExamHelper.getHomeFinalExamData(
+        context: context,
+        listProposedThesis: proposedThesis,
+        listSeminar: seminars);
     return SliverToBoxAdapter(
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: AppSize.space[4]),
@@ -246,23 +258,23 @@ class _FinalExamSection extends StatelessWidget {
               ),
             ),
             AppSize.verticalSpace[3],
-            if (listFeObject.length > 1)
-              SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: AppSize.space[4]),
-                scrollDirection: Axis.vertical,
-                child: Row(
-                  children: listFeObject
-                      .map(
-                        (data) => HomeFinalExamCard(proposedThesis: data),
-                      )
-                      .toList(),
-                ),
-              )
-            else
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: AppSize.space[4]),
-                child: HomeFinalExamCard(proposedThesis: listFeObject.first),
-              ),
+            // if (listFeObject.length > 1)
+            //   SingleChildScrollView(
+            //     padding: EdgeInsets.symmetric(horizontal: AppSize.space[4]),
+            //     scrollDirection: Axis.vertical,
+            //     child: Row(
+            //       children: listFeObject
+            //           .map(
+            //             (data) => HomeFinalExamCard(proposedThesis: data),
+            //           )
+            //           .toList(),
+            //     ),
+            //   )
+            // else
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: AppSize.space[4]),
+              child: HomeFinalExamCard(proposedThesis: listFeObject.first),
+            ),
           ],
         ),
       ),
@@ -331,11 +343,10 @@ class HomeFinalExamCard extends StatelessWidget {
                   Text(
                     proposedThesis.title,
                     style: kTextHeme.subtitle1?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Palette.onPrimary,
-                    ),
+                        fontWeight: FontWeight.bold,
+                        color: Palette.onPrimary,
+                        height: 1.2),
                   ),
-                  AppSize.verticalSpace[1],
                   Text(
                     proposedThesis.message ?? '',
                     maxLines: 4,
@@ -347,7 +358,7 @@ class HomeFinalExamCard extends StatelessWidget {
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(45),
-                      color: Palette.success,
+                      color: proposedThesis.color,
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                     child: Text(

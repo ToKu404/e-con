@@ -1,19 +1,21 @@
 import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/data/models/final_exam/fe_proposed_thesis.dart';
+import 'package:e_con/src/data/models/final_exam/fe_seminar.dart';
 import 'package:e_con/src/data/models/final_exam/seminar_data.dart';
-import 'package:e_con/src/domain/usecases/final_exam_lecturer_usecases/get_detail_seminar.dart';
-import 'package:e_con/src/domain/usecases/final_exam_lecturer_usecases/get_invited_seminars.dart';
 import 'package:e_con/src/domain/usecases/final_exam_student_usecases/get_detail_seminar_by_student.dart';
 import 'package:e_con/src/domain/usecases/final_exam_student_usecases/get_proposed_thesis.dart';
+import 'package:e_con/src/domain/usecases/final_exam_student_usecases/get_seminar_detail.dart';
 import 'package:flutter/material.dart';
 
 class StudentFinalExamNotifier extends ChangeNotifier {
   final GetDetailSeminarByStudent getDetailSeminarByStudentUsecase;
   final GetProposedThesis getProposedThesisUsecase;
+  final GetSeminarDetail getSeminarsUsecase;
 
   StudentFinalExamNotifier({
     required this.getDetailSeminarByStudentUsecase,
     required this.getProposedThesisUsecase,
+    required this.getSeminarsUsecase,
   });
 
   RequestState _detailState = RequestState.init;
@@ -52,6 +54,26 @@ class StudentFinalExamNotifier extends ChangeNotifier {
     }, (r) {
       _listProposedThesis = r;
       _proposedThesisState = RequestState.success;
+    });
+    notifyListeners();
+  }
+
+  RequestState _seminarsState = RequestState.init;
+  RequestState get seminarsState => _seminarsState;
+
+  List<FeSeminar> _listSeminar = [];
+  List<FeSeminar> get listSeminar => _listSeminar;
+
+  Future<void> getSeminars() async {
+    _seminarsState = RequestState.loading;
+    notifyListeners();
+    final result = await getSeminarsUsecase.execute();
+
+    result.fold((l) {
+      _seminarsState = RequestState.error;
+    }, (r) {
+      _listSeminar = r;
+      _seminarsState = RequestState.success;
     });
     notifyListeners();
   }

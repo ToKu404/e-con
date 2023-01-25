@@ -1,14 +1,15 @@
 import 'package:e_con/src/data/models/final_exam/fe_examiner.dart';
-import 'package:e_con/src/data/models/final_exam/fe_student.dart';
 import 'package:e_con/src/data/models/final_exam/fe_supervisor.dart';
 import 'package:equatable/equatable.dart';
 
 class FeFinalExam extends Equatable {
   final int? id;
+  final String? title;
+
   final List<FeExaminer>? listExaminer;
   final List<FeSupervisor>? listSupervisor;
 
-  FeFinalExam({this.id, this.listExaminer, this.listSupervisor});
+  FeFinalExam({this.id, this.listExaminer, this.listSupervisor, this.title});
 
   factory FeFinalExam.fromJson(Map<String, dynamic> json) {
     Iterable examinerList = [];
@@ -35,9 +36,10 @@ class FeFinalExam extends Equatable {
               ),
             )
           : null,
+      title: json['taJudul'],
     );
   }
 
   @override
-  List<Object?> get props => [id, listExaminer, listSupervisor];
+  List<Object?> get props => [id, listExaminer, listSupervisor, title];
 }

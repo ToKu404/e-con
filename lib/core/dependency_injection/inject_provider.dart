@@ -113,6 +113,7 @@ void injectProvider(GetIt locator) {
     () => StudentFinalExamNotifier(
       getDetailSeminarByStudentUsecase: locator(),
       getProposedThesisUsecase: locator(),
+      getSeminarsUsecase: locator(),
     ),
   );
 }

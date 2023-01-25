@@ -1,5 +1,4 @@
 import 'package:e_con/src/data/models/final_exam/fe_final_exam.dart';
-import 'package:e_con/src/data/models/final_exam/final_exam_data.dart';
 import 'package:equatable/equatable.dart';
 
 class FeSeminar extends Equatable {

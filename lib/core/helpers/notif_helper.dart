@@ -4,7 +4,7 @@ import 'package:onesignal_flutter/onesignal_flutter.dart';
 class NotifHelper {
   Future<void> init() async {
     //Remove this method to stop OneSignal Debugging
-    await OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
+    // await OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
 
     await OneSignal.shared.setAppId(NotifService.appId);
 

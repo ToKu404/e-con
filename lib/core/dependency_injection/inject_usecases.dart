@@ -17,6 +17,7 @@ import 'package:e_con/src/domain/usecases/final_exam_lecturer_usecases/get_detai
 import 'package:e_con/src/domain/usecases/final_exam_lecturer_usecases/get_invited_seminars.dart';
 import 'package:e_con/src/domain/usecases/final_exam_student_usecases/get_detail_seminar_by_student.dart';
 import 'package:e_con/src/domain/usecases/final_exam_student_usecases/get_proposed_thesis.dart';
+import 'package:e_con/src/domain/usecases/final_exam_student_usecases/get_seminar_detail.dart';
 import 'package:e_con/src/domain/usecases/profile_usecases/get_lecture_data.dart';
 import 'package:e_con/src/domain/usecases/profile_usecases/get_profile_picture.dart';
 import 'package:e_con/src/domain/usecases/profile_usecases/get_student_data.dart';
@@ -171,6 +172,11 @@ void injectUsecases(GetIt locator) {
   );
   locator.registerLazySingleton(
     () => GetProposedThesis(
+      finalExamStudentRepository: locator(),
+    ),
+  );
+  locator.registerLazySingleton(
+    () => GetSeminarDetail(
       finalExamStudentRepository: locator(),
     ),
   );

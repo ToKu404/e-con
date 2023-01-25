@@ -5,6 +5,7 @@ import 'package:e_con/core/utils/exception.dart';
 import 'package:e_con/core/responses/data_response.dart';
 import 'package:e_con/core/services/api_service.dart';
 import 'package:e_con/src/data/models/final_exam/fe_proposed_thesis.dart';
+import 'package:e_con/src/data/models/final_exam/fe_seminar.dart';
 import 'package:e_con/src/data/models/final_exam/seminar_data.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decode/jwt_decode.dart';
@@ -12,6 +13,7 @@ import 'package:jwt_decode/jwt_decode.dart';
 abstract class FinalExamStudentDataSource {
   Future<SeminarData?> getDetailSeminarByStudent();
   Future<List<FeProposedThesis>> getProposedThesis();
+  Future<List<FeSeminar>> getSeminarDetail();
 }
 
 class FinalExamStudentDataSourceImpl implements FinalExamStudentDataSource {
@@ -56,6 +58,7 @@ class FinalExamStudentDataSourceImpl implements FinalExamStudentDataSource {
     }
   }
 
+  /// Mendapatkan data tugas akhir beserta sk pembimbing dan penguji dari mahasiswa
   @override
   Future<List<FeProposedThesis>> getProposedThesis() async {
     try {
@@ -80,11 +83,47 @@ class FinalExamStudentDataSourceImpl implements FinalExamStudentDataSource {
           ),
         );
       } else if (responseData.statusCode == 404) {
-        throw DataNotFoundException();
+        return [];
       } else {
         throw ServerException();
       }
     } catch (e) {
+      throw ServerException();
+    }
+  }
+
+  /// Mendapatkan data tugas akhir beserta sk pembimbing dan penguji dari mahasiswa
+  @override
+  Future<List<FeSeminar>> getSeminarDetail() async {
+    try {
+      final credential = await authPreferenceHelper.getUser();
+      Map<String, dynamic> payload = Jwt.parseJwt(credential!.token!);
+
+      final responseData = await client.get(
+        Uri.parse(
+          '${ApiService.baseUrlFinalExam}/students/${payload['username']}/seminars',
+        ),
+        headers: {
+          "Authorization": "Bearer ${credential.token}",
+        },
+      );
+      print(responseData.body);
+      if (responseData.statusCode == 200) {
+        Iterable dataResponse =
+            DataResponse<List<dynamic>>.fromJson(jsonDecode(responseData.body))
+                .data;
+        return List<FeSeminar>.from(
+          dataResponse.map(
+            (e) => FeSeminar.fromJson(e),
+          ),
+        );
+      } else if (responseData.statusCode == 404) {
+        return [];
+      } else {
+        throw ServerException();
+      }
+    } catch (e) {
+      print(e.toString());
       throw ServerException();
     }
   }
