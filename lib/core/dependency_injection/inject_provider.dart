@@ -114,6 +114,7 @@ void injectProvider(GetIt locator) {
       getDetailSeminarByStudentUsecase: locator(),
       getProposedThesisUsecase: locator(),
       getSeminarsUsecase: locator(),
+      getThesisTrialExamUsecase: locator(),
     ),
   );
 }

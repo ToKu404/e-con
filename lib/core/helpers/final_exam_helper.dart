@@ -1,5 +1,6 @@
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/routes/app_routes.dart';
+import 'package:e_con/src/data/models/final_exam/fe_exam.dart';
 import 'package:e_con/src/data/models/final_exam/fe_proposed_thesis.dart';
 import 'package:e_con/src/data/models/final_exam/fe_seminar.dart';
 import 'package:flutter/widgets.dart';
@@ -17,9 +18,42 @@ class FinalExamHelper {
   static List<FinalExamObject> getHomeFinalExamData(
       {required List<FeProposedThesis> listProposedThesis,
       required List<FeSeminar> listSeminar,
+      required FeExam? listTrialExam,
       required BuildContext context}) {
     final List<FinalExamObject> listFeObject = [];
-    if (listSeminar.isNotEmpty) {
+    if (listTrialExam != null) {
+      String message =
+          "\"${titleMaker(listSeminar.first.finalExamData!.title!)}\"";
+      String title = 'Ujian Sidang';
+      final activeTrialExam = listTrialExam;
+      String status = '';
+      Color color = Palette.secondary;
+      if (activeTrialExam.verificationDocStatus == 'Belum_Diproses') {
+        status = 'Menunggu Verifikasi Berkas';
+      } else if (activeTrialExam.validationDocStatus == 'Belum_Diproses') {
+        status = 'Menunggu Validasi Berkas';
+      } else if (activeTrialExam.proposalStatus == 'Belum_Diproses' ||
+          activeTrialExam.skDate == null) {
+        status = 'Menunggu Permohonan Disetujui';
+      } else if (activeTrialExam.proposalStatus == 'Diterima') {
+        if (DateTime.now().isBefore(activeTrialExam.skDate!)) {
+          status = 'Menunggu Jadwal Sidang';
+        } else {
+          status = 'Selesai';
+          color = Palette.success;
+        }
+      }
+      listFeObject.add(FinalExamObject(
+        title: title,
+        status: status,
+        color: color,
+        message: message,
+        onclick: () {
+          Navigator.pushNamed(context, AppRoutes.lecturerDetailSeminar,
+              arguments: activeTrialExam.id);
+        },
+      ));
+    } else if (listSeminar.isNotEmpty) {
       String message =
           "\"${titleMaker(listSeminar.first.finalExamData!.title!)}\"";
       String title = '';
@@ -48,10 +82,6 @@ class FinalExamHelper {
               arguments: activeSeminar.seminarId);
         },
       ));
-      print(listFeObject.first.title);
-      print(listFeObject.first.status);
-      print(listFeObject.first.color);
-      print(listFeObject.first.message);
     } else {
       // Saat kedunya masih diproses
       for (int i = 0; i < listProposedThesis.length; i++) {

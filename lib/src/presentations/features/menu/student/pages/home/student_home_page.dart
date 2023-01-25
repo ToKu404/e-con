@@ -5,6 +5,7 @@ import 'package:e_con/core/helpers/reusable_function_helper.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
+import 'package:e_con/src/data/models/final_exam/fe_exam.dart';
 import 'package:e_con/src/data/models/final_exam/fe_proposed_thesis.dart';
 import 'package:e_con/src/data/models/final_exam/fe_seminar.dart';
 import 'package:e_con/src/data/models/final_exam/seminar_data.dart';
@@ -35,23 +36,25 @@ class _StudentHomePageState extends State<StudentHomePage> {
             ..getProposedThesis(),
           Provider.of<StudentFinalExamNotifier>(context, listen: false)
             ..getSeminars(),
+          Provider.of<StudentFinalExamNotifier>(context, listen: false)
+            ..getThesisTrialExam(),
         });
   }
 
   @override
   Widget build(BuildContext context) {
     final feProvider = context.watch<StudentFinalExamNotifier>();
-    print(feProvider.listProposedThesis);
-    print(feProvider.seminarsState);
 
     return CustomScrollView(
       slivers: [
         _AppBarSection(),
         if (feProvider.listProposedThesis.isNotEmpty &&
-            feProvider.seminarsState == RequestState.success)
+            feProvider.seminarsState == RequestState.success &&
+            feProvider.trialExamState == RequestState.success)
           _FinalExamSection(
             proposedThesis: feProvider.listProposedThesis,
             seminars: feProvider.listSeminar,
+            thesisTrialExam: feProvider.thesisTrialExam,
           ),
         _ActivitySection(),
       ],
@@ -219,14 +222,19 @@ class _ActivitySection extends StatelessWidget {
 class _FinalExamSection extends StatelessWidget {
   final List<FeProposedThesis> proposedThesis;
   final List<FeSeminar> seminars;
+  final FeExam? thesisTrialExam;
 
-  _FinalExamSection({required this.proposedThesis, required this.seminars});
+  _FinalExamSection(
+      {required this.proposedThesis,
+      required this.seminars,
+      required this.thesisTrialExam});
 
   @override
   Widget build(BuildContext context) {
     final listFeObject = FinalExamHelper.getHomeFinalExamData(
         context: context,
         listProposedThesis: proposedThesis,
+        listTrialExam: thesisTrialExam,
         listSeminar: seminars);
     return SliverToBoxAdapter(
       child: Padding(
@@ -343,16 +351,16 @@ class HomeFinalExamCard extends StatelessWidget {
                   Text(
                     proposedThesis.title,
                     style: kTextHeme.subtitle1?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Palette.onPrimary,
-                        height: 1.2),
+                      fontWeight: FontWeight.bold,
+                      color: Palette.onPrimary,
+                    ),
                   ),
                   Text(
                     proposedThesis.message ?? '',
                     maxLines: 4,
                     overflow: TextOverflow.ellipsis,
-                    style: kTextHeme.subtitle2
-                        ?.copyWith(height: 1.2, color: Palette.onPrimary),
+                    style:
+                        kTextHeme.subtitle2?.copyWith(color: Palette.onPrimary),
                   ),
                   AppSize.verticalSpace[4],
                   Container(

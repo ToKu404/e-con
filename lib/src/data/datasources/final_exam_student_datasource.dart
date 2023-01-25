@@ -4,6 +4,7 @@ import 'package:e_con/core/helpers/auth_preference_helper.dart';
 import 'package:e_con/core/utils/exception.dart';
 import 'package:e_con/core/responses/data_response.dart';
 import 'package:e_con/core/services/api_service.dart';
+import 'package:e_con/src/data/models/final_exam/fe_exam.dart';
 import 'package:e_con/src/data/models/final_exam/fe_proposed_thesis.dart';
 import 'package:e_con/src/data/models/final_exam/fe_seminar.dart';
 import 'package:e_con/src/data/models/final_exam/seminar_data.dart';
@@ -14,6 +15,7 @@ abstract class FinalExamStudentDataSource {
   Future<SeminarData?> getDetailSeminarByStudent();
   Future<List<FeProposedThesis>> getProposedThesis();
   Future<List<FeSeminar>> getSeminarDetail();
+  Future<FeExam?> getThesisTrialExam();
 }
 
 class FinalExamStudentDataSourceImpl implements FinalExamStudentDataSource {
@@ -119,6 +121,41 @@ class FinalExamStudentDataSourceImpl implements FinalExamStudentDataSource {
         );
       } else if (responseData.statusCode == 404) {
         return [];
+      } else {
+        throw ServerException();
+      }
+    } catch (e) {
+      print(e.toString());
+      throw ServerException();
+    }
+  }
+
+  /// Mendapatkan data tugas akhir beserta sk pembimbing dan penguji dari mahasiswa
+
+  @override
+  Future<FeExam?> getThesisTrialExam() async {
+    try {
+      final credential = await authPreferenceHelper.getUser();
+      Map<String, dynamic> payload = Jwt.parseJwt(credential!.token!);
+
+      final responseData = await client.get(
+        Uri.parse(
+          '${ApiService.baseUrlFinalExam}/students/${payload['username']}/exams',
+        ),
+        headers: {
+          "Authorization": "Bearer ${credential.token}",
+        },
+      );
+      print(responseData.body);
+      if (responseData.statusCode == 200) {
+        final dataResponse = DataResponse<Map<String, dynamic>>.fromJson(
+                jsonDecode(responseData.body))
+            .data;
+
+        final seminarData = FeExam.fromJson(dataResponse);
+        return seminarData;
+      } else if (responseData.statusCode == 404) {
+        return null;
       } else {
         throw ServerException();
       }

@@ -1,21 +1,25 @@
 import 'package:e_con/core/utils/request_state.dart';
+import 'package:e_con/src/data/models/final_exam/fe_exam.dart';
 import 'package:e_con/src/data/models/final_exam/fe_proposed_thesis.dart';
 import 'package:e_con/src/data/models/final_exam/fe_seminar.dart';
 import 'package:e_con/src/data/models/final_exam/seminar_data.dart';
 import 'package:e_con/src/domain/usecases/final_exam_student_usecases/get_detail_seminar_by_student.dart';
 import 'package:e_con/src/domain/usecases/final_exam_student_usecases/get_proposed_thesis.dart';
 import 'package:e_con/src/domain/usecases/final_exam_student_usecases/get_seminar_detail.dart';
+import 'package:e_con/src/domain/usecases/final_exam_student_usecases/get_thesis_trial_exam.dart';
 import 'package:flutter/material.dart';
 
 class StudentFinalExamNotifier extends ChangeNotifier {
   final GetDetailSeminarByStudent getDetailSeminarByStudentUsecase;
   final GetProposedThesis getProposedThesisUsecase;
   final GetSeminarDetail getSeminarsUsecase;
+  final GetThesisTrialExam getThesisTrialExamUsecase;
 
   StudentFinalExamNotifier({
     required this.getDetailSeminarByStudentUsecase,
     required this.getProposedThesisUsecase,
     required this.getSeminarsUsecase,
+    required this.getThesisTrialExamUsecase,
   });
 
   RequestState _detailState = RequestState.init;
@@ -74,6 +78,26 @@ class StudentFinalExamNotifier extends ChangeNotifier {
     }, (r) {
       _listSeminar = r;
       _seminarsState = RequestState.success;
+    });
+    notifyListeners();
+  }
+
+  RequestState _trialExamState = RequestState.init;
+  RequestState get trialExamState => _trialExamState;
+
+  FeExam? _thesisTrialExam;
+  FeExam? get thesisTrialExam => _thesisTrialExam;
+
+  Future<void> getThesisTrialExam() async {
+    _trialExamState = RequestState.loading;
+    notifyListeners();
+    final result = await getThesisTrialExamUsecase.execute();
+
+    result.fold((l) {
+      _trialExamState = RequestState.error;
+    }, (r) {
+      _thesisTrialExam = r;
+      _trialExamState = RequestState.success;
     });
     notifyListeners();
   }
