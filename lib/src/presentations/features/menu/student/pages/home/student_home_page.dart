@@ -11,8 +11,10 @@ import 'package:e_con/src/data/models/final_exam/fe_seminar.dart';
 import 'package:e_con/src/data/models/final_exam/seminar_data.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/home/widgets/student_task_card.dart';
 import 'package:e_con/src/presentations/features/menu/student/providers/student_activity_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/student/providers/student_final_exam_helper_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/student/providers/student_final_exam_notifier.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_empty.dart';
+import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
 import 'package:e_con/src/presentations/widgets/custom_shimmer.dart';
 import 'package:e_con/src/presentations/widgets/header_logo.dart';
 import 'package:e_con/src/presentations/widgets/placeholders/card_placeholder.dart';
@@ -43,19 +45,33 @@ class _StudentHomePageState extends State<StudentHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final feProvider = context.watch<StudentFinalExamNotifier>();
-
     return CustomScrollView(
       slivers: [
         _AppBarSection(),
-        if (feProvider.listProposedThesis.isNotEmpty &&
-            feProvider.seminarsState == RequestState.success &&
-            feProvider.trialExamState == RequestState.success)
-          _FinalExamSection(
+        SliverToBoxAdapter(child: Builder(builder: (context) {
+          final feProvider = context.watch<StudentFinalExamNotifier>();
+
+          if (feProvider.proposedThesisState == RequestState.loading ||
+              feProvider.seminarsState == RequestState.loading ||
+              feProvider.trialExamState == RequestState.loading) {
+            return CustomShimmer(
+              child: Column(
+                children: [
+                  CardPlaceholder(
+                    height: 100,
+                  ),
+                  AppSize.verticalSpace[2],
+                ],
+              ),
+            );
+          }
+
+          return _FinalExamSection(
             proposedThesis: feProvider.listProposedThesis,
             seminars: feProvider.listSeminar,
             thesisTrialExam: feProvider.thesisTrialExam,
-          ),
+          );
+        })),
         _ActivitySection(),
       ],
     );
@@ -219,7 +235,7 @@ class _ActivitySection extends StatelessWidget {
   }
 }
 
-class _FinalExamSection extends StatelessWidget {
+class _FinalExamSection extends StatefulWidget {
   final List<FeProposedThesis> proposedThesis;
   final List<FeSeminar> seminars;
   final FeExam? thesisTrialExam;
@@ -230,61 +246,85 @@ class _FinalExamSection extends StatelessWidget {
       required this.thesisTrialExam});
 
   @override
+  State<_FinalExamSection> createState() => _FinalExamSectionState();
+}
+
+class _FinalExamSectionState extends State<_FinalExamSection> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() =>
+        Provider.of<StudentFinalExamHelperNotifier>(context, listen: false)
+          ..init(
+              context: context,
+              listProposedThesis: widget.proposedThesis,
+              listTrialExam: widget.thesisTrialExam,
+              listSeminar: widget.seminars));
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final listFeObject = FinalExamHelper.getHomeFinalExamData(
-        context: context,
-        listProposedThesis: proposedThesis,
-        listTrialExam: thesisTrialExam,
-        listSeminar: seminars);
-    return SliverToBoxAdapter(
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: AppSize.space[4]),
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: AppSize.space[4]),
-              child: Row(
-                children: [
-                  RichText(
-                    text: TextSpan(
-                      text: 'Informasi ',
-                      style: kTextHeme.subtitle1?.copyWith(
-                        color: Palette.onPrimary,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: 'Tugas Akhir',
-                          style: kTextHeme.subtitle1?.copyWith(
-                            color: Palette.primary,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        )
-                      ],
+    final provider = context.watch<StudentFinalExamHelperNotifier>();
+    if (provider.state == RequestState.loading ||
+        provider.homeFinalExamDta.isEmpty) {
+      return CustomShimmer(
+          child: Column(
+        children: [
+          CardPlaceholder(
+            height: 100,
+          ),
+          AppSize.verticalSpace[2],
+        ],
+      ));
+    }
+    final listFeObject = provider.homeFinalExamDta;
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: AppSize.space[4]),
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: AppSize.space[4]),
+            child: Row(
+              children: [
+                RichText(
+                  text: TextSpan(
+                    text: 'Informasi ',
+                    style: kTextHeme.subtitle1?.copyWith(
+                      color: Palette.onPrimary,
                     ),
+                    children: [
+                      TextSpan(
+                        text: 'Tugas Akhir',
+                        style: kTextHeme.subtitle1?.copyWith(
+                          color: Palette.primary,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      )
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            AppSize.verticalSpace[3],
-            // if (listFeObject.length > 1)
-            //   SingleChildScrollView(
-            //     padding: EdgeInsets.symmetric(horizontal: AppSize.space[4]),
-            //     scrollDirection: Axis.vertical,
-            //     child: Row(
-            //       children: listFeObject
-            //           .map(
-            //             (data) => HomeFinalExamCard(proposedThesis: data),
-            //           )
-            //           .toList(),
-            //     ),
-            //   )
-            // else
+          ),
+          AppSize.verticalSpace[3],
+          if (listFeObject.length > 1)
+            SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: AppSize.space[4]),
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: listFeObject
+                    .map(
+                      (data) => HomeFinalExamCard(proposedThesis: data),
+                    )
+                    .toList(),
+              ),
+            )
+          else
             Padding(
               padding: EdgeInsets.symmetric(horizontal: AppSize.space[4]),
               child: HomeFinalExamCard(proposedThesis: listFeObject.first),
             ),
-          ],
-        ),
+        ],
       ),
     );
   }
@@ -300,41 +340,42 @@ class HomeFinalExamCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: proposedThesis.onclick,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Palette.white,
-          boxShadow: [
-            BoxShadow(
-              blurRadius: 10,
-              color: Palette.onPrimary.withOpacity(
-                .34,
-              ),
+    return Container(
+      margin: EdgeInsets.only(bottom: 8, right: 8),
+      decoration: BoxDecoration(
+        color: Palette.white,
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 10,
+            color: Palette.onPrimary.withOpacity(
+              .34,
             ),
-            BoxShadow(
-              blurRadius: 3.19,
-              color: Palette.onPrimary.withOpacity(
-                .20,
-              ),
-            ),
-            BoxShadow(
-              blurRadius: 1,
-              color: Palette.onPrimary.withOpacity(
-                .13,
-              ),
-            ),
-          ],
-          borderRadius: BorderRadius.circular(
-            AppSize.space[3],
           ),
+          BoxShadow(
+            blurRadius: 3.19,
+            color: Palette.onPrimary.withOpacity(
+              .20,
+            ),
+          ),
+          BoxShadow(
+            blurRadius: 1,
+            color: Palette.onPrimary.withOpacity(
+              .13,
+            ),
+          ),
+        ],
+        borderRadius: BorderRadius.circular(
+          AppSize.space[3],
         ),
+      ),
+      child: InkWell(
+        onTap: proposedThesis.onclick,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               height: 7,
-              width: double.infinity,
+              width: AppSize.getAppWidth(context) - (AppSize.space[4] * 2),
               decoration: BoxDecoration(
                   color: Palette.primary,
                   borderRadius: BorderRadius.only(
@@ -438,7 +479,7 @@ class _ActivityBodyState extends State<ActivityBody> {
 
     if (listMeeting.isEmpty) {
       return ConstrainedBox(
-          constraints: BoxConstraints(minHeight: 490),
+          constraints: BoxConstraints(minHeight: 10),
           child: EconEmpty(emptyMessage: 'Belum ada kegiatan untuk hari ini'));
     }
 

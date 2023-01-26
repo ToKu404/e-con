@@ -64,7 +64,7 @@ class _LecturerSeminarDetailPageState extends State<LecturerSeminarDetailPage> {
                 style: kTextHeme.headline4?.copyWith(color: Palette.onPrimary),
               ),
               Text(
-                  "\"${FinalExamHelper.titleMaker(detailSeminar.finalExamData!.title!)}\""),
+                  "\"${ReusableFuntionHelper.titleMaker(detailSeminar.finalExamData!.title!)}\""),
               SizedBox(
                 height: 8,
               ),

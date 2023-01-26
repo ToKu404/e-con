@@ -2,6 +2,7 @@ import 'package:e_con/src/presentations/blocs/realtime_internet_check/realtime_i
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecturer_seminars_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecturer_today_meeting_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/student/providers/student_activity_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/student/providers/student_final_exam_helper_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/student/providers/student_final_exam_notifier.dart';
 import 'package:get_it/get_it.dart';
 import 'package:e_con/src/presentations/features/login/provider/auth_notifier.dart';
@@ -111,10 +112,14 @@ void injectProvider(GetIt locator) {
   );
   locator.registerFactory(
     () => StudentFinalExamNotifier(
-      getDetailSeminarByStudentUsecase: locator(),
+      // getDetailSeminarByStudentUsecase: locator(),
       getProposedThesisUsecase: locator(),
       getSeminarsUsecase: locator(),
       getThesisTrialExamUsecase: locator(),
+    ),
+  );
+  locator.registerFactory(
+    () => StudentFinalExamHelperNotifier(
     ),
   );
 }

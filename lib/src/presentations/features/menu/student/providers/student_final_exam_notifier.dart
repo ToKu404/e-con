@@ -10,37 +10,37 @@ import 'package:e_con/src/domain/usecases/final_exam_student_usecases/get_thesis
 import 'package:flutter/material.dart';
 
 class StudentFinalExamNotifier extends ChangeNotifier {
-  final GetDetailSeminarByStudent getDetailSeminarByStudentUsecase;
+  // final GetDetailSeminarByStudent getDetailSeminarByStudentUsecase;
   final GetProposedThesis getProposedThesisUsecase;
   final GetSeminarDetail getSeminarsUsecase;
   final GetThesisTrialExam getThesisTrialExamUsecase;
 
   StudentFinalExamNotifier({
-    required this.getDetailSeminarByStudentUsecase,
+    // required this.getDetailSeminarByStudentUsecase,
     required this.getProposedThesisUsecase,
     required this.getSeminarsUsecase,
     required this.getThesisTrialExamUsecase,
   });
 
-  RequestState _detailState = RequestState.init;
-  RequestState get detailState => _detailState;
+  // RequestState _detailState = RequestState.init;
+  // RequestState get detailState => _detailState;
 
-  SeminarData? _detailSeminar;
-  SeminarData? get detailSeminar => _detailSeminar;
+  // SeminarData? _detailSeminar;
+  // SeminarData? get detailSeminar => _detailSeminar;
 
-  Future<void> getDetailSeminarByStudent() async {
-    _detailState = RequestState.loading;
-    notifyListeners();
-    final result = await getDetailSeminarByStudentUsecase.execute();
+  // Future<void> getDetailSeminarByStudent() async {
+  //   _detailState = RequestState.loading;
+  //   notifyListeners();
+  //   final result = await getDetailSeminarByStudentUsecase.execute();
 
-    result.fold((l) {
-      _detailState = RequestState.error;
-    }, (r) {
-      _detailSeminar = r;
-      _detailState = RequestState.success;
-    });
-    notifyListeners();
-  }
+  //   result.fold((l) {
+  //     _detailState = RequestState.error;
+  //   }, (r) {
+  //     _detailSeminar = r;
+  //     _detailState = RequestState.success;
+  //   });
+  //   notifyListeners();
+  // }
 
   RequestState _proposedThesisState = RequestState.init;
   RequestState get proposedThesisState => _proposedThesisState;
