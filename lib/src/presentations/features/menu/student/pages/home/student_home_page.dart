@@ -57,8 +57,9 @@ class _StudentHomePageState extends State<StudentHomePage> {
             return CustomShimmer(
               child: Column(
                 children: [
+                  AppSize.verticalSpace[2],
                   CardPlaceholder(
-                    height: 100,
+                    height: 120,
                   ),
                   AppSize.verticalSpace[2],
                 ],

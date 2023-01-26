@@ -123,14 +123,14 @@ import 'package:flutter/widgets.dart';
 //     return listFeObject;
 //   }
 
-  // static FeProposedThesis? getAcceptedThesis(
-  //     {required List<FeProposedThesis> listProposedThesis}) {
-  //   for (var element in listProposedThesis) {
-  //     if (element.proposalStatus == 'Diterima') {
-  //       return element;
-  //     }
-  //   }
-  // }
+// static FeProposedThesis? getAcceptedThesis(
+//     {required List<FeProposedThesis> listProposedThesis}) {
+//   for (var element in listProposedThesis) {
+//     if (element.proposalStatus == 'Diterima') {
+//       return element;
+//     }
+//   }
+// }
 // }
 
 class FinalExamObject {
@@ -155,6 +155,7 @@ final Map<String, String> seminarType = {
 };
 
 Map<String, String> feStatus = {
+  'Belum_Diproses': 'Belum Diproses',
   'Sedang_Diproses': 'Sedang Diproses',
   'Diterima': 'Diterima',
   'Ditolak': 'Ditolak',

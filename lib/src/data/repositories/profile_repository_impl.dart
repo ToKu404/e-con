@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:e_con/core/utils/exception.dart';
 import 'package:e_con/src/data/datasources/profile_datasource.dart';
 import 'package:e_con/src/data/models/profile/lecture_data.dart';
+import 'package:e_con/src/data/models/profile/notification.dart';
 import 'package:e_con/src/data/models/profile/student_data.dart';
 import 'package:e_con/core/utils/failure.dart';
 import 'package:dartz/dartz.dart';
@@ -45,6 +46,16 @@ class ProfileRepositoryImpl implements ProfileRepository {
   Future<Either<Failure, Uint8List?>> getProfilePicture() async {
     try {
       final result = await profileDataSource.getUserProfilePicture();
+      return Right(result);
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<NotificationModel>>> getNotification() async {
+    try {
+      final result = await profileDataSource.getNotification();
       return Right(result);
     } catch (e) {
       return Left(ServerFailure(e.toString()));

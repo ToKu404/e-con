@@ -6,6 +6,7 @@ import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/data/models/final_exam/helpers/seminar_type.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecturer_seminars_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/student/pages/final_exam/student_final_exam_detail.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -72,197 +73,144 @@ class _LecturerSeminarDetailPageState extends State<LecturerSeminarDetailPage> {
               SizedBox(
                 height: 8,
               ),
-              Container(
-                width: AppSize.getAppWidth(context),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: Palette.white,
-                    border: Border.all(width: 1, color: Palette.field)),
-                padding: EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Mahasiswa',
-                      style: kTextHeme.headline5?.copyWith(
-                          fontWeight: FontWeight.normal,
-                          color: Palette.onPrimary),
-                    ),
-                    Divider(),
-                    Text(
-                      'Nama',
-                      style: kTextHeme.subtitle1?.copyWith(
-                          color: Palette.disable,
-                          fontWeight: FontWeight.normal),
-                    ),
-                    Text(
-                      detailSeminar.finalExamData!.student!.name!,
-                      style: kTextHeme.subtitle1,
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Text(
-                      'NIM',
-                      style: kTextHeme.subtitle1?.copyWith(
-                          color: Palette.disable,
-                          fontWeight: FontWeight.normal),
-                    ),
-                    Text(
-                      detailSeminar.finalExamData!.student!.nim!,
-                      style: kTextHeme.subtitle1,
-                    ),
-                  ],
-                ),
+              BuildFeCard(
+                child: [
+                  Text(
+                    'Mahasiswa',
+                    style: kTextHeme.headline5?.copyWith(
+                        fontWeight: FontWeight.normal,
+                        color: Palette.onPrimary),
+                  ),
+                  Divider(),
+                  Text(
+                    'Nama',
+                    style: kTextHeme.subtitle1?.copyWith(
+                        color: Palette.disable, fontWeight: FontWeight.normal),
+                  ),
+                  Text(
+                    detailSeminar.finalExamData!.student!.name!,
+                    style: kTextHeme.subtitle1,
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Text(
+                    'NIM',
+                    style: kTextHeme.subtitle1?.copyWith(
+                        color: Palette.disable, fontWeight: FontWeight.normal),
+                  ),
+                  Text(
+                    detailSeminar.finalExamData!.student!.nim!,
+                    style: kTextHeme.subtitle1,
+                  ),
+                ],
               ),
               SizedBox(
                 height: 12,
               ),
-              Container(
-                width: AppSize.getAppWidth(context),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: Palette.white,
-                    border: Border.all(width: 1, color: Palette.field)),
-                padding: EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Tim Pembimbing',
-                      style: kTextHeme.headline5?.copyWith(
-                          fontWeight: FontWeight.normal,
-                          color: Palette.onPrimary),
-                    ),
-                    Divider(),
-                    for (int i = 0;
-                        i < detailSeminar.finalExamData!.listSupervisor!.length;
-                        i++) ...[
-                      Text(
-                        'Pembimbing ${detailSeminar.finalExamData!.listSupervisor![i].supervisorPosition}',
-                        style: kTextHeme.subtitle1?.copyWith(
-                            color: Palette.disable,
-                            fontWeight: FontWeight.normal),
-                      ),
-                      Text(
-                        detailSeminar
-                            .finalExamData!.listSupervisor![i].lecturer!.name!,
-                        style: kTextHeme.subtitle1,
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                    ]
-                  ],
+              BuildFeCard(child: [
+                Text(
+                  'Tim Pembimbing',
+                  style: kTextHeme.headline5?.copyWith(
+                      fontWeight: FontWeight.normal, color: Palette.onPrimary),
                 ),
-              ),
+                Divider(),
+                for (int i = 0;
+                    i < detailSeminar.finalExamData!.listSupervisor!.length;
+                    i++) ...[
+                  Text(
+                    'Pembimbing ${detailSeminar.finalExamData!.listSupervisor![i].supervisorPosition}',
+                    style: kTextHeme.subtitle1?.copyWith(
+                        color: Palette.disable, fontWeight: FontWeight.normal),
+                  ),
+                  Text(
+                    detailSeminar
+                        .finalExamData!.listSupervisor![i].lecturer!.name!,
+                    style: kTextHeme.subtitle1,
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                ]
+              ]),
               SizedBox(
                 height: 12,
               ),
-              Container(
-                width: AppSize.getAppWidth(context),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: Palette.white,
-                    border: Border.all(width: 1, color: Palette.field)),
-                padding: EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Tim Penguji',
-                      style: kTextHeme.headline5?.copyWith(
-                          fontWeight: FontWeight.normal,
-                          color: Palette.onPrimary),
-                    ),
-                    Divider(),
-                    for (int i = 0;
-                        i < detailSeminar.finalExamData!.listExaminer!.length;
-                        i++) ...[
-                      Text(
-                        'Penguji ${detailSeminar.finalExamData!.listExaminer![i].order}',
-                        style: kTextHeme.subtitle1?.copyWith(
-                            color: Palette.disable,
-                            fontWeight: FontWeight.normal),
-                      ),
-                      Text(
-                        detailSeminar
-                            .finalExamData!.listExaminer![i].lecturer!.name!,
-                        style: kTextHeme.subtitle1,
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                    ]
-                  ],
+              BuildFeCard(child: [
+                Text(
+                  'Tim Penguji',
+                  style: kTextHeme.headline5?.copyWith(
+                      fontWeight: FontWeight.normal, color: Palette.onPrimary),
                 ),
-              ),
+                Divider(),
+                for (int i = 0;
+                    i < detailSeminar.finalExamData!.listExaminer!.length;
+                    i++) ...[
+                  Text(
+                    'Penguji ${detailSeminar.finalExamData!.listExaminer![i].order}',
+                    style: kTextHeme.subtitle1?.copyWith(
+                        color: Palette.disable, fontWeight: FontWeight.normal),
+                  ),
+                  Text(
+                    detailSeminar
+                        .finalExamData!.listExaminer![i].lecturer!.name!,
+                    style: kTextHeme.subtitle1,
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                ]
+              ]),
               SizedBox(
                 height: 12,
               ),
-              Container(
-                width: AppSize.getAppWidth(context),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: Palette.white,
-                    border: Border.all(width: 1, color: Palette.field)),
-                padding: EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Jadwal',
-                      style: kTextHeme.headline5?.copyWith(
-                          fontWeight: FontWeight.normal,
-                          color: Palette.onPrimary),
-                    ),
-                    Divider(),
-                    Text(
-                      'Hari, Tanggal',
-                      style: kTextHeme.subtitle1?.copyWith(
-                          color: Palette.disable,
-                          fontWeight: FontWeight.normal),
-                    ),
-                    Text(
-                      ReusableFuntionHelper.datetimeToString(
-                          detailSeminar.date!),
-                      style: kTextHeme.subtitle1,
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Text(
-                      'Pukul',
-                      style: kTextHeme.subtitle1?.copyWith(
-                          color: Palette.disable,
-                          fontWeight: FontWeight.normal),
-                    ),
-                    Text(
-                      '${detailSeminar.startTime}-${detailSeminar.endTime} WITA',
-                      style: kTextHeme.subtitle1,
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Text(
-                      'Tempat',
-                      style: kTextHeme.subtitle1?.copyWith(
-                          color: Palette.disable,
-                          fontWeight: FontWeight.normal),
-                    ),
-                    if (detailSeminar.place != null)
-                      Text(
-                        'Offline : ${detailSeminar.place}',
-                        style: kTextHeme.subtitle1,
-                      ),
-                    if (detailSeminar.link != null)
-                      Text(
-                        'Online : ${detailSeminar.link!.split(':')[1].trim()}',
-                        style: kTextHeme.subtitle1,
-                      ),
-                  ],
+              BuildFeCard(child: [
+                Text(
+                  'Jadwal',
+                  style: kTextHeme.headline5?.copyWith(
+                      fontWeight: FontWeight.normal, color: Palette.onPrimary),
                 ),
-              ),
+                Divider(),
+                Text(
+                  'Hari, Tanggal',
+                  style: kTextHeme.subtitle1?.copyWith(
+                      color: Palette.disable, fontWeight: FontWeight.normal),
+                ),
+                Text(
+                  ReusableFuntionHelper.datetimeToString(detailSeminar.date!),
+                  style: kTextHeme.subtitle1,
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                Text(
+                  'Pukul',
+                  style: kTextHeme.subtitle1?.copyWith(
+                      color: Palette.disable, fontWeight: FontWeight.normal),
+                ),
+                Text(
+                  '${detailSeminar.startTime}-${detailSeminar.endTime} WITA',
+                  style: kTextHeme.subtitle1,
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                Text(
+                  'Tempat',
+                  style: kTextHeme.subtitle1?.copyWith(
+                      color: Palette.disable, fontWeight: FontWeight.normal),
+                ),
+                if (detailSeminar.place != null)
+                  Text(
+                    'Offline : ${detailSeminar.place}',
+                    style: kTextHeme.subtitle1,
+                  ),
+                if (detailSeminar.link != null)
+                  Text(
+                    'Online : ${detailSeminar.link!.split(':')[1].trim()}',
+                    style: kTextHeme.subtitle1,
+                  ),
+              ])
             ],
           ),
         ),

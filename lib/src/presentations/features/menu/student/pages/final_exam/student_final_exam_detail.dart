@@ -1,5 +1,6 @@
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
+import 'package:e_con/core/helpers/final_exam_helper.dart';
 import 'package:e_con/core/helpers/reusable_function_helper.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
@@ -297,17 +298,19 @@ class __BuildBodyState extends State<_BuildBody> {
                                   color: Palette.primaryVariant),
                             ),
                             Divider(),
-                            Text(
-                              'Hari, Tanggal',
-                              style: kTextHeme.subtitle1?.copyWith(
-                                  color: Palette.disable,
-                                  fontWeight: FontWeight.normal),
-                            ),
-                            Text(
-                              ReusableFuntionHelper.datetimeToString(
-                                  DateTime.now()),
-                              style: kTextHeme.subtitle1,
-                            ),
+                            if (resultSeminar.date != null) ...[
+                              Text(
+                                'Hari, Tanggal',
+                                style: kTextHeme.subtitle1?.copyWith(
+                                    color: Palette.disable,
+                                    fontWeight: FontWeight.normal),
+                              ),
+                              Text(
+                                ReusableFuntionHelper.datetimeToString(
+                                    resultSeminar.date!),
+                                style: kTextHeme.subtitle1,
+                              ),
+                            ],
                             SizedBox(
                               height: 8,
                             ),
@@ -318,7 +321,7 @@ class __BuildBodyState extends State<_BuildBody> {
                                   fontWeight: FontWeight.normal),
                             ),
                             Text(
-                              '10.00 - 12.00 WITA',
+                              '${resultSeminar.startTime}-${resultSeminar.endTime} WITA',
                               style: kTextHeme.subtitle1,
                             ),
                             SizedBox(
@@ -330,16 +333,16 @@ class __BuildBodyState extends State<_BuildBody> {
                                   color: Palette.disable,
                                   fontWeight: FontWeight.normal),
                             ),
-                            // if (detailSeminar.place != null)
-                            Text(
-                              'Offline : Aula',
-                              style: kTextHeme.subtitle1,
-                            ),
-                            // if (detailSeminar.link != null)
-                            Text(
-                              'Online : zoom.com',
-                              style: kTextHeme.subtitle1,
-                            ),
+                            if (resultSeminar.place != null)
+                              Text(
+                                'Offline : ${resultSeminar.place}',
+                                style: kTextHeme.subtitle1,
+                              ),
+                            if (resultSeminar.link != null)
+                              Text(
+                                'Online : ${resultSeminar.link!.split(':')[1].trim()}',
+                                style: kTextHeme.subtitle1,
+                              ),
                           ],
                         ),
                       if (finalExam != null)
@@ -352,17 +355,19 @@ class __BuildBodyState extends State<_BuildBody> {
                                   color: Palette.primaryVariant),
                             ),
                             Divider(),
-                            Text(
-                              'Hari, Tanggal',
-                              style: kTextHeme.subtitle1?.copyWith(
-                                  color: Palette.disable,
-                                  fontWeight: FontWeight.normal),
-                            ),
-                            Text(
-                              ReusableFuntionHelper.datetimeToString(
-                                  DateTime.now()),
-                              style: kTextHeme.subtitle1,
-                            ),
+                            if (finalExam.date != null) ...[
+                              Text(
+                                'Hari, Tanggal',
+                                style: kTextHeme.subtitle1?.copyWith(
+                                    color: Palette.disable,
+                                    fontWeight: FontWeight.normal),
+                              ),
+                              Text(
+                                ReusableFuntionHelper.datetimeToString(
+                                    finalExam.date!),
+                                style: kTextHeme.subtitle1,
+                              ),
+                            ],
                             SizedBox(
                               height: 8,
                             ),
@@ -373,7 +378,7 @@ class __BuildBodyState extends State<_BuildBody> {
                                   fontWeight: FontWeight.normal),
                             ),
                             Text(
-                              '10.00 - 12.00 WITA',
+                              '${finalExam.startTime}-${finalExam.endTime} WITA',
                               style: kTextHeme.subtitle1,
                             ),
                             SizedBox(
@@ -385,16 +390,16 @@ class __BuildBodyState extends State<_BuildBody> {
                                   color: Palette.disable,
                                   fontWeight: FontWeight.normal),
                             ),
-                            // if (detailSeminar.place != null)
-                            Text(
-                              'Offline : Aula',
-                              style: kTextHeme.subtitle1,
-                            ),
-                            // if (detailSeminar.link != null)
-                            Text(
-                              'Online : zoom.com',
-                              style: kTextHeme.subtitle1,
-                            ),
+                            if (finalExam.place != null)
+                              Text(
+                                'Offline : ${finalExam.place}',
+                                style: kTextHeme.subtitle1,
+                              ),
+                            if (finalExam.link != null)
+                              Text(
+                                'Online : ${finalExam.link!.split(':')[1].trim()}',
+                                style: kTextHeme.subtitle1,
+                              ),
                           ],
                         ),
                     ],
@@ -406,7 +411,62 @@ class __BuildBodyState extends State<_BuildBody> {
                       'Ujian Sidang',
                     ),
                     initiallyExpanded: false,
-                    children: [],
+                    children: [
+                      BuildFeCard(child: [
+                        Text(
+                          'Status Permohonan',
+                          style: kTextHeme.subtitle1?.copyWith(
+                              color: Palette.disable,
+                              fontWeight: FontWeight.normal),
+                        ),
+                        Text(
+                          feStatus[trialExam.proposalStatus!] ?? '-',
+                          style: kTextHeme.subtitle1,
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Text(
+                          'Status Validasi Berkas',
+                          style: kTextHeme.subtitle1?.copyWith(
+                              color: Palette.disable,
+                              fontWeight: FontWeight.normal),
+                        ),
+                        Text(
+                          feStatus[trialExam.validationDocStatus!] ?? '-',
+                          style: kTextHeme.subtitle1,
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Text(
+                          'Status Verifikasi Berkas',
+                          style: kTextHeme.subtitle1?.copyWith(
+                              color: Palette.disable,
+                              fontWeight: FontWeight.normal),
+                        ),
+                        Text(
+                          feStatus[trialExam.verificationDocStatus!] ?? '-',
+                          style: kTextHeme.subtitle1,
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        if (trialExam.skDate != null) ...[
+                          Text(
+                            'Tanggal SK',
+                            style: kTextHeme.subtitle1?.copyWith(
+                                color: Palette.disable,
+                                fontWeight: FontWeight.normal),
+                          ),
+                          Text(
+                            ReusableFuntionHelper.datetimeToString(
+                                trialExam.skDate!),
+                            style: kTextHeme.subtitle1,
+                          ),
+                        ],
+                      ])
+                    ],
                   ),
               ],
             ),

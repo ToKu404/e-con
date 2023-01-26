@@ -4,16 +4,19 @@ import 'package:e_con/core/helpers/auth_preference_helper.dart';
 import 'package:e_con/core/utils/exception.dart';
 import 'package:e_con/core/responses/data_response.dart';
 import 'package:e_con/core/services/api_service.dart';
+import 'package:e_con/src/data/models/profile/notification.dart';
 import 'package:e_con/src/data/models/profile/lecture_data.dart';
 import 'package:e_con/src/data/models/profile/student_data.dart';
 import 'package:e_con/src/data/models/profile/student_home.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:jwt_decode/jwt_decode.dart';
 
 abstract class ProfileDataSource {
   Future<StudentData> singleStudentProfile();
   Future<LectureData> singleLecturerProfile();
   Future<Uint8List?> getUserProfilePicture();
+  Future<List<NotificationModel>> getNotification();
 }
 
 class ProfileDataSourceImpl implements ProfileDataSource {
@@ -112,5 +115,42 @@ class ProfileDataSourceImpl implements ProfileDataSource {
       ServerException();
     }
     return null;
+  }
+
+  /// Notif
+
+  @override
+  Future<List<NotificationModel>> getNotification() async {
+    try {
+      final credential = await authPreferenceHelper.getUser();
+      Map<String, dynamic> payload = Jwt.parseJwt(credential!.token!);
+
+      final responseData = await client.get(
+        Uri.parse(
+          '${ApiService.baseUrlFinalExam}/notifications',
+        ),
+        headers: {
+          "Authorization": "Bearer ${credential.token}",
+        },
+      );
+      print(responseData.body);
+      if (responseData.statusCode == 200) {
+        Iterable dataResponse =
+            DataResponse<List<dynamic>>.fromJson(jsonDecode(responseData.body))
+                .data;
+        return List<NotificationModel>.from(
+          dataResponse.map(
+            (e) => NotificationModel.fromJson(e),
+          ),
+        );
+      } else if (responseData.statusCode == 404) {
+        return [];
+      } else {
+        throw ServerException();
+      }
+    } catch (e) {
+      print(e.toString());
+      throw ServerException();
+    }
   }
 }

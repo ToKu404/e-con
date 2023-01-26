@@ -1,7 +1,18 @@
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
+import 'package:e_con/core/helpers/reusable_function_helper.dart';
+import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
+import 'package:e_con/core/utils/request_state.dart';
+import 'package:e_con/src/data/models/profile/notification.dart';
+import 'package:e_con/src/presentations/features/menu/providers/user_notif_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/student/pages/final_exam/student_final_exam_detail.dart';
+import 'package:e_con/src/presentations/reusable_pages/econ_empty.dart';
+import 'package:e_con/src/presentations/widgets/custom_shimmer.dart';
+import 'package:e_con/src/presentations/widgets/default_appbar.dart';
+import 'package:e_con/src/presentations/widgets/placeholders/card_placeholder.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class StudentNotifPage extends StatelessWidget {
   const StudentNotifPage({super.key});
@@ -20,139 +31,157 @@ class StudentNotifPage extends StatelessWidget {
             ),
           ],
         ),
-        _AppBarSection()
+        DefaultAppBar(
+          title: 'Notifikasi',
+        ),
       ],
     );
   }
 }
 
-class _AppBarSection extends StatelessWidget {
-  const _AppBarSection();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 60,
-      padding: EdgeInsets.symmetric(horizontal: AppSize.space[4]),
-      width: AppSize.getAppWidth(context),
-      decoration: BoxDecoration(color: Colors.white, boxShadow: [
-        BoxShadow(
-          color: Colors.black.withOpacity(.15),
-          offset: const Offset(1, 2),
-          blurRadius: 1,
-        ),
-      ]),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                'Notifikasi',
-                style: kTextHeme.headline5?.copyWith(
-                  color: Palette.primary,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              AppSize.horizontalSpace[0],
-              Container(
-                width: 20,
-                height: 20,
-                margin: EdgeInsets.only(left: AppSize.space[1]),
-                padding: EdgeInsets.all(AppSize.space[0]),
-                decoration: BoxDecoration(
-                  color: Palette.primary,
-                  borderRadius: BorderRadius.circular(AppSize.space[0]),
-                ),
-                child: Center(
-                  child: Text(
-                    '2',
-                    style: kTextHeme.overline?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _BodySection extends StatelessWidget {
+class _BodySection extends StatefulWidget {
   const _BodySection();
 
   @override
+  State<_BodySection> createState() => _BodySectionState();
+}
+
+class _BodySectionState extends State<_BodySection> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.microtask(() =>
+        Provider.of<UserNotifNotifier>(context, listen: false)
+          ..fetchNotifications());
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final provider = context.watch<UserNotifNotifier>();
+    if (provider.state == RequestState.loading) {
+      return CustomShimmer(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 12,
+            ),
+            CardPlaceholder(
+              height: 80,
+            ),
+            AppSize.verticalSpace[3],
+            CardPlaceholder(
+              height: 100,
+            ),
+            AppSize.verticalSpace[3],
+            CardPlaceholder(
+              height: 100,
+            ),
+            AppSize.verticalSpace[3],
+            CardPlaceholder(
+              height: 100,
+            ),
+            AppSize.verticalSpace[3],
+            CardPlaceholder(
+              height: 100,
+            ),
+            AppSize.verticalSpace[3],
+          ],
+        ),
+      );
+    }
+    if (provider.listNotif.isEmpty) {
+      return EconEmpty(emptyMessage: 'Belum ada notifikasi');
+    }
     return ListView.builder(
-      itemCount: 10,
+      itemCount: provider.listNotif.length,
       itemBuilder: (context, index) {
-        return _StudentNotifCard();
+        return _StudentNotifCard(
+          notif: provider.listNotif[index],
+        );
       },
     );
   }
 }
 
 class _StudentNotifCard extends StatelessWidget {
+  final NotificationModel notif;
   const _StudentNotifCard({
+    required this.notif,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: AppSize.getAppWidth(context),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        border: Border(
-          bottom: BorderSide(
-            color: Palette.background,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: InkWell(
+        onTap: () =>
+            Navigator.pushNamed(context, AppRoutes.studentDetailFinalExam),
+        child: Container(
+          width: AppSize.getAppWidth(context),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            border: Border(
+              bottom: BorderSide(
+                color: Palette.background,
+              ),
+            ),
           ),
-        ),
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(
-          AppSize.space[3],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                'Hari Ini',
-                style: kTextHeme.overline?.copyWith(
-                  color: Palette.onPrimary,
-                  height: 1,
+          child: Padding(
+            padding: EdgeInsets.all(
+              AppSize.space[3],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'SIFA',
+                      overflow: TextOverflow.ellipsis,
+                      style: kTextHeme.subtitle2?.copyWith(
+                        color: Palette.primary,
+                      ),
+                    ),
+                    if (notif.createdAt != null)
+                      Text(
+                        ReusableFuntionHelper.datetimeToString(notif.createdAt!,
+                            format: notif.createdAt!.day == DateTime.now().day
+                                ? 'HH:mm dd MMM'
+                                : 'dd MMM'),
+                        style: kTextHeme.overline?.copyWith(
+                          color: Palette.onPrimary,
+                          height: 1,
+                        ),
+                      ),
+                  ],
                 ),
-              ),
+                SizedBox(
+                  height: 4,
+                ),
+                Text(
+                  notif.message ?? '',
+                  style: kTextHeme.subtitle1?.copyWith(
+                      color: Palette.onPrimary,
+                      fontWeight: FontWeight.w500,
+                      height: 1),
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Text(
+                  'Update Tugas Akhir',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: kTextHeme.subtitle2?.copyWith(
+                    color: Palette.disable,
+                  ),
+                ),
+              ],
             ),
-            Text(
-              'Lorem',
-              style: kTextHeme.subtitle2?.copyWith(
-                color: Palette.disable,
-                height: 1.2,
-              ),
-            ),
-            Text(
-              'Lorem Ipsum',
-              style: kTextHeme.subtitle1?.copyWith(
-                color: Palette.primary,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              'Lorem 23',
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: kTextHeme.subtitle2?.copyWith(
-                color: Palette.disable,
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

@@ -26,6 +26,7 @@ import 'src/presentations/features/menu/lecturer/providers/lecturer_seminars_not
 import 'src/presentations/features/menu/lecturer/providers/lecturer_today_meeting_notifier.dart';
 import 'src/presentations/features/menu/providers/profile_picture_notifier.dart';
 import 'src/presentations/blocs/onetime_internet_check/onetime_internet_check_cubit.dart';
+import 'src/presentations/features/menu/providers/user_notif_notifier.dart';
 import 'src/presentations/features/menu/student/providers/student_activity_notifier.dart';
 
 class EconApp extends StatelessWidget {
@@ -101,6 +102,9 @@ class EconApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => di.locator<StudentFinalExamHelperNotifier>(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => di.locator<UserNotifNotifier>(),
         ),
       ],
       child: MaterialApp(

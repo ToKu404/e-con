@@ -113,7 +113,7 @@ class _LecturerNotifSeminarPageState extends State<LecturerNotifSeminarPage> {
           ],
         ),
         DefaultAppBar(
-          title: 'Notifikasi Seminar',
+          title: 'Jadwal Seminar',
         ),
       ],
     );
