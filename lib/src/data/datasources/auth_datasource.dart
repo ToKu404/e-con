@@ -71,6 +71,9 @@ class AuthDataSourceImpl implements AuthDataSource {
           dataResponse,
           cookie ?? '',
         );
+        if (userCredential.role == null) {
+          throw UnauthenticateException();
+        }
         authPreferenceHelper.setUserData(userCredential);
         return userCredential;
       } else if (responseFE.statusCode == 401 &&
