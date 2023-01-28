@@ -43,7 +43,7 @@ class _LecturerEditMeetingPageState extends State<LecturerEditMeetingPage> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       topicController.text = topic;
       meetingDate = date;
-      dateController.text = ReusableFuntionHelper.datetimeToString(date);
+      dateController.text = ReusableFunctionHelper.datetimeToString(date);
     });
   }
 

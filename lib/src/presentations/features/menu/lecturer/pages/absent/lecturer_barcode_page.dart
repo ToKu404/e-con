@@ -168,7 +168,7 @@ class _LecturerBarcodePageState extends State<LecturerBarcodePage> {
                             ),
                           ),
                           Text(
-                            ReusableFuntionHelper.datetimeToString(
+                            ReusableFunctionHelper.datetimeToString(
                                 meetingData.validationCodeExpiredDate!,
                                 format: 'HH:mm dd-MM-yyyy'),
                             style: kTextHeme.subtitle1?.copyWith(

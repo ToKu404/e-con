@@ -38,7 +38,7 @@ class _LecturerGenBarcodePageState extends State<LecturerGenBarcodePage> {
     isEdit = widget.args['isEdit'];
 
     if (isEdit) {
-      dateController.text = ReusableFuntionHelper.datetimeToString(
+      dateController.text = ReusableFunctionHelper.datetimeToString(
           meetingData.validationCodeExpiredDate!,
           isShowTime: true);
       dateTime = meetingData.validationCodeExpiredDate!;
@@ -110,7 +110,7 @@ class _LecturerGenBarcodePageState extends State<LecturerGenBarcodePage> {
                         ),
                         AppSize.verticalSpace[1],
                         _buildAbsentTile(
-                          title: ReusableFuntionHelper.datetimeToString(
+                          title: ReusableFunctionHelper.datetimeToString(
                               meetingData.date!),
                           iconPath: AssetPath.iconDate,
                         ),

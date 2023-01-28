@@ -218,7 +218,7 @@ class _AttendanceDetailSectionState extends State<AttendanceDetailSection> {
                     ),
                     AppSize.verticalSpace[1],
                     _buildAbsentTile(
-                      title: ReusableFuntionHelper.datetimeToString(
+                      title: ReusableFunctionHelper.datetimeToString(
                           qrResult.meetingData.date!),
                       iconPath: AssetPath.iconDate,
                     ),

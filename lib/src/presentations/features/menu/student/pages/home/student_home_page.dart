@@ -119,10 +119,10 @@ class _ActivitySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final listWeekly = ReusableFuntionHelper.getWeeklyActivityData();
+    final listWeekly = ReusableFunctionHelper.getWeeklyActivityData();
 
     final ValueNotifier<WeeklyActivity> selectWeekly =
-        ValueNotifier(ReusableFuntionHelper.getTodayActivityData());
+        ValueNotifier(ReusableFunctionHelper.getTodayActivityData());
     final ValueNotifier<bool?> isRightSwap = ValueNotifier(null);
 
     return ValueListenableBuilder(

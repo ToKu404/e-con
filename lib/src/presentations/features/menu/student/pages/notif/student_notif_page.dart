@@ -147,7 +147,8 @@ class _StudentNotifCard extends StatelessWidget {
                     ),
                     if (notif.createdAt != null)
                       Text(
-                        ReusableFuntionHelper.datetimeToString(notif.createdAt!,
+                        ReusableFunctionHelper.datetimeToString(
+                            notif.createdAt!,
                             format: notif.createdAt!.day == DateTime.now().day
                                 ? 'HH:mm dd MMM'
                                 : 'dd MMM'),

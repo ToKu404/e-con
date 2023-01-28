@@ -68,7 +68,7 @@ class SuccessAttendanceModal extends StatelessWidget {
           ),
           AppSize.verticalSpace[0],
           Text(
-            ReusableFuntionHelper.datetimeToString(DateTime.now(),
+            ReusableFunctionHelper.datetimeToString(DateTime.now(),
                 format: 'HH:mm dd-MM-yyyy'),
             style: kTextHeme.subtitle2?.copyWith(
               color: Palette.disable,

@@ -1,4 +1,5 @@
 import 'package:e_con/core/constants/color_const.dart';
+import 'package:e_con/src/data/models/attendance/attendance_data.dart';
 import 'package:e_con/src/data/models/attendance/student_data_attendance_data.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/statistic_data.dart';
 import 'package:equatable/equatable.dart';
@@ -6,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 /// A collection of functions that are reusable
-class ReusableFuntionHelper {
+class ReusableFunctionHelper {
   /// Convert DateTime to String
   static String datetimeToString(DateTime date,
       {bool isShowTime = false, String? format}) {
@@ -161,6 +162,21 @@ class ReusableFuntionHelper {
       newTitle += t[0].toUpperCase() + t.substring(1, t.length) + " ";
     }
     return newTitle.trim();
+  }
+
+  static List<AttendanceData> getListStudentAttendanceHistory(
+      List<AttendanceData>? listStudentAttendance) {
+    DateTime now = DateTime.now();
+    now = DateTime(now.year, now.month, now.day);
+    final List<AttendanceData> result = [];
+    for (var element in listStudentAttendance!) {
+      if (element.meetingData!.date != null) {
+        if (element.meetingData!.date!.isBefore(now)) {
+          result.add(element);
+        }
+      }
+    }
+    return result;
   }
 }
 

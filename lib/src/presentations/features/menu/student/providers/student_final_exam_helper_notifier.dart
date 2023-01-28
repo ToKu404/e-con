@@ -94,7 +94,7 @@ class StudentFinalExamHelperNotifier extends ChangeNotifier {
     homeFinalExamDta.clear();
     if (listTrialExam != null) {
       String message =
-          "\"${ReusableFuntionHelper.titleMaker(listSeminar.first.finalExamData!.title!)}\"";
+          "\"${ReusableFunctionHelper.titleMaker(listSeminar.first.finalExamData!.title!)}\"";
       String title = 'Ujian Sidang';
       final activeTrialExam = listTrialExam;
       String status = '';
@@ -125,7 +125,7 @@ class StudentFinalExamHelperNotifier extends ChangeNotifier {
       ));
     } else if (listSeminar.isNotEmpty) {
       String message =
-          "\"${ReusableFuntionHelper.titleMaker(listSeminar.first.finalExamData!.title!)}\"";
+          "\"${ReusableFunctionHelper.titleMaker(listSeminar.first.finalExamData!.title!)}\"";
       String title = '';
       final activeSeminar = listSeminar[listSeminar.length - 1];
 
@@ -136,9 +136,10 @@ class StudentFinalExamHelperNotifier extends ChangeNotifier {
         status = 'Pengajuan sedang diproses';
       } else {
         if (DateTime.now().isBefore(activeSeminar.date!)) {
-          status = 'Menunggu Jadwal ${ReusableFuntionHelper.titleMaker(title)}';
+          status =
+              'Menunggu Jadwal ${ReusableFunctionHelper.titleMaker(title)}';
         } else {
-          status = 'Selesai Ujian ${ReusableFuntionHelper.titleMaker(title)}';
+          status = 'Selesai Ujian ${ReusableFunctionHelper.titleMaker(title)}';
           color = Palette.success;
         }
       }
@@ -159,7 +160,7 @@ class StudentFinalExamHelperNotifier extends ChangeNotifier {
           _homeFinalExamDta.add(
             FinalExamObject(
               title: 'Usulan #${i + 1}',
-              message: ReusableFuntionHelper.titleMaker(
+              message: ReusableFunctionHelper.titleMaker(
                   listProposedThesis[i].title ?? ''),
               status: '${feStatus[listProposedThesis[i].proposalStatus!]}',
               onclick: () {},
@@ -181,7 +182,7 @@ class StudentFinalExamHelperNotifier extends ChangeNotifier {
           }
           _homeFinalExamDta.add(FinalExamObject(
             title: 'Usulan #${i + 1}',
-            message: ReusableFuntionHelper.titleMaker(
+            message: ReusableFunctionHelper.titleMaker(
                 listProposedThesis[i].title ?? ''),
             status: status,
             onclick: () {

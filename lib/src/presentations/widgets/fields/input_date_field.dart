@@ -30,7 +30,7 @@ class _InputDateFieldState extends State<InputDateField> {
           context: context,
           initialDate: widget.controller.text.isEmpty
               ? DateTime.now()
-              : ReusableFuntionHelper.stringToDateTime(widget.controller.text),
+              : ReusableFunctionHelper.stringToDateTime(widget.controller.text),
           firstDate: DateTime.now().subtract(
             Duration(days: 30),
           ),
@@ -44,7 +44,7 @@ class _InputDateFieldState extends State<InputDateField> {
         if (selected == null) return;
         setState(() {
           widget.controller.text =
-              ReusableFuntionHelper.datetimeToString(selected);
+              ReusableFunctionHelper.datetimeToString(selected);
           widget.action!.call(selected);
         });
       },

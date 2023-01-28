@@ -67,13 +67,19 @@ class _StudentMeetingHistoryPageState extends State<StudentMeetingHistoryPage> {
             ],
           ));
         }
+        if (provider.listStudentClass!.isEmpty) {
+          return SizedBox.shrink();
+        }
 
-        final listAttendanceData = provider.listStudentAttendance;
+        final listAttendanceData =
+            ReusableFunctionHelper.getListStudentAttendanceHistory(
+                provider.listStudentAttendance ?? []);
+
         return ListView.builder(
           padding: EdgeInsets.all(
             AppSize.space[3],
           ),
-          itemCount: listAttendanceData?.length,
+          itemCount: listAttendanceData.length,
           itemBuilder: (context, index) {
             return Container(
               margin: EdgeInsets.only(
@@ -98,8 +104,8 @@ class _StudentMeetingHistoryPageState extends State<StudentMeetingHistoryPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            ReusableFuntionHelper.datetimeToString(
-                                listAttendanceData![index].meetingData!.date!),
+                            ReusableFunctionHelper.datetimeToString(
+                                listAttendanceData[index].meetingData!.date!),
                             style: kTextHeme.subtitle2?.copyWith(
                               color: Palette.disable,
                             ),
@@ -132,7 +138,7 @@ class _StudentMeetingHistoryPageState extends State<StudentMeetingHistoryPage> {
                         borderRadius: BorderRadius.circular(
                           AppSize.space[4],
                         ),
-                        color: ReusableFuntionHelper.getAttendanceColor(
+                        color: ReusableFunctionHelper.getAttendanceColor(
                                 listAttendanceData[index].attendanceType!.id!)
                             .withOpacity(.2),
                       ),
@@ -140,7 +146,7 @@ class _StudentMeetingHistoryPageState extends State<StudentMeetingHistoryPage> {
                         child: Text(
                           listAttendanceData[index].attendanceType?.name ?? '',
                           style: kTextHeme.subtitle2?.copyWith(
-                            color: ReusableFuntionHelper.getAttendanceColor(
+                            color: ReusableFunctionHelper.getAttendanceColor(
                                 listAttendanceData[index].attendanceType!.id!),
                             height: 1,
                           ),

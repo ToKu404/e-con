@@ -65,7 +65,7 @@ class _LecturerSeminarDetailPageState extends State<LecturerSeminarDetailPage> {
                 style: kTextHeme.headline4?.copyWith(color: Palette.onPrimary),
               ),
               Text(
-                  "\"${ReusableFuntionHelper.titleMaker(detailSeminar.finalExamData!.title!)}\""),
+                  "\"${ReusableFunctionHelper.titleMaker(detailSeminar.finalExamData!.title!)}\""),
               SizedBox(
                 height: 8,
               ),
@@ -177,7 +177,7 @@ class _LecturerSeminarDetailPageState extends State<LecturerSeminarDetailPage> {
                       color: Palette.disable, fontWeight: FontWeight.normal),
                 ),
                 Text(
-                  ReusableFuntionHelper.datetimeToString(detailSeminar.date!),
+                  ReusableFunctionHelper.datetimeToString(detailSeminar.date!),
                   style: kTextHeme.subtitle1,
                 ),
                 SizedBox(

@@ -250,7 +250,7 @@ class _LecturerMeetDetailPageState extends State<LecturerMeetDetailPage> {
                   text: 'Barcode Absen',
                   onTap: () async {
                     if (meetingData.validationCodeExpiredDate != null &&
-                        !ReusableFuntionHelper.isInitialExpiredDate(
+                        !ReusableFunctionHelper.isInitialExpiredDate(
                             meetingData.validationCodeExpiredDate!)) {
                       if (meetingData.validationCodeExpiredDate!
                           .isAfter(DateTime.now())) {
@@ -323,7 +323,7 @@ class _StatisticSectionState extends State<_StatisticSection> {
       return SizedBox.shrink();
     }
     final statData = statProvider.listStatisticData!;
-    final getStatValue = ReusableFuntionHelper.getStatisticValue(statData);
+    final getStatValue = ReusableFunctionHelper.getStatisticValue(statData);
 
     return Column(
       children: [
@@ -450,7 +450,6 @@ class _CustomAppBarState extends State<_CustomAppBar> {
     );
   }
 }
-
 
 class AbsentStatisticCard extends StatelessWidget {
   final int value;

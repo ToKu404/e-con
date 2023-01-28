@@ -65,7 +65,7 @@ class _LecturerHomePageState extends State<LecturerHomePage> {
                               ),
                             ),
                             Text(
-                              ReusableFuntionHelper.datetimeToString(
+                              ReusableFunctionHelper.datetimeToString(
                                   DateTime.now()),
                               style: TextStyle(
                                 fontSize: 14,

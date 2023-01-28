@@ -35,7 +35,7 @@ class _InputDateTimeFieldState extends State<InputDateTimeField> {
               ? (widget.initialDate != null
                   ? widget.initialDate!
                   : DateTime.now())
-              : ReusableFuntionHelper.stringToDateTime(widget.controller.text,
+              : ReusableFunctionHelper.stringToDateTime(widget.controller.text,
                   isShowTime: true),
           firstDate:
               widget.initialDate != null ? widget.initialDate! : DateTime.now(),
@@ -58,7 +58,7 @@ class _InputDateTimeFieldState extends State<InputDateTimeField> {
         setState(() {
           final dateTime = DateTime(dateSelected.year, dateSelected.month,
               dateSelected.day, time.hour, time.minute);
-          widget.controller.text = ReusableFuntionHelper.datetimeToString(
+          widget.controller.text = ReusableFunctionHelper.datetimeToString(
               dateTime,
               isShowTime: true);
           widget.action!.call(dateTime);

@@ -58,7 +58,7 @@ class _TeacherMeetCardState extends State<TeacherMeetCard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        ReusableFuntionHelper.datetimeToString(
+                        ReusableFunctionHelper.datetimeToString(
                             widget.meetingData.date!),
                         style: kTextHeme.overline?.copyWith(
                           color: Palette.disable,
@@ -83,7 +83,7 @@ class _TeacherMeetCardState extends State<TeacherMeetCard> {
                 ),
                 Builder(builder: (context) {
                   final statusMeeting =
-                      ReusableFuntionHelper.checkStatusMeeting(
+                      ReusableFunctionHelper.checkStatusMeeting(
                           widget.meetingData.date!);
                   return Container(
                     decoration: BoxDecoration(
@@ -125,7 +125,8 @@ class _BuildMeetStat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final statData = ReusableFuntionHelper.getStatisticValue(listStatisticData);
+    final statData =
+        ReusableFunctionHelper.getStatisticValue(listStatisticData);
     int maxVal = 0;
     statData.values.map((e) => maxVal += e);
     return Column(

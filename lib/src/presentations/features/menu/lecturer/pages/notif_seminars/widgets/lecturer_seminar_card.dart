@@ -72,7 +72,7 @@ class LecturerSeminarCard extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          ReusableFuntionHelper.datetimeToString(
+                          ReusableFunctionHelper.datetimeToString(
                               seminarData.date!,
                               format: 'dd MMM'),
                           style: kTextHeme.overline?.copyWith(

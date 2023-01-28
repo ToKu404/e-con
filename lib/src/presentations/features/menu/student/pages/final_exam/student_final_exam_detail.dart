@@ -112,7 +112,7 @@ class __BuildBodyState extends State<_BuildBody> {
     final trialExam = provider.trialExam;
 
     return FutureBuilder(
-      future: Future.delayed(Duration(seconds: 3)),
+      future: Future.delayed(Duration(seconds: 1, milliseconds: 500)),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return SingleChildScrollView(
@@ -122,7 +122,7 @@ class __BuildBodyState extends State<_BuildBody> {
               children: [
                 Text('Judul'),
                 Text(
-                  '\"${ReusableFuntionHelper.titleMaker(acceptedThesis?.title ?? '')}\"',
+                  '\"${ReusableFunctionHelper.titleMaker(acceptedThesis?.title ?? '')}\"',
                   style: kTextHeme.headline4?.copyWith(
                     color: Palette.onPrimary,
                   ),
@@ -246,7 +246,7 @@ class __BuildBodyState extends State<_BuildBody> {
                                     fontWeight: FontWeight.normal),
                               ),
                               Text(
-                                ReusableFuntionHelper.datetimeToString(
+                                ReusableFunctionHelper.datetimeToString(
                                     proposedSeminar.date!),
                                 style: kTextHeme.subtitle1,
                               ),
@@ -306,7 +306,7 @@ class __BuildBodyState extends State<_BuildBody> {
                                     fontWeight: FontWeight.normal),
                               ),
                               Text(
-                                ReusableFuntionHelper.datetimeToString(
+                                ReusableFunctionHelper.datetimeToString(
                                     resultSeminar.date!),
                                 style: kTextHeme.subtitle1,
                               ),
@@ -363,7 +363,7 @@ class __BuildBodyState extends State<_BuildBody> {
                                     fontWeight: FontWeight.normal),
                               ),
                               Text(
-                                ReusableFuntionHelper.datetimeToString(
+                                ReusableFunctionHelper.datetimeToString(
                                     finalExam.date!),
                                 style: kTextHeme.subtitle1,
                               ),
@@ -460,7 +460,7 @@ class __BuildBodyState extends State<_BuildBody> {
                                 fontWeight: FontWeight.normal),
                           ),
                           Text(
-                            ReusableFuntionHelper.datetimeToString(
+                            ReusableFunctionHelper.datetimeToString(
                                 trialExam.skDate!),
                             style: kTextHeme.subtitle1,
                           ),

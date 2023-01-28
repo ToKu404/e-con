@@ -51,7 +51,7 @@ class CourseParticipantCard extends StatelessWidget {
           ),
           Builder(builder: (context) {
             final attendanceStatusCard =
-                ReusableFuntionHelper.getAttendanceStat(
+                ReusableFunctionHelper.getAttendanceStat(
                     attendances: studentData.attendances!);
             return Stack(
               children: [
