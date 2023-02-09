@@ -8,7 +8,6 @@ import 'package:e_con/core/utils/exception.dart';
 import 'package:e_con/core/responses/data_response.dart';
 import 'package:e_con/core/responses/session.dart';
 import 'package:e_con/core/services/api_service.dart';
-import 'package:e_con/src/data/models/user/helper/user_role_type.dart';
 import 'package:e_con/src/data/models/user/user_credential.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decode/jwt_decode.dart';
@@ -52,6 +51,7 @@ class AuthDataSourceImpl implements AuthDataSource {
         },
         body: json.encode(map),
       );
+      print(responseFE.body);
 
       final responseCPL = await client.post(
         Uri.parse('${ApiService.baseUrlCPL}/login'),
@@ -59,6 +59,7 @@ class AuthDataSourceImpl implements AuthDataSource {
           "Authorization": basicAuth,
         },
       );
+      print(responseCPL.body);
 
       String? cookie = Session.getCookie(responseCPL.headers);
 
@@ -71,7 +72,7 @@ class AuthDataSourceImpl implements AuthDataSource {
           dataResponse,
           cookie ?? '',
         );
-        if (userCredential.role == null) {
+        if (userCredential.role!.id != 4 && userCredential.role!.id != 5) {
           throw UnauthenticateException();
         }
         authPreferenceHelper.setUserData(userCredential);
@@ -86,6 +87,7 @@ class AuthDataSourceImpl implements AuthDataSource {
         throw AuthException();
       }
     } catch (e) {
+      print(e.toString());
       throw AuthException();
     }
   }
@@ -108,7 +110,7 @@ class AuthDataSourceImpl implements AuthDataSource {
         Map<String, dynamic> payload = Jwt.parseJwt(credential.token!);
 
         late dynamic response;
-        if (credential.role == UserRole.teacher) {
+        if (credential.role!.id == 4) {
           response = await client.get(
             Uri.parse(
                 '${ApiService.baseUrlFinalExam}/lecturers/${payload['username']}'),

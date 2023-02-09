@@ -1,4 +1,5 @@
-import 'package:e_con/src/data/models/user/helper/user_role_type.dart';
+
+import 'package:e_con/src/data/models/user/user_role.dart';
 import 'package:equatable/equatable.dart';
 
 class UserCredential extends Equatable {
@@ -14,11 +15,7 @@ class UserCredential extends Equatable {
 
   factory UserCredential.fromJson(Map<String, dynamic> json, String session) =>
       UserCredential(
-        role: (json['role']) == 7
-            ? UserRole.student
-            : (json['role']) == 6
-                ? UserRole.teacher
-                : null,
+        role: UserRole.fromJson(json['role']),
         token: json['token'] as String,
         session: session,
       );

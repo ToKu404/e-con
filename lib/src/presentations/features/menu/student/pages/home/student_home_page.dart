@@ -407,13 +407,13 @@ class HomeFinalExamCard extends StatelessWidget {
                   AppSize.verticalSpace[4],
                   Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(45),
+                      borderRadius: BorderRadius.circular(8),
                       color: proposedThesis.color,
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     child: Text(
                       proposedThesis.status,
-                      style: kTextHeme.subtitle2,
+                      style: kTextHeme.subtitle2?.copyWith(height: 1.2),
                     ),
                   ),
                 ],

@@ -117,6 +117,7 @@ class EconApp extends StatelessWidget {
           colorScheme: ColorScheme.light(
             primary: Palette.primary,
           ),
+          dividerColor: Colors.transparent,
         ),
         home: const SplashPage(),
         navigatorObservers: [routeObserver],

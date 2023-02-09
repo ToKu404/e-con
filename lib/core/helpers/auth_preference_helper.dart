@@ -1,5 +1,5 @@
 import 'package:e_con/src/data/models/user/user_credential.dart';
-import 'package:e_con/src/data/models/user/helper/user_role_type.dart';
+import 'package:e_con/src/data/models/user/user_role.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Auth Preferences Helper
@@ -38,7 +38,7 @@ class AuthPreferenceHelper {
     try {
       pr!.setString(userTokenKey, user.token ?? '');
       pr.setString(userSessionKey, user.session ?? '');
-      pr.setInt(userRoleKey, user.role == UserRole.student ? 7 : 6);
+      pr.setInt(userRoleKey, user.role!.id);
       return true;
     } catch (e) {
       return false;
@@ -71,10 +71,13 @@ class AuthPreferenceHelper {
     if (pr!.containsKey(userTokenKey)) {
       String? token = pr.getString(userTokenKey);
       String? session = pr.getString(userSessionKey);
-      UserRole role =
-          pr.getInt(userRoleKey) == 7 ? UserRole.student : UserRole.teacher;
+      int? roleId = pr.getInt(userRoleKey);
 
-      return UserCredential(role: role, token: token, session: session);
+      return UserCredential(
+        role: UserRole(id: roleId!),
+        token: token,
+        session: session,
+      );
     } else {
       return null;
     }

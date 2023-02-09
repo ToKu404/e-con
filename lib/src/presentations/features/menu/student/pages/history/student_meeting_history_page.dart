@@ -5,6 +5,7 @@ import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/history/provider/attendance_history_notifier.dart';
+import 'package:e_con/src/presentations/reusable_pages/econ_empty.dart';
 import 'package:e_con/src/presentations/widgets/custom_shimmer.dart';
 import 'package:e_con/src/presentations/widgets/placeholders/card_placeholder.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +46,7 @@ class _StudentMeetingHistoryPageState extends State<StudentMeetingHistoryPage> {
         final provider = context.watch<AttendanceHistoryNotifier>();
 
         if (provider.studentAttendanceState == RequestState.loading ||
-            provider.listStudentClass == null) {
+            provider.listStudentAttendance == null) {
           return CustomShimmer(
               child: Column(
             children: [
@@ -67,8 +68,10 @@ class _StudentMeetingHistoryPageState extends State<StudentMeetingHistoryPage> {
             ],
           ));
         }
-        if (provider.listStudentClass!.isEmpty) {
-          return SizedBox.shrink();
+        if (provider.listStudentAttendance!.isEmpty) {
+          return EconEmpty(
+            emptyMessage: 'Belum ada riwayat pertemuan',
+          );
         }
 
         final listAttendanceData =

@@ -146,7 +146,9 @@ class ProfileSection extends StatelessWidget {
             ],
           ),
         ),
-        Divider(),
+        Divider(
+          color: Palette.disable,
+        ),
         Padding(
           padding: EdgeInsets.all(20),
           child: Column(

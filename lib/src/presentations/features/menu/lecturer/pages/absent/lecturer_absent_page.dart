@@ -3,6 +3,7 @@ import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/presentations/features/menu/widgets/class_card.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecture_courses_notifier.dart';
+import 'package:e_con/src/presentations/reusable_pages/econ_empty.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_error.dart';
 import 'package:e_con/src/presentations/widgets/custom_shimmer.dart';
 import 'package:e_con/src/presentations/widgets/default_appbar.dart';
@@ -31,7 +32,8 @@ class _LecturerAbsentPageState extends State<LecturerAbsentPage> {
               child: Builder(builder: (c) {
                 final courseProvider = context.watch<LectureCourseNotifier>();
 
-                if (courseProvider.state == RequestState.loading) {
+                if (courseProvider.state == RequestState.loading ||
+                    courseProvider.listClazz == null) {
                   return CustomShimmer(
                       child: Column(
                     children: [
@@ -45,6 +47,11 @@ class _LecturerAbsentPageState extends State<LecturerAbsentPage> {
                   ));
                 } else if (courseProvider.state == RequestState.error) {
                   return EconError(errorMessage: courseProvider.error);
+                }
+
+                if (courseProvider.listClazz!.isEmpty) {
+                  return EconEmpty(
+                      emptyMessage: 'Belum ada kelas yang diampuh');
                 }
 
                 return ListView.builder(

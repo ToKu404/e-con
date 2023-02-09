@@ -137,14 +137,16 @@ class __BuildBodyState extends State<_BuildBody> {
                   ),
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   child: Text(
-                    finalExamObject.status + " " + finalExamObject.title,
+                    finalExamObject.status,
                     style: kTextHeme.subtitle2,
                   ),
                 ),
                 SizedBox(
                   height: 8,
                 ),
-                Divider(),
+                Divider(
+                  color: Palette.disable,
+                ),
                 if (proposedSeminar != null)
                   ExpansionTile(
                     tilePadding: EdgeInsets.symmetric(horizontal: 0),
@@ -160,7 +162,9 @@ class __BuildBodyState extends State<_BuildBody> {
                               fontWeight: FontWeight.w500,
                               color: Palette.primaryVariant),
                         ),
-                        Divider(),
+                        Divider(
+                          color: Palette.disable,
+                        ),
                         for (int i = 0;
                             i <
                                 proposedSeminar
@@ -193,7 +197,9 @@ class __BuildBodyState extends State<_BuildBody> {
                                 fontWeight: FontWeight.w500,
                                 color: Palette.primaryVariant),
                           ),
-                          Divider(),
+                          Divider(
+                            color: Palette.disable,
+                          ),
                           for (int i = 0;
                               i <
                                   proposedSeminar
@@ -213,8 +219,11 @@ class __BuildBodyState extends State<_BuildBody> {
                             SizedBox(
                               height: 8,
                             ),
-                          ]
+                          ],
                         ],
+                      ),
+                      SizedBox(
+                        height: 4,
                       ),
                     ],
                   ),
@@ -237,7 +246,9 @@ class __BuildBodyState extends State<_BuildBody> {
                                   fontWeight: FontWeight.w500,
                                   color: Palette.primaryVariant),
                             ),
-                            Divider(),
+                            Divider(
+                              color: Palette.disable,
+                            ),
                             if (proposedSeminar.date != null) ...[
                               Text(
                                 'Hari, Tanggal',
@@ -261,7 +272,9 @@ class __BuildBodyState extends State<_BuildBody> {
                                   fontWeight: FontWeight.normal),
                             ),
                             Text(
-                              '${proposedSeminar.startTime}-${proposedSeminar.endTime} WITA',
+                              proposedSeminar.startTime != null
+                                  ? '${proposedSeminar.startTime}-${proposedSeminar.endTime} WITA'
+                                  : '-',
                               style: kTextHeme.subtitle1,
                             ),
                             SizedBox(
@@ -297,7 +310,9 @@ class __BuildBodyState extends State<_BuildBody> {
                                   fontWeight: FontWeight.w500,
                                   color: Palette.primaryVariant),
                             ),
-                            Divider(),
+                            Divider(
+                              color: Palette.disable,
+                            ),
                             if (resultSeminar.date != null) ...[
                               Text(
                                 'Hari, Tanggal',
@@ -354,7 +369,9 @@ class __BuildBodyState extends State<_BuildBody> {
                                   fontWeight: FontWeight.w500,
                                   color: Palette.primaryVariant),
                             ),
-                            Divider(),
+                            Divider(
+                              color: Palette.disable,
+                            ),
                             if (finalExam.date != null) ...[
                               Text(
                                 'Hari, Tanggal',
@@ -402,6 +419,9 @@ class __BuildBodyState extends State<_BuildBody> {
                               ),
                           ],
                         ),
+                      SizedBox(
+                        height: 4,
+                      ),
                     ],
                   ),
                 if (trialExam != null)
@@ -412,60 +432,65 @@ class __BuildBodyState extends State<_BuildBody> {
                     ),
                     initiallyExpanded: false,
                     children: [
-                      BuildFeCard(child: [
-                        Text(
-                          'Status Permohonan',
-                          style: kTextHeme.subtitle1?.copyWith(
-                              color: Palette.disable,
-                              fontWeight: FontWeight.normal),
-                        ),
-                        Text(
-                          feStatus[trialExam.proposalStatus!] ?? '-',
-                          style: kTextHeme.subtitle1,
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        Text(
-                          'Status Validasi Berkas',
-                          style: kTextHeme.subtitle1?.copyWith(
-                              color: Palette.disable,
-                              fontWeight: FontWeight.normal),
-                        ),
-                        Text(
-                          feStatus[trialExam.validationDocStatus!] ?? '-',
-                          style: kTextHeme.subtitle1,
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        Text(
-                          'Status Verifikasi Berkas',
-                          style: kTextHeme.subtitle1?.copyWith(
-                              color: Palette.disable,
-                              fontWeight: FontWeight.normal),
-                        ),
-                        Text(
-                          feStatus[trialExam.verificationDocStatus!] ?? '-',
-                          style: kTextHeme.subtitle1,
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        if (trialExam.skDate != null) ...[
+                      BuildFeCard(
+                        child: [
                           Text(
-                            'Tanggal SK',
+                            'Status Permohonan',
                             style: kTextHeme.subtitle1?.copyWith(
                                 color: Palette.disable,
                                 fontWeight: FontWeight.normal),
                           ),
                           Text(
-                            ReusableFunctionHelper.datetimeToString(
-                                trialExam.skDate!),
+                            feStatus[trialExam.proposalStatus!] ?? '-',
                             style: kTextHeme.subtitle1,
                           ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            'Status Validasi Berkas',
+                            style: kTextHeme.subtitle1?.copyWith(
+                                color: Palette.disable,
+                                fontWeight: FontWeight.normal),
+                          ),
+                          Text(
+                            feStatus[trialExam.validationDocStatus!] ?? '-',
+                            style: kTextHeme.subtitle1,
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            'Status Verifikasi Berkas',
+                            style: kTextHeme.subtitle1?.copyWith(
+                                color: Palette.disable,
+                                fontWeight: FontWeight.normal),
+                          ),
+                          Text(
+                            feStatus[trialExam.verificationDocStatus!] ?? '-',
+                            style: kTextHeme.subtitle1,
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          if (trialExam.skDate != null) ...[
+                            Text(
+                              'Tanggal SK',
+                              style: kTextHeme.subtitle1?.copyWith(
+                                  color: Palette.disable,
+                                  fontWeight: FontWeight.normal),
+                            ),
+                            Text(
+                              ReusableFunctionHelper.datetimeToString(
+                                  trialExam.skDate!),
+                              style: kTextHeme.subtitle1,
+                            ),
+                          ],
                         ],
-                      ])
+                      ),
+                      SizedBox(
+                        height: 4,
+                      ),
                     ],
                   ),
               ],
@@ -483,8 +508,8 @@ class BuildFeCard extends StatelessWidget {
   final List<Widget> child;
   const BuildFeCard({
     required this.child,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

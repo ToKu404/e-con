@@ -3,7 +3,6 @@ import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
-import 'package:e_con/src/data/models/user/helper/user_role_type.dart';
 import 'package:e_con/src/presentations/features/login/provider/auth_notifier.dart';
 import 'package:e_con/src/presentations/features/login/provider/error_field_checker.dart';
 import 'package:e_con/src/presentations/features/login/widgets/password_field.dart';
@@ -69,13 +68,13 @@ class _LoginPageState extends State<LoginPage> {
       } else if (authNotifier.loginState == RequestState.success) {
         if (isLoadingEnd) Navigator.pop(context);
         if (authNotifier.user != null) {
-          if (authNotifier.user!.role == UserRole.student) {
+          if (authNotifier.user!.role!.id == 5) {
             Navigator.pushNamedAndRemoveUntil(
               context,
               AppRoutes.mainStudent,
               (route) => false,
             );
-          } else if (authNotifier.user!.role == UserRole.teacher) {
+          } else if (authNotifier.user!.role!.id == 4) {
             Navigator.pushNamedAndRemoveUntil(
               context,
               AppRoutes.mainLecturer,

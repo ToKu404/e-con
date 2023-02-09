@@ -69,7 +69,9 @@ class _LecturerSeminarDetailPageState extends State<LecturerSeminarDetailPage> {
               SizedBox(
                 height: 8,
               ),
-              Divider(),
+              Divider(
+                color: Palette.disable,
+              ),
               SizedBox(
                 height: 8,
               ),
@@ -81,7 +83,9 @@ class _LecturerSeminarDetailPageState extends State<LecturerSeminarDetailPage> {
                         fontWeight: FontWeight.normal,
                         color: Palette.onPrimary),
                   ),
-                  Divider(),
+                  Divider(
+                    color: Palette.disable,
+                  ),
                   Text(
                     'Nama',
                     style: kTextHeme.subtitle1?.copyWith(
@@ -114,7 +118,10 @@ class _LecturerSeminarDetailPageState extends State<LecturerSeminarDetailPage> {
                   style: kTextHeme.headline5?.copyWith(
                       fontWeight: FontWeight.normal, color: Palette.onPrimary),
                 ),
-                Divider(),
+                Divider(
+                  color: Palette.disable,
+                ),
+               
                 for (int i = 0;
                     i < detailSeminar.finalExamData!.listSupervisor!.length;
                     i++) ...[
@@ -142,7 +149,9 @@ class _LecturerSeminarDetailPageState extends State<LecturerSeminarDetailPage> {
                   style: kTextHeme.headline5?.copyWith(
                       fontWeight: FontWeight.normal, color: Palette.onPrimary),
                 ),
-                Divider(),
+                Divider(
+                  color: Palette.disable,
+                ),
                 for (int i = 0;
                     i < detailSeminar.finalExamData!.listExaminer!.length;
                     i++) ...[
@@ -170,7 +179,9 @@ class _LecturerSeminarDetailPageState extends State<LecturerSeminarDetailPage> {
                   style: kTextHeme.headline5?.copyWith(
                       fontWeight: FontWeight.normal, color: Palette.onPrimary),
                 ),
-                Divider(),
+               Divider(
+                  color: Palette.disable,
+                ),
                 Text(
                   'Hari, Tanggal',
                   style: kTextHeme.subtitle1?.copyWith(

@@ -133,7 +133,7 @@ class StudentFinalExamHelperNotifier extends ChangeNotifier {
       String status = '';
       Color color = Palette.secondary;
       if (activeSeminar.invitationFiles == null || activeSeminar.date == null) {
-        status = 'Pengajuan sedang diproses';
+        status = 'Pengajuan ${title} sedang diproses';
       } else {
         if (DateTime.now().isBefore(activeSeminar.date!)) {
           status =
