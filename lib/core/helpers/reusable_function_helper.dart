@@ -191,6 +191,12 @@ class ReusableFunctionHelper {
     }
     return todaySeminar;
   }
+
+  static bool isNotAfterToday(DateTime? date) {
+    DateTime now = DateTime.now();
+    now = DateTime(now.year, now.month, now.day);
+    return !date!.isAfter(now);
+  }
 }
 
 class WeeklyActivity extends Equatable {

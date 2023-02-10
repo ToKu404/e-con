@@ -233,18 +233,37 @@ class _AttendanceDetailSectionState extends State<AttendanceDetailSection> {
                       iconPath: AssetPath.iconDate,
                     ),
                     AppSize.verticalSpace[5],
-                    CustomButton(
-                      height: 50,
-                      text: 'Konfirmasi',
-                      onTap: () {
-                        // #TODO hit api absen with valcode and meetingId
-                        attendanceProvider.setAttendanceByStudent(
-                          meetingId: qrResult.meetingData.id,
-                          studentId: studentData.id!,
-                          validationCode: qrResult.validationCode,
-                        );
-                      },
-                    ),
+                    (ReusableFunctionHelper.isNotAfterToday(
+                            qrResult.meetingData.date))
+                        ? CustomButton(
+                            height: 50,
+                            text: 'Konfirmasi',
+                            onTap: () {
+                              // #TODO hit api absen with valcode and meetingId
+                              attendanceProvider.setAttendanceByStudent(
+                                meetingId: qrResult.meetingData.id,
+                                studentId: studentData.id!,
+                                validationCode: qrResult.validationCode,
+                              );
+                            },
+                          )
+                        : Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: Palette.primaryVariant,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Center(
+                              child: Text(
+                                'Kelas belum mulai',
+                                style: kTextHeme.subtitle1?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
                     AppSize.verticalSpace[5],
                   ],
                 ),
