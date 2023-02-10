@@ -155,8 +155,11 @@ class AuthDataSourceImpl implements AuthDataSource {
     try {
       final credential = await authPreferenceHelper.getUser();
       if (credential != null) {
+        Map<String, dynamic> payload = Jwt.parseJwt(credential.token!);
+
         final response = await client.get(
-          Uri.parse('${ApiService.baseUrlFinalExam}/users/logout'),
+          Uri.parse(
+              '${ApiService.baseUrlFinalExam}/users/logout/${payload['username']}'),
           headers: {
             "Authorization": "Bearer ${credential.token}",
           },

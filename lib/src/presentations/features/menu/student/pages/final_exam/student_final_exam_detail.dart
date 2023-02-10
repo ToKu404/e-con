@@ -207,7 +207,7 @@ class __BuildBodyState extends State<_BuildBody> {
                                       .finalExamData!.listExaminer!.length;
                               i++) ...[
                             Text(
-                              'Penguji ${proposedSeminar.finalExamData!.listExaminer![i].order}',
+                              'Penguji ${proposedSeminar.finalExamData!.listExaminer![1].order}',
                               style: kTextHeme.subtitle1?.copyWith(
                                   color: Palette.disable,
                                   fontWeight: FontWeight.normal),
@@ -293,10 +293,12 @@ class __BuildBodyState extends State<_BuildBody> {
                                 style: kTextHeme.subtitle1,
                               ),
                             if (proposedSeminar.link != null)
-                              Text(
-                                'Online : ${proposedSeminar.link!.split(':')[1].trim()}',
-                                style: kTextHeme.subtitle1,
-                              ),
+                              Builder(builder: (context) {
+                                return Text(
+                                  'Online : ${proposedSeminar.link!.trim()}',
+                                  style: kTextHeme.subtitle1,
+                                );
+                              }),
                           ],
                         ),
                       SizedBox(
