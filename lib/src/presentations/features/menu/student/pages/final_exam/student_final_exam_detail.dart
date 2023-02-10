@@ -358,7 +358,7 @@ class __BuildBodyState extends State<_BuildBody> {
                               ),
                             if (resultSeminar.link != null)
                               Text(
-                                'Online : ${resultSeminar.link!.split(':')[1].trim()}',
+                                'Online : ${resultSeminar.link!.trim()}',
                                 style: kTextHeme.subtitle1,
                               ),
                           ],
@@ -417,7 +417,7 @@ class __BuildBodyState extends State<_BuildBody> {
                               ),
                             if (finalExam.link != null)
                               Text(
-                                'Online : ${finalExam.link!.split(':')[1].trim()}',
+                                'Online : ${finalExam.link!.trim()}',
                                 style: kTextHeme.subtitle1,
                               ),
                           ],

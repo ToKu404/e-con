@@ -94,21 +94,21 @@ class StudentFinalExamHelperNotifier extends ChangeNotifier {
     homeFinalExamDta.clear();
     if (listTrialExam != null) {
       String message =
-          "\"${ReusableFunctionHelper.titleMaker(listSeminar.first.finalExamData!.title!)}\"";
+          "\"${ReusableFunctionHelper.titleMaker(listProposedThesis.first.title!)}\"";
       String title = 'Ujian Sidang';
       final activeTrialExam = listTrialExam;
       String status = '';
       Color color = Palette.secondary;
       if (activeTrialExam.verificationDocStatus == 'Belum_Diproses') {
-        status = 'Menunggu Verifikasi Berkas';
+        status = 'Menunggu Verifikasi Berkas Ujian Sidang';
       } else if (activeTrialExam.validationDocStatus == 'Belum_Diproses') {
-        status = 'Menunggu Validasi Berkas';
+        status = 'Menunggu Validasi Berkas Ujian Sidang';
       } else if (activeTrialExam.proposalStatus == 'Belum_Diproses' ||
           activeTrialExam.skDate == null) {
-        status = 'Menunggu Permohonan Disetujui';
+        status = 'Menunggu Permohonan Ujian Sidang Disetujui';
       } else if (activeTrialExam.proposalStatus == 'Diterima') {
         if (DateTime.now().isBefore(activeTrialExam.skDate!)) {
-          status = 'Menunggu Jadwal Sidang';
+          status = 'Menunggu Jadwal Ujian Sidang';
         } else {
           status = 'Selesai';
           color = Palette.success;
@@ -124,6 +124,7 @@ class StudentFinalExamHelperNotifier extends ChangeNotifier {
         },
       ));
     } else if (listSeminar.isNotEmpty) {
+      print('tester');
       String message =
           "\"${ReusableFunctionHelper.titleMaker(listSeminar.first.finalExamData!.title!)}\"";
       String title = '';

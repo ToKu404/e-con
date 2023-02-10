@@ -44,90 +44,85 @@ class _StudentHomePageState extends State<StudentHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        _AppBarSection(),
-        SliverFillRemaining(
-          child: CheckInternetOnetime(child: (context) {
-            return CustomScrollView(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              slivers: [
-                SliverToBoxAdapter(
-                  child: Builder(
-                    builder: (context) {
-                      final feProvider =
-                          context.watch<StudentFinalExamNotifier>();
-
-                      if (feProvider.proposedThesisState ==
-                              RequestState.loading ||
-                          feProvider.seminarsState == RequestState.loading ||
-                          feProvider.trialExamState == RequestState.loading) {
-                        return CustomShimmer(
-                          child: Column(
-                            children: [
-                              AppSize.verticalSpace[2],
-                              CardPlaceholder(
-                                height: 120,
-                              ),
-                              AppSize.verticalSpace[2],
-                            ],
-                          ),
-                        );
-                      }
-                      if (feProvider.listProposedThesis.isEmpty) {
-                        return SizedBox();
-                      }
-
-                      return _FinalExamSection(
-                        proposedThesis: feProvider.listProposedThesis,
-                        seminars: feProvider.listSeminar,
-                        thesisTrialExam: feProvider.thesisTrialExam,
-                      );
-                    },
-                  ),
-                ),
-                _ActivitySection(),
-              ],
-            );
-          }),
-        )
-      ],
-    );
-  }
-}
-
-class _AppBarSection extends StatelessWidget {
-  const _AppBarSection();
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverAppBar(
-      pinned: true,
-      title: const HeaderLogo(),
-      actions: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ElevatedButton.icon(
-            label: Text(
-              'Buka SIFA',
-              style: kTextHeme.subtitle1?.copyWith(color: Palette.white),
-            ),
-            style: ElevatedButton.styleFrom(
-              elevation: 0,
-              backgroundColor: Palette.primaryVariant.withOpacity(.7),
-            ),
-            onPressed: () {
-              Navigator.pushNamed(context, AppRoutes.cplWebview);
-            },
-            icon: const Icon(
-              Icons.open_in_new,
-              size: 16,
-              color: Palette.white,
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 1,
+        shadowColor: Colors.black38,
+        title: const HeaderLogo(),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton.icon(
+              label: Text(
+                'Buka SIFA',
+                style: kTextHeme.subtitle1?.copyWith(color: Palette.white),
+              ),
+              style: ElevatedButton.styleFrom(
+                elevation: 0,
+                backgroundColor: Palette.primaryVariant.withOpacity(.7),
+              ),
+              onPressed: () {
+                Navigator.pushNamed(context, AppRoutes.cplWebview);
+              },
+              icon: const Icon(
+                Icons.open_in_new,
+                size: 16,
+                color: Palette.white,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
+      body: CustomScrollView(
+        slivers: [
+          SliverFillRemaining(
+            child: CheckInternetOnetime(child: (context) {
+              return CustomScrollView(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: Builder(
+                      builder: (context) {
+                        final feProvider =
+                            context.watch<StudentFinalExamNotifier>();
+
+                        if (feProvider.proposedThesisState ==
+                                RequestState.loading ||
+                            feProvider.seminarsState == RequestState.loading ||
+                            feProvider.trialExamState == RequestState.loading) {
+                          return CustomShimmer(
+                            child: Column(
+                              children: [
+                                AppSize.verticalSpace[5],
+                                CardPlaceholder(
+                                  height: 120,
+                                ),
+                                AppSize.verticalSpace[2],
+                              ],
+                            ),
+                          );
+                        }
+                        print("test ${feProvider.listProposedThesis}");
+                        if (feProvider.listProposedThesis.isEmpty) {
+                          return SizedBox();
+                        }
+
+                        return _FinalExamSection(
+                          proposedThesis: feProvider.listProposedThesis,
+                          seminars: feProvider.listSeminar,
+                          thesisTrialExam: feProvider.thesisTrialExam,
+                        );
+                      },
+                    ),
+                  ),
+                  _ActivitySection(),
+                ],
+              );
+            }),
+          )
+        ],
+      ),
     );
   }
 }
@@ -499,9 +494,7 @@ class _ActivityBodyState extends State<ActivityBody> {
     final listMeeting = provider.listMeetingData;
 
     if (listMeeting.isEmpty) {
-      return ConstrainedBox(
-          constraints: BoxConstraints(minHeight: 10),
-          child: EconEmpty(emptyMessage: 'Belum ada kegiatan untuk hari ini'));
+      return EconEmpty(emptyMessage: 'Belum ada kegiatan untuk hari ini');
     }
 
     return ConstrainedBox(
