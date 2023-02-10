@@ -172,7 +172,7 @@ class ReusableFunctionHelper {
     final List<AttendanceData> result = [];
     for (var element in listStudentAttendance!) {
       if (element.meetingData!.date != null) {
-        if (element.meetingData!.date!.isBefore(now)) {
+        if (!element.meetingData!.date!.isAfter(now)) {
           result.add(element);
         }
       }
