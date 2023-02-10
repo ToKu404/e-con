@@ -7,7 +7,6 @@ import 'package:e_con/core/services/api_service.dart';
 import 'package:e_con/src/data/models/final_exam/fe_exam.dart';
 import 'package:e_con/src/data/models/final_exam/fe_proposed_thesis.dart';
 import 'package:e_con/src/data/models/final_exam/fe_seminar.dart';
-import 'package:e_con/src/data/models/profile/notification.dart';
 import 'package:e_con/src/data/models/final_exam/seminar_data.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decode/jwt_decode.dart';

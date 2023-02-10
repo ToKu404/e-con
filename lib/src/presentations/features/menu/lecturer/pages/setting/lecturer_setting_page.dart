@@ -7,13 +7,13 @@ import 'package:e_con/src/presentations/blocs/onetime_internet_check/onetime_int
 import 'package:e_con/src/presentations/features/login/provider/auth_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecture_profile_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/providers/profile_picture_notifier.dart';
+import 'package:e_con/src/presentations/reusable_pages/check_internet_onetime.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_error.dart';
 import 'package:e_con/src/presentations/widgets/default_appbar.dart';
 import 'package:e_con/src/presentations/widgets/dialog/show_confirmation.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 
 class LecturerSettingPage extends StatelessWidget {
   const LecturerSettingPage({super.key});
@@ -56,155 +56,152 @@ class _ProfileSection extends StatefulWidget {
 
 class _ProfileSectionState extends State<_ProfileSection> {
   @override
-  void initState() {
-    super.initState();
-    BlocProvider.of<OnetimeInternetCheckCubit>(context)
-        .onCheckConnectionOnetime();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final profileProvider = context.watch<LectureProfileNotifier>();
-    final profilePictureProvider = context.watch<ProfilePictureNotifier>();
+    return CheckInternetOnetime(child: (context) {
+      final profileProvider = context.watch<LectureProfileNotifier>();
+      final profilePictureProvider = context.watch<ProfilePictureNotifier>();
 
-    if (profileProvider.state == RequestState.loading ||
-        profileProvider.lectureData == null ||
-        profilePictureProvider.state == RequestState.loading) {
-      return EconLoading();
-    } else if (profileProvider.state == RequestState.error) {
-      return EconError(errorMessage: profileProvider.error);
-    }
-    final lectureData = profileProvider.lectureData!;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Stack(
-          clipBehavior: Clip.antiAlias,
-          children: [
-            SizedBox(
-              width: AppSize.getAppWidth(context),
-              height: 160,
-            ),
-            Container(
-              height: 100,
-              width: AppSize.getAppWidth(context),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Palette.primary,
-                    Palette.primaryVariant,
-                  ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
+      if (profileProvider.state == RequestState.loading ||
+          profileProvider.lectureData == null ||
+          profilePictureProvider.state == RequestState.loading) {
+        return EconLoading();
+      } else if (profileProvider.state == RequestState.error) {
+        return EconError(errorMessage: profileProvider.error);
+      }
+      final lectureData = profileProvider.lectureData!;
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Stack(
+            clipBehavior: Clip.antiAlias,
+            children: [
+              SizedBox(
+                width: AppSize.getAppWidth(context),
+                height: 160,
               ),
-            ),
-            Positioned(
-              bottom: 0,
-              left: 20,
-              child: Container(
-                width: 120,
-                height: 120,
+              Container(
+                height: 100,
+                width: AppSize.getAppWidth(context),
                 decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    width: 2,
-                    color: Palette.background,
+                  gradient: LinearGradient(
+                    colors: [
+                      Palette.primary,
+                      Palette.primaryVariant,
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
                   ),
-                  color: Palette.disable,
-                  image: profilePictureProvider.profilePicture != null
-                      ? DecorationImage(
-                          image: MemoryImage(
-                              profilePictureProvider.profilePicture!),
-                          fit: BoxFit.cover)
-                      : null,
                 ),
-                child: profilePictureProvider.profilePicture == null
-                    ? Center(
-                        child: Text(
-                          lectureData.name![0],
-                          style: TextStyle(
-                            fontSize: 40,
-                            fontWeight: FontWeight.w600,
-                            color: Palette.white,
+              ),
+              Positioned(
+                bottom: 0,
+                left: 20,
+                child: Container(
+                  width: 120,
+                  height: 120,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      width: 2,
+                      color: Palette.background,
+                    ),
+                    color: Palette.disable,
+                    image: profilePictureProvider.profilePicture != null
+                        ? DecorationImage(
+                            image: MemoryImage(
+                                profilePictureProvider.profilePicture!),
+                            fit: BoxFit.cover)
+                        : null,
+                  ),
+                  child: profilePictureProvider.profilePicture == null
+                      ? Center(
+                          child: Text(
+                            lectureData.name![0],
+                            style: TextStyle(
+                              fontSize: 40,
+                              fontWeight: FontWeight.w600,
+                              color: Palette.white,
+                            ),
                           ),
-                        ),
-                      )
-                    : SizedBox.shrink(),
+                        )
+                      : SizedBox.shrink(),
+                ),
               ),
+            ],
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  lectureData.name ?? '',
+                  style: kTextHeme.headline2?.copyWith(
+                      color: Palette.black,
+                      fontWeight: FontWeight.w500,
+                      height: 1.1),
+                ),
+                Text(
+                  'NIP. ${lectureData.idNumber ?? ''}',
+                  style: kTextHeme.headline6?.copyWith(
+                      color: Palette.black,
+                      fontWeight: FontWeight.normal,
+                      height: 1),
+                )
+              ],
             ),
-          ],
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                lectureData.name ?? '',
-                style: kTextHeme.headline2?.copyWith(
-                    color: Palette.black,
-                    fontWeight: FontWeight.w500,
-                    height: 1.1),
-              ),
-              Text(
-                'NIP. ${lectureData.idNumber ?? ''}',
-                style: kTextHeme.headline6?.copyWith(
-                    color: Palette.black,
-                    fontWeight: FontWeight.normal,
-                    height: 1),
-              )
-            ],
           ),
-        ),
-        Divider(),
-        Padding(
-          padding: EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Jenjang',
-                style: kTextHeme.subtitle1?.copyWith(color: Palette.disable),
-              ),
-              Text(
-                lectureData.major?.degree ?? '',
-                style: kTextHeme.subtitle1?.copyWith(
-                    color: Palette.black,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16,
-                    height: 1),
-              ),
-              AppSize.verticalSpace[4],
-              Text(
-                'Program Studi',
-                style: kTextHeme.subtitle1?.copyWith(color: Palette.disable),
-              ),
-              Text(
-                lectureData.major?.name ?? '',
-                style: kTextHeme.subtitle1?.copyWith(
-                    color: Palette.black,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16,
-                    height: 1),
-              ),
-              AppSize.verticalSpace[4],
-              Text(
-                'Departemen',
-                style: kTextHeme.subtitle1?.copyWith(color: Palette.disable),
-              ),
-              Text(
-                lectureData.major?.departmentData?.departmentName ?? '',
-                style: kTextHeme.subtitle1?.copyWith(
-                    color: Palette.black,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16,
-                    height: 1),
-              )
-            ],
+          Divider(
+            color: Palette.disable,
           ),
-        )
-      ],
-    );
+          Padding(
+            padding: EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Jenjang',
+                  style: kTextHeme.subtitle1?.copyWith(color: Palette.disable),
+                ),
+                Text(
+                  lectureData.major?.degree ?? '',
+                  style: kTextHeme.subtitle1?.copyWith(
+                      color: Palette.black,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                      height: 1),
+                ),
+                AppSize.verticalSpace[4],
+                Text(
+                  'Program Studi',
+                  style: kTextHeme.subtitle1?.copyWith(color: Palette.disable),
+                ),
+                Text(
+                  lectureData.major?.name ?? '',
+                  style: kTextHeme.subtitle1?.copyWith(
+                      color: Palette.black,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                      height: 1),
+                ),
+                AppSize.verticalSpace[4],
+                Text(
+                  'Departemen',
+                  style: kTextHeme.subtitle1?.copyWith(color: Palette.disable),
+                ),
+                Text(
+                  lectureData.major?.departmentData?.departmentName ?? '',
+                  style: kTextHeme.subtitle1?.copyWith(
+                      color: Palette.black,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                      height: 1),
+                )
+              ],
+            ),
+          )
+        ],
+      );
+    });
   }
 }

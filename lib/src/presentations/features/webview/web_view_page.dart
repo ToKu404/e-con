@@ -18,6 +18,7 @@ class _WebViewPageState extends State<WebViewPage> {
   @override
   void initState() {
     super.initState();
+
     controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(Palette.background)
@@ -29,6 +30,11 @@ class _WebViewPageState extends State<WebViewPage> {
             } else {
               isLoading.value = false;
             }
+            Future.delayed(Duration(seconds: 2), () {
+              if (progress < 100) {
+                isLoading.value = false;
+              }
+            });
           },
           onPageStarted: (String url) {},
           onPageFinished: (String url) {},
@@ -38,7 +44,9 @@ class _WebViewPageState extends State<WebViewPage> {
           },
         ),
       )
-      ..loadRequest(Uri.parse(WebViewService.url));
+      ..loadRequest(
+        Uri.parse(WebViewService.url),
+      );
   }
 
   Future<bool> _exitApp(BuildContext context) async {

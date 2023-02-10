@@ -3,6 +3,7 @@ import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/history/provider/attendance_history_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/widgets/class_card.dart';
+import 'package:e_con/src/presentations/reusable_pages/check_internet_onetime.dart';
 import 'package:e_con/src/presentations/widgets/custom_shimmer.dart';
 import 'package:e_con/src/presentations/widgets/default_appbar.dart';
 import 'package:e_con/src/presentations/widgets/placeholders/card_placeholder.dart';
@@ -21,8 +22,10 @@ class StudentHistoryPage extends StatelessWidget {
             SizedBox(
               height: 60,
             ),
-            const Expanded(
-              child: _BodySection(),
+            Expanded(
+              child: CheckInternetOnetime(child: (context) {
+                return _BodySection();
+              }),
             ),
           ],
         ),

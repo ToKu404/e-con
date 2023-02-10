@@ -6,6 +6,7 @@ import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/presentations/features/login/provider/auth_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/providers/profile_picture_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/student/providers/student_profile_notifier.dart';
+import 'package:e_con/src/presentations/reusable_pages/check_internet_onetime.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_error.dart';
 import 'package:e_con/src/presentations/widgets/default_appbar.dart';
 import 'package:e_con/src/presentations/widgets/dialog/show_confirmation.dart';
@@ -41,7 +42,9 @@ class StudentSettingPage extends StatelessWidget {
           ),
         ),
         Expanded(
-          child: ProfileSection(),
+          child: CheckInternetOnetime(child: (context) {
+            return ProfileSection();
+          }),
         )
       ],
     );

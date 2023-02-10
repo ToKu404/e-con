@@ -1,6 +1,5 @@
 import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/data/models/attendance/attendance_data.dart';
-import 'package:e_con/src/data/models/attendance/student_attendance_data.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
 import 'package:e_con/src/domain/usecases/cpl_student_usecases/get_list_student_attendance_history.dart';
 import 'package:e_con/src/domain/usecases/cpl_student_usecases/get_list_student_classes.dart';

@@ -2,8 +2,6 @@ import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/data/models/final_exam/fe_exam.dart';
 import 'package:e_con/src/data/models/final_exam/fe_proposed_thesis.dart';
 import 'package:e_con/src/data/models/final_exam/fe_seminar.dart';
-import 'package:e_con/src/data/models/final_exam/seminar_data.dart';
-import 'package:e_con/src/domain/usecases/final_exam_student_usecases/get_detail_seminar_by_student.dart';
 import 'package:e_con/src/domain/usecases/final_exam_student_usecases/get_proposed_thesis.dart';
 import 'package:e_con/src/domain/usecases/final_exam_student_usecases/get_seminar_detail.dart';
 import 'package:e_con/src/domain/usecases/final_exam_student_usecases/get_thesis_trial_exam.dart';

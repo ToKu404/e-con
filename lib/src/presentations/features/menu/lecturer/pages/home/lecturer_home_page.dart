@@ -1,17 +1,14 @@
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
-import 'package:e_con/core/helpers/final_exam_helper.dart';
 import 'package:e_con/core/helpers/reusable_function_helper.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
-import 'package:e_con/src/presentations/blocs/onetime_internet_check/onetime_internet_check_cubit.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/pages/home/widgets/lecturer_task_card.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/pages/notif_seminars/widgets/lecturer_seminar_card.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecturer_seminars_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecturer_today_meeting_notifier.dart';
 import 'package:e_con/src/presentations/reusable_pages/check_internet_onetime.dart';
-import 'package:e_con/src/presentations/reusable_pages/econ_no_internet.dart';
 import 'package:e_con/src/presentations/widgets/custom_shimmer.dart';
 import 'package:e_con/src/presentations/widgets/default_appbar.dart';
 import 'package:e_con/src/presentations/widgets/header_logo.dart';
@@ -28,13 +25,6 @@ class LecturerHomePage extends StatefulWidget {
 
 class _LecturerHomePageState extends State<LecturerHomePage> {
   @override
-  void initState() {
-    super.initState();
-    BlocProvider.of<OnetimeInternetCheckCubit>(context)
-        .onCheckConnectionOnetime();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
@@ -44,7 +34,7 @@ class _LecturerHomePageState extends State<LecturerHomePage> {
               height: 60,
             ),
             Expanded(
-              child: Builder(builder: (context) {
+              child: CheckInternetOnetime(child: (context) {
                 return SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,88 +80,83 @@ class _LecturerHomePageState extends State<LecturerHomePage> {
                         final seminarNotifier =
                             context.watch<LecturerSeminarNotifier>();
 
-                        return CheckInternetOnetime(
-                          child: (context) {
-                            if (provider.state == RequestState.loading ||
-                                provider.listMeetingData == null) {
-                              return CustomShimmer(
-                                child: Column(
-                                  children: [
-                                    SizedBox(
-                                      height: 12,
-                                    ),
-                                    CardPlaceholder(
-                                      height: 80,
-                                    ),
-                                    AppSize.verticalSpace[3],
-                                    CardPlaceholder(
-                                      height: 100,
-                                    ),
-                                    AppSize.verticalSpace[3],
-                                    CardPlaceholder(
-                                      height: 100,
-                                    ),
-                                    AppSize.verticalSpace[3],
-                                    CardPlaceholder(
-                                      height: 100,
-                                    ),
-                                    AppSize.verticalSpace[3],
-                                    CardPlaceholder(
-                                      height: 100,
-                                    ),
-                                    AppSize.verticalSpace[3],
-                                  ],
+                        if (provider.state == RequestState.loading ||
+                            provider.listMeetingData == null) {
+                          return CustomShimmer(
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: 12,
                                 ),
-                              );
-                            }
-
-                            final getTodaySeminar =
-                                ReusableFunctionHelper.getTodayListSeminar(
-                                    seminarNotifier.seminars);
-
-                            if (provider.listMeetingData!.isEmpty &&
-                                getTodaySeminar.isEmpty) {
-                              return Padding(
-                                padding: const EdgeInsets.all(20.0),
-                                child: Text(
-                                  'Belum ada aktivitas yang dijadwalkan hari ini',
-                                  style: TextStyle(
-                                    color: Palette.disable,
-                                  ),
+                                CardPlaceholder(
+                                  height: 80,
                                 ),
-                              );
-                            }
+                                AppSize.verticalSpace[3],
+                                CardPlaceholder(
+                                  height: 100,
+                                ),
+                                AppSize.verticalSpace[3],
+                                CardPlaceholder(
+                                  height: 100,
+                                ),
+                                AppSize.verticalSpace[3],
+                                CardPlaceholder(
+                                  height: 100,
+                                ),
+                                AppSize.verticalSpace[3],
+                                CardPlaceholder(
+                                  height: 100,
+                                ),
+                                AppSize.verticalSpace[3],
+                              ],
+                            ),
+                          );
+                        }
 
-                            if (getTodaySeminar.isNotEmpty)
-                              return ListView.builder(
-                                physics: NeverScrollableScrollPhysics(),
-                                padding: EdgeInsets.only(top: 12),
-                                shrinkWrap: true,
-                                itemCount: getTodaySeminar.length,
-                                itemBuilder: (context, index) {
-                                  return LecturerSeminarCard(
-                                    seminarData: getTodaySeminar[index],
-                                  );
-                                },
-                              );
+                        final getTodaySeminar =
+                            ReusableFunctionHelper.getTodayListSeminar(
+                                seminarNotifier.seminars);
 
-                            if (provider.listMeetingData!.isNotEmpty)
-                              return ListView.builder(
-                                physics: NeverScrollableScrollPhysics(),
-                                padding: EdgeInsets.only(top: 12),
-                                shrinkWrap: true,
-                                itemCount: provider.listMeetingData?.length,
-                                itemBuilder: (context, index) {
-                                  return TeacherTaskCard(
-                                    meetingData:
-                                        provider.listMeetingData![index],
-                                  );
-                                },
-                              );
+                        if (provider.listMeetingData!.isEmpty &&
+                            getTodaySeminar.isEmpty) {
+                          return Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Text(
+                              'Belum ada aktivitas yang dijadwalkan hari ini',
+                              style: TextStyle(
+                                color: Palette.disable,
+                              ),
+                            ),
+                          );
+                        }
 
-                            return SizedBox.shrink();
-                          },
-                        );
+                        if (getTodaySeminar.isNotEmpty)
+                          return ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            padding: EdgeInsets.only(top: 12),
+                            shrinkWrap: true,
+                            itemCount: getTodaySeminar.length,
+                            itemBuilder: (context, index) {
+                              return LecturerSeminarCard(
+                                seminarData: getTodaySeminar[index],
+                              );
+                            },
+                          );
+
+                        if (provider.listMeetingData!.isNotEmpty)
+                          return ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            padding: EdgeInsets.only(top: 12),
+                            shrinkWrap: true,
+                            itemCount: provider.listMeetingData?.length,
+                            itemBuilder: (context, index) {
+                              return TeacherTaskCard(
+                                meetingData: provider.listMeetingData![index],
+                              );
+                            },
+                          );
+
+                        return SizedBox.shrink();
                       }),
                     ],
                   ),

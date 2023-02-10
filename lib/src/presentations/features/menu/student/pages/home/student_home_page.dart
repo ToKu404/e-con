@@ -8,13 +8,12 @@ import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/data/models/final_exam/fe_exam.dart';
 import 'package:e_con/src/data/models/final_exam/fe_proposed_thesis.dart';
 import 'package:e_con/src/data/models/final_exam/fe_seminar.dart';
-import 'package:e_con/src/data/models/final_exam/seminar_data.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/home/widgets/student_task_card.dart';
 import 'package:e_con/src/presentations/features/menu/student/providers/student_activity_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/student/providers/student_final_exam_helper_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/student/providers/student_final_exam_notifier.dart';
+import 'package:e_con/src/presentations/reusable_pages/check_internet_onetime.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_empty.dart';
-import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
 import 'package:e_con/src/presentations/widgets/custom_shimmer.dart';
 import 'package:e_con/src/presentations/widgets/header_logo.dart';
 import 'package:e_con/src/presentations/widgets/placeholders/card_placeholder.dart';
@@ -48,32 +47,51 @@ class _StudentHomePageState extends State<StudentHomePage> {
     return CustomScrollView(
       slivers: [
         _AppBarSection(),
-        SliverToBoxAdapter(child: Builder(builder: (context) {
-          final feProvider = context.watch<StudentFinalExamNotifier>();
+        SliverFillRemaining(
+          child: CheckInternetOnetime(child: (context) {
+            return CustomScrollView(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              slivers: [
+                SliverToBoxAdapter(
+                  child: Builder(
+                    builder: (context) {
+                      final feProvider =
+                          context.watch<StudentFinalExamNotifier>();
 
-          if (feProvider.proposedThesisState == RequestState.loading ||
-              feProvider.seminarsState == RequestState.loading ||
-              feProvider.trialExamState == RequestState.loading) {
-            return CustomShimmer(
-              child: Column(
-                children: [
-                  AppSize.verticalSpace[2],
-                  CardPlaceholder(
-                    height: 120,
+                      if (feProvider.proposedThesisState ==
+                              RequestState.loading ||
+                          feProvider.seminarsState == RequestState.loading ||
+                          feProvider.trialExamState == RequestState.loading) {
+                        return CustomShimmer(
+                          child: Column(
+                            children: [
+                              AppSize.verticalSpace[2],
+                              CardPlaceholder(
+                                height: 120,
+                              ),
+                              AppSize.verticalSpace[2],
+                            ],
+                          ),
+                        );
+                      }
+                      if (feProvider.listProposedThesis.isEmpty) {
+                        return SizedBox();
+                      }
+
+                      return _FinalExamSection(
+                        proposedThesis: feProvider.listProposedThesis,
+                        seminars: feProvider.listSeminar,
+                        thesisTrialExam: feProvider.thesisTrialExam,
+                      );
+                    },
                   ),
-                  AppSize.verticalSpace[2],
-                ],
-              ),
+                ),
+                _ActivitySection(),
+              ],
             );
-          }
-
-          return _FinalExamSection(
-            proposedThesis: feProvider.listProposedThesis,
-            seminars: feProvider.listSeminar,
-            thesisTrialExam: feProvider.thesisTrialExam,
-          );
-        })),
-        _ActivitySection(),
+          }),
+        )
       ],
     );
   }
@@ -215,9 +233,11 @@ class _ActivitySection extends StatelessWidget {
                               ? listWeekly[listWeekly.indexOf(val) - 1]
                               : listWeekly[listWeekly.indexOf(val) + 1];
                           isRightSwap.value = null;
+                          print(selectWeekly.value.dateName);
                           Provider.of<StudentActivityNotifier>(context,
                               listen: false)
-                            ..fetchAllMeetingByDate(date: val.date);
+                            ..fetchAllMeetingByDate(
+                                date: selectWeekly.value.date);
                         }
                       },
                       child: ActivityBody(

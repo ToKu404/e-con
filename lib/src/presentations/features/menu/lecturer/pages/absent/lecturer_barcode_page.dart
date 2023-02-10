@@ -129,9 +129,11 @@ class _LecturerBarcodePageState extends State<LecturerBarcodePage> {
                           Text(
                             '${clazzData.courseData!.courseName!} (${clazzData.name})',
                             style: kTextHeme.headline5?.copyWith(
-                                color: Palette.primary,
-                                fontWeight: FontWeight.bold,
-                                height: 1),
+                              color: Palette.primary,
+                              fontWeight: FontWeight.bold,
+                              height: 1,
+                            ),
+                            textAlign: TextAlign.center,
                           ),
                           Text(
                             'Pertemuan ${meetingData.meetingNumber}',

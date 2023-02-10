@@ -151,9 +151,22 @@ class AuthDataSourceImpl implements AuthDataSource {
 
   /// Digunakan untuk logout dengan menghapus credential di sharedpreferences
   @override
-  Future<bool> logOut() {
+  Future<bool> logOut() async {
     try {
-      return authPreferenceHelper.removeUserData();
+      final credential = await authPreferenceHelper.getUser();
+      if (credential != null) {
+        final response = await client.get(
+          Uri.parse('${ApiService.baseUrlFinalExam}/users/logout'),
+          headers: {
+            "Authorization": "Bearer ${credential.token}",
+          },
+        );
+        print(response.body);
+        if (response == 200) {
+          return authPreferenceHelper.removeUserData();
+        }
+      }
+      return false;
     } catch (e) {
       throw LocalDatabaseException();
     }

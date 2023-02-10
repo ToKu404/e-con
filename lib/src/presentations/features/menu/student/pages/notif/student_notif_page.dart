@@ -6,7 +6,7 @@ import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/data/models/profile/notification.dart';
 import 'package:e_con/src/presentations/features/menu/providers/user_notif_notifier.dart';
-import 'package:e_con/src/presentations/features/menu/student/pages/final_exam/student_final_exam_detail.dart';
+import 'package:e_con/src/presentations/reusable_pages/check_internet_onetime.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_empty.dart';
 import 'package:e_con/src/presentations/widgets/custom_shimmer.dart';
 import 'package:e_con/src/presentations/widgets/default_appbar.dart';
@@ -22,12 +22,14 @@ class StudentNotifPage extends StatelessWidget {
     return Stack(
       children: [
         Column(
-          children: const [
+          children: [
             SizedBox(
               height: 60,
             ),
             Expanded(
-              child: _BodySection(),
+              child: CheckInternetOnetime(child: (context) {
+                return _BodySection();
+              }),
             ),
           ],
         ),
@@ -49,7 +51,6 @@ class _BodySection extends StatefulWidget {
 class _BodySectionState extends State<_BodySection> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Future.microtask(() =>
         Provider.of<UserNotifNotifier>(context, listen: false)

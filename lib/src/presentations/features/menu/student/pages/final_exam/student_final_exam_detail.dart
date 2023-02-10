@@ -9,6 +9,7 @@ import 'package:e_con/src/data/models/final_exam/fe_proposed_thesis.dart';
 import 'package:e_con/src/data/models/final_exam/fe_seminar.dart';
 import 'package:e_con/src/presentations/features/menu/student/providers/student_final_exam_helper_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/student/providers/student_final_exam_notifier.dart';
+import 'package:e_con/src/presentations/reusable_pages/check_internet_onetime.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -50,7 +51,7 @@ class _StudentFinalExamDetailState extends State<StudentFinalExamDetail> {
         ),
         centerTitle: true,
       ),
-      body: Builder(builder: (context) {
+      body: CheckInternetOnetime(child: (context) {
         final provider = context.watch<StudentFinalExamNotifier>();
         if (provider.trialExamState == RequestState.loading ||
             provider.seminarsState == RequestState.loading ||

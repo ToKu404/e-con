@@ -3,7 +3,6 @@ import 'package:dartz/dartz.dart';
 import 'package:e_con/src/data/datasources/activity_datasource.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
 import 'package:e_con/src/domain/repositories/activity_repository.dart';
-import 'package:e_con/src/domain/repositories/cpl_student_repository.dart';
 
 class ActivityRepositoryImpl implements ActivityRepository {
   final ActivityDataSource activityDataSource;

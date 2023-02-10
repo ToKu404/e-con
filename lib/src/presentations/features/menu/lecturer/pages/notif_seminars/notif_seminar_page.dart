@@ -1,11 +1,9 @@
-import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/utils/request_state.dart';
-import 'package:e_con/src/presentations/blocs/onetime_internet_check/onetime_internet_check_cubit.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/pages/notif_seminars/widgets/lecturer_seminar_card.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecturer_seminars_notifier.dart';
+import 'package:e_con/src/presentations/reusable_pages/check_internet_onetime.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_empty.dart';
-import 'package:e_con/src/presentations/reusable_pages/econ_no_internet.dart';
 import 'package:e_con/src/presentations/widgets/custom_shimmer.dart';
 import 'package:e_con/src/presentations/widgets/default_appbar.dart';
 import 'package:e_con/src/presentations/widgets/placeholders/card_placeholder.dart';
@@ -22,13 +20,6 @@ class LecturerNotifSeminarPage extends StatefulWidget {
 
 class _LecturerNotifSeminarPageState extends State<LecturerNotifSeminarPage> {
   @override
-  void initState() {
-    super.initState();
-    BlocProvider.of<OnetimeInternetCheckCubit>(context)
-        .onCheckConnectionOnetime();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
@@ -41,16 +32,8 @@ class _LecturerNotifSeminarPageState extends State<LecturerNotifSeminarPage> {
               child: Builder(builder: (context) {
                 return Builder(builder: (context) {
                   final provider = context.watch<LecturerSeminarNotifier>();
-                  return BlocBuilder<OnetimeInternetCheckCubit,
-                      OnetimeInternetCheckState>(builder: (context, state) {
-                    if (state is OnetimeInternetCheckLost) {
-                      return EconNoInternet(
-                        onReload: () {
-                          BlocProvider.of<OnetimeInternetCheckCubit>(context)
-                              .onCheckConnectionOnetime();
-                        },
-                      );
-                    }
+                  return CheckInternetOnetime(child: (context) {
+                    
                     if (provider.state == RequestState.loading) {
                       return CustomShimmer(
                         child: Column(

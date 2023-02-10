@@ -10,7 +10,6 @@ import 'package:e_con/src/data/models/profile/student_data.dart';
 import 'package:e_con/src/data/models/profile/student_home.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'package:jwt_decode/jwt_decode.dart';
 
 abstract class ProfileDataSource {
   Future<StudentData> singleStudentProfile();
@@ -123,14 +122,14 @@ class ProfileDataSourceImpl implements ProfileDataSource {
   Future<List<NotificationModel>> getNotification() async {
     try {
       final credential = await authPreferenceHelper.getUser();
-      Map<String, dynamic> payload = Jwt.parseJwt(credential!.token!);
+      
 
       final responseData = await client.get(
         Uri.parse(
           '${ApiService.baseUrlFinalExam}/notifications',
         ),
         headers: {
-          "Authorization": "Bearer ${credential.token}",
+          "Authorization": "Bearer ${credential!.token}",
         },
       );
       print(responseData.body);

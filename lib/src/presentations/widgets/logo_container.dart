@@ -1,4 +1,3 @@
-import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/constants/path_const.dart';
 import 'package:e_con/core/constants/size_const.dart';
 import 'package:flutter/material.dart';

@@ -1,4 +1,3 @@
-import 'package:e_con/src/data/models/attendance/attendance_data.dart';
 import 'package:e_con/src/data/models/attendance/student_data_attendance_data.dart';
 import 'package:equatable/equatable.dart';
 

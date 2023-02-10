@@ -9,6 +9,7 @@ import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/pages/absent/widgets/attendance_student_card.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/meeting_course_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/providers/attendance_notifier.dart';
+import 'package:e_con/src/presentations/reusable_pages/check_internet_onetime.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
 import 'package:e_con/src/presentations/widgets/custom_button.dart';
 import 'package:e_con/src/presentations/widgets/custom_shimmer.dart';
@@ -56,233 +57,247 @@ class _LecturerMeetDetailPageState extends State<LecturerMeetDetailPage> {
       );
     }
     final meetingData = meetingProvider.meetingData!;
-    return GestureDetector(
-      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: Palette.background,
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(
-              Icons.arrow_back_rounded,
-            ),
-          ),
-          centerTitle: true,
-          title: Text(
-            'Pertemuan ${meetingNumber}',
-            style: kTextHeme.headline5?.copyWith(
-              color: Palette.black,
-            ),
-          ),
-          actions: [
-            PopupMenuButton<Function>(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 4,
-                vertical: 8.0,
+    return WillPopScope(
+      onWillPop: () async {
+        final prov = context.read<MeetingCourseNotifier>();
+        await prov.getListMeeting(classId: classData.id!);
+        return true;
+      },
+      child: GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          backgroundColor: Palette.background,
+          appBar: AppBar(
+            leading: IconButton(
+              onPressed: () async {
+                final prov = context.read<MeetingCourseNotifier>();
+                await prov.getListMeeting(classId: classData.id!);
+                Navigator.pop(context);
+              },
+              icon: const Icon(
+                Icons.arrow_back_rounded,
               ),
-              onSelected: (val) {
-                // Navigator.pop(context);
-                val.call();
-              },
-              itemBuilder: (ctx) {
-                return [
-                  PopupMenuItem(
-                    value: () async {
-                      Navigator.pushNamed(context, AppRoutes.editMeeting,
-                          arguments: {
-                            'classData': classData,
-                            'topic': meetingData.topics,
-                            'date': meetingData.date,
-                            'meetingId': meetingData.id,
-                          });
-                    },
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.edit,
-                        ),
-                        const SizedBox(
-                          width: 4,
-                        ),
-                        Text('Edit')
-                      ],
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: () async {
-                      final deleteConfirmation = await showConfirmation(
-                          context: ctx,
-                          title: 'Yakin ingin menghapus pertemuan ini?');
-                      if (deleteConfirmation) {
-                        await meetingProvider.deleteMeeting(
-                            meetingId: meetingData.id);
-                        await meetingProvider.getListMeeting(
-                            classId: classData.id!);
-                        Navigator.pop(context);
-                      }
-                    },
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.delete_rounded,
-                        ),
-                        const SizedBox(
-                          width: 4,
-                        ),
-                        Text('Hapus')
-                      ],
-                    ),
-                  ),
-                ];
-              },
             ),
-          ],
-        ),
-        body: Stack(
-          children: [
-            CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(
-                  child: Container(
-                    padding: EdgeInsets.all(
-                      AppSize.space[3],
+            centerTitle: true,
+            title: Text(
+              'Pertemuan ${meetingNumber}',
+              style: kTextHeme.headline5?.copyWith(
+                color: Palette.black,
+              ),
+            ),
+            actions: [
+              PopupMenuButton<Function>(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 4,
+                  vertical: 8.0,
+                ),
+                onSelected: (val) {
+                  // Navigator.pop(context);
+                  val.call();
+                },
+                itemBuilder: (ctx) {
+                  return [
+                    PopupMenuItem(
+                      value: () async {
+                        Navigator.pushNamed(context, AppRoutes.editMeeting,
+                            arguments: {
+                              'classData': classData,
+                              'topic': meetingData.topics,
+                              'date': meetingData.date,
+                              'meetingId': meetingData.id,
+                            });
+                      },
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.edit,
+                          ),
+                          const SizedBox(
+                            width: 4,
+                          ),
+                          Text('Edit')
+                        ],
+                      ),
                     ),
-                    color: Palette.background,
-                    child: Container(
-                      padding: EdgeInsets.all(AppSize.space[3]),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
+                    PopupMenuItem(
+                      value: () async {
+                        final deleteConfirmation = await showConfirmation(
+                            context: ctx,
+                            title: 'Yakin ingin menghapus pertemuan ini?');
+                        if (deleteConfirmation) {
+                          await meetingProvider.deleteMeeting(
+                              meetingId: meetingData.id);
+                          await meetingProvider.getListMeeting(
+                              classId: classData.id!);
+                          Navigator.pop(context);
+                        }
+                      },
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.delete_rounded,
+                          ),
+                          const SizedBox(
+                            width: 4,
+                          ),
+                          Text('Hapus')
+                        ],
+                      ),
+                    ),
+                  ];
+                },
+              ),
+            ],
+          ),
+          body: CheckInternetOnetime(child: (context) {
+            return Stack(
+              children: [
+                CustomScrollView(
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: Container(
+                        padding: EdgeInsets.all(
                           AppSize.space[3],
                         ),
-                        color: Colors.white,
-                        border: Border.all(
-                          color: Palette.field,
+                        color: Palette.background,
+                        child: Container(
+                          padding: EdgeInsets.all(AppSize.space[3]),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                              AppSize.space[3],
+                            ),
+                            color: Colors.white,
+                            border: Border.all(
+                              color: Palette.field,
+                            ),
+                          ),
+                          child: _StatisticSection(
+                            meetingId: meetingId,
+                          ),
                         ),
                       ),
-                      child: _StatisticSection(
-                        meetingId: meetingId,
+                    ),
+                    _CustomAppBar(
+                      meetingId: meetingId,
+                    ),
+                    SliverPadding(
+                      padding: EdgeInsets.all(AppSize.space[4]),
+                      sliver: Builder(builder: (context) {
+                        final attendanceProvider =
+                            context.watch<AttendanceNotifier>();
+                        if (attendanceProvider.state == RequestState.loading) {
+                          return SliverToBoxAdapter(
+                            child: CustomShimmer(
+                                child: Column(
+                              children: [
+                                CardPlaceholder(
+                                  height: 80,
+                                  horizontalPadding: 0,
+                                ),
+                                AppSize.verticalSpace[4],
+                                CardPlaceholder(
+                                  height: 80,
+                                  horizontalPadding: 0,
+                                ),
+                                AppSize.verticalSpace[4],
+                                CardPlaceholder(
+                                  height: 80,
+                                  horizontalPadding: 0,
+                                )
+                              ],
+                            )),
+                          );
+                        }
+                        final listAttendance =
+                            attendanceProvider.listAttendanceData;
+
+                        if (listAttendance.isEmpty) {
+                          return SliverToBoxAdapter(
+                            child: SizedBox.shrink(),
+                          );
+                        }
+
+                        return SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                              childCount: listAttendance.length,
+                              (context, index) {
+                            return Column(
+                              children: [
+                                AttedanceStudentCard(
+                                  attendanceData: listAttendance[index],
+                                ),
+                                SizedBox(
+                                  height: (index == 9) ? 66 : 8,
+                                )
+                              ],
+                            );
+                          }),
+                        );
+                      }),
+                    ),
+                  ],
+                ),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.transparent,
+                          Colors.white.withOpacity(.5),
+                          Colors.white
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
                       ),
+                    ),
+                    width: AppSize.getAppWidth(context),
+                    padding: EdgeInsets.all(AppSize.space[3]),
+                    child: CustomButton(
+                      height: 54,
+                      icon: Icons.qr_code_2_rounded,
+                      text: 'Barcode Absen',
+                      onTap: () async {
+                        if (meetingData.validationCodeExpiredDate != null &&
+                            !ReusableFunctionHelper.isInitialExpiredDate(
+                                meetingData.validationCodeExpiredDate!)) {
+                          if (meetingData.validationCodeExpiredDate!
+                              .isAfter(DateTime.now())) {
+                            final provider =
+                                context.read<MeetingCourseNotifier>();
+                            await provider.getValidationCode(
+                                meetingId: meetingData.id);
+
+                            if (provider.validationCode != null) {
+                              Navigator.pushNamed(
+                                  context, AppRoutes.barcodeAbsent,
+                                  arguments: {
+                                    'meetingId': meetingData.id,
+                                    'classData': classData,
+                                    'validationCode': provider.validationCode,
+                                    'meetingNumber': meetingNumber,
+                                  });
+                            }
+                            return;
+                          }
+                        }
+
+                        meetingData.setMeetingNumber = meetingNumber;
+                        Navigator.pushNamed(context, AppRoutes.genBarcode,
+                            arguments: {
+                              'meetingData': meetingData,
+                              'classData': classData,
+                              'isEdit': false,
+                            });
+                      },
                     ),
                   ),
                 ),
-                _CustomAppBar(
-                  meetingId: meetingId,
-                ),
-                SliverPadding(
-                  padding: EdgeInsets.all(AppSize.space[4]),
-                  sliver: Builder(builder: (context) {
-                    final attendanceProvider =
-                        context.watch<AttendanceNotifier>();
-                    if (attendanceProvider.state == RequestState.loading) {
-                      return SliverToBoxAdapter(
-                        child: CustomShimmer(
-                            child: Column(
-                          children: [
-                            CardPlaceholder(
-                              height: 80,
-                              horizontalPadding: 0,
-                            ),
-                            AppSize.verticalSpace[4],
-                            CardPlaceholder(
-                              height: 80,
-                              horizontalPadding: 0,
-                            ),
-                            AppSize.verticalSpace[4],
-                            CardPlaceholder(
-                              height: 80,
-                              horizontalPadding: 0,
-                            )
-                          ],
-                        )),
-                      );
-                    }
-                    final listAttendance =
-                        attendanceProvider.listAttendanceData;
-
-                    if (listAttendance.isEmpty) {
-                      return SliverToBoxAdapter(
-                        child: SizedBox.shrink(),
-                      );
-                    }
-
-                    return SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                          childCount: listAttendance.length, (context, index) {
-                        return Column(
-                          children: [
-                            AttedanceStudentCard(
-                              attendanceData: listAttendance[index],
-                            ),
-                            SizedBox(
-                              height: (index == 9) ? 66 : 8,
-                            )
-                          ],
-                        );
-                      }),
-                    );
-                  }),
-                ),
               ],
-            ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Colors.transparent,
-                      Colors.white.withOpacity(.5),
-                      Colors.white
-                    ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  ),
-                ),
-                width: AppSize.getAppWidth(context),
-                padding: EdgeInsets.all(AppSize.space[3]),
-                child: CustomButton(
-                  height: 54,
-                  icon: Icons.qr_code_2_rounded,
-                  text: 'Barcode Absen',
-                  onTap: () async {
-                    if (meetingData.validationCodeExpiredDate != null &&
-                        !ReusableFunctionHelper.isInitialExpiredDate(
-                            meetingData.validationCodeExpiredDate!)) {
-                      if (meetingData.validationCodeExpiredDate!
-                          .isAfter(DateTime.now())) {
-                        final provider = context.read<MeetingCourseNotifier>();
-                        await provider.getValidationCode(
-                            meetingId: meetingData.id);
-
-                        if (provider.validationCode != null) {
-                          Navigator.pushNamed(context, AppRoutes.barcodeAbsent,
-                              arguments: {
-                                'meetingId': meetingData.id,
-                                'classData': classData,
-                                'validationCode': provider.validationCode,
-                                'meetingNumber': meetingNumber,
-                              });
-                        }
-                        return;
-                      }
-                    }
-
-                    meetingData.setMeetingNumber = meetingNumber;
-                    Navigator.pushNamed(context, AppRoutes.genBarcode,
-                        arguments: {
-                          'meetingData': meetingData,
-                          'classData': classData,
-                          'isEdit': false,
-                        });
-                  },
-                ),
-              ),
-            ),
-          ],
+            );
+          }),
         ),
       ),
     );

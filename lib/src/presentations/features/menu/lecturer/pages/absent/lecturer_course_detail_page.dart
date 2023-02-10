@@ -8,6 +8,7 @@ import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/pages/absent/widgets/teacher_meet_card.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/course_student_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/meeting_course_notifier.dart';
+import 'package:e_con/src/presentations/reusable_pages/check_internet_onetime.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_empty.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_error.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
@@ -39,35 +40,6 @@ class _LecturerCourseDetailPageState extends State<LecturerCourseDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    final meetingProvider = context.watch<MeetingCourseNotifier>();
-    final studentCourseProvider = context.watch<CourseStudentNotifier>();
-
-    if (meetingProvider.state == RequestState.loading ||
-        studentCourseProvider.state == RequestState.loading) {
-      return EconLoading(
-        withScaffold: true,
-      );
-    } else if (meetingProvider.state == RequestState.error ||
-        studentCourseProvider.state == RequestState.error) {
-      return EconError(
-        errorMessage: meetingProvider.error,
-        withScaffold: true,
-      );
-    }
-
-    if (meetingProvider.listMeeting == null ||
-        studentCourseProvider.listStudent == null) {
-      return EconError(
-        errorMessage: 'Data Kosong',
-        withScaffold: true,
-      );
-    }
-
-    final listMeeting = meetingProvider.listMeeting!;
-
-    final courseDate =
-        '${widget.clazzData.startTime}-${widget.clazzData.endTime}';
-
     final ValueNotifier<bool> isShowDetail = ValueNotifier(false);
 
     return ValueListenableBuilder(
@@ -124,69 +96,97 @@ class _LecturerCourseDetailPageState extends State<LecturerCourseDetailPage> {
               ],
             ),
             body: SafeArea(
-              child: ValueListenableBuilder(
-                  valueListenable: isShowDetail,
-                  builder: (context, state, _) {
-                    return Stack(
-                      children: [
-                        Column(
-                          children: [
-                            state
-                                ? _TitleSection(
-                                    className: widget.clazzData.name ?? '',
-                                    courseName: widget
-                                            .clazzData.courseData!.courseName ??
-                                        '',
-                                    semesterName: '',
-                                    totalStudent: studentCourseProvider
-                                        .listStudent!.length,
-                                    courseDate: courseDate,
-                                    classId: widget.clazzData.id!,
-                                  )
-                                : SizedBox.shrink(),
-                            Expanded(
-                              child: listMeeting.isEmpty
-                                  ? EconEmpty(
-                                      emptyMessage:
-                                          'Silahkan buat meeting terlebih dahulu!')
-                                  : ListView.builder(
-                                      itemCount: listMeeting.length,
-                                      padding: EdgeInsets.all(
-                                        AppSize.space[3],
+              child: CheckInternetOnetime(child: (context) {
+                final meetingProvider = context.watch<MeetingCourseNotifier>();
+                final studentCourseProvider =
+                    context.watch<CourseStudentNotifier>();
+
+                if (meetingProvider.state == RequestState.loading ||
+                    studentCourseProvider.state == RequestState.loading) {
+                  return EconLoading();
+                } else if (meetingProvider.state == RequestState.error ||
+                    studentCourseProvider.state == RequestState.error) {
+                  return EconError(
+                    errorMessage: meetingProvider.error,
+                  );
+                }
+
+                if (meetingProvider.listMeeting == null ||
+                    studentCourseProvider.listStudent == null) {
+                  return EconError(
+                    errorMessage: 'Data Kosong',
+                  );
+                }
+
+                final listMeeting = meetingProvider.listMeeting!;
+
+                final courseDate =
+                    '${widget.clazzData.startTime}-${widget.clazzData.endTime}';
+                return ValueListenableBuilder(
+                    valueListenable: isShowDetail,
+                    builder: (context, state, _) {
+                      return Stack(
+                        children: [
+                          Column(
+                            children: [
+                              state
+                                  ? _TitleSection(
+                                      className: widget.clazzData.name ?? '',
+                                      courseName: widget.clazzData.courseData!
+                                              .courseName ??
+                                          '',
+                                      semesterName: '',
+                                      totalStudent: studentCourseProvider
+                                          .listStudent!.length,
+                                      courseDate: courseDate,
+                                      classId: widget.clazzData.id!,
+                                    )
+                                  : SizedBox.shrink(),
+                              Expanded(
+                                child: listMeeting.isEmpty
+                                    ? EconEmpty(
+                                        emptyMessage:
+                                            'Silahkan buat meeting terlebih dahulu!')
+                                    : ListView.builder(
+                                        itemCount: listMeeting.length,
+                                        padding: EdgeInsets.all(
+                                          AppSize.space[3],
+                                        ),
+                                        itemBuilder: (context, index) {
+                                          final meetingData =
+                                              listMeeting[index];
+                                          meetingData.setMeetingNumber =
+                                              index + 1;
+                                          return TeacherMeetCard(
+                                            meetingData: meetingData,
+                                            classData: widget.clazzData,
+                                          );
+                                        },
                                       ),
-                                      itemBuilder: (context, index) {
-                                        final meetingData = listMeeting[index];
-                                        meetingData.setMeetingNumber =
-                                            index + 1;
-                                        return TeacherMeetCard(
-                                          meetingData: meetingData,
-                                          classData: widget.clazzData,
-                                        );
-                                      },
-                                    ),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            state
-                                ? _TitleSection(
-                                    className: widget.clazzData.name ?? '',
-                                    courseName: widget
-                                            .clazzData.courseData!.courseName ??
-                                        '',
-                                    semesterName: '',
-                                    totalStudent: studentCourseProvider
-                                        .listStudent!.length,
-                                    courseDate: courseDate,
-                                    classId: widget.clazzData.id!,
-                                  )
-                                : SizedBox.shrink(),
-                          ],
-                        )
-                      ],
-                    );
-                  }),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              state
+                                  ? _TitleSection(
+                                      className: widget.clazzData.name ?? '',
+                                      courseName: widget.clazzData.courseData!
+                                              .courseName ??
+                                          '',
+                                      semesterName: '',
+                                      totalStudent: studentCourseProvider
+                                          .listStudent!.length,
+                                      courseDate: courseDate,
+                                      classId: widget.clazzData.id!,
+                                    )
+                                  : SizedBox.shrink(),
+                            ],
+                          )
+                        ],
+                      );
+                    });
+              }),
             ),
           );
         });

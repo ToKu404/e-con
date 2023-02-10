@@ -1,10 +1,8 @@
 import 'package:e_con/core/constants/color_const.dart';
-import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/helpers/final_exam_helper.dart';
 import 'package:e_con/core/helpers/reusable_function_helper.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
-import 'package:e_con/src/data/models/final_exam/helpers/seminar_type.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecturer_seminars_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/final_exam/student_final_exam_detail.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';

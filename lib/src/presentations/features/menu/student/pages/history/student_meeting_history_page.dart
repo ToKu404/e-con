@@ -5,6 +5,7 @@ import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/history/provider/attendance_history_notifier.dart';
+import 'package:e_con/src/presentations/reusable_pages/check_internet_onetime.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_empty.dart';
 import 'package:e_con/src/presentations/widgets/custom_shimmer.dart';
 import 'package:e_con/src/presentations/widgets/placeholders/card_placeholder.dart';
@@ -42,7 +43,7 @@ class _StudentMeetingHistoryPageState extends State<StudentMeetingHistoryPage> {
           ),
         ),
       ),
-      body: SafeArea(child: Builder(builder: (context) {
+      body: SafeArea(child: CheckInternetOnetime(child: (context) {
         final provider = context.watch<AttendanceHistoryNotifier>();
 
         if (provider.studentAttendanceState == RequestState.loading ||
