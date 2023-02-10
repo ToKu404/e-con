@@ -103,7 +103,6 @@ class _StudentHomePageState extends State<StudentHomePage> {
                             ),
                           );
                         }
-                        print("test ${feProvider.listProposedThesis}");
                         if (feProvider.listProposedThesis.isEmpty) {
                           return SizedBox();
                         }

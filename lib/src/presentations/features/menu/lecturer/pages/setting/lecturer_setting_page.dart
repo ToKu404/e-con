@@ -3,7 +3,6 @@ import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
-import 'package:e_con/src/presentations/blocs/onetime_internet_check/onetime_internet_check_cubit.dart';
 import 'package:e_con/src/presentations/features/login/provider/auth_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecture_profile_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/providers/profile_picture_notifier.dart';
@@ -31,17 +30,24 @@ class LecturerSettingPage extends StatelessWidget {
               if (logoutConfirmation) {
                 await context.read<AuthNotifier>()
                   ..logOut();
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  AppRoutes.login,
-                  (route) => false,
+                Future.delayed(
+                  Duration(seconds: 1),
+                  () {
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      AppRoutes.login,
+                      (route) => false,
+                    );
+                  },
                 );
               }
             },
             icon: Icon(Icons.exit_to_app),
           ),
         ),
-        Expanded(child: _ProfileSection()),
+        Expanded(child: CheckInternetOnetime(child: (context) {
+          return _ProfileSection();
+        })),
       ],
     );
   }

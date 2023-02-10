@@ -88,7 +88,11 @@ class AttendanceNotifier extends ChangeNotifier {
     result.fold((l) {
       _setAttendanceByStudentState = RequestState.error;
     }, (r) {
-      _setAttendanceByStudentState = RequestState.success;
+      if (r) {
+        _setAttendanceByStudentState = RequestState.success;
+      } else {
+        _setAttendanceByStudentState = RequestState.error;
+      }
     });
     notifyListeners();
   }

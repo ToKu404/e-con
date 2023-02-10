@@ -13,6 +13,7 @@ import 'package:e_con/src/presentations/reusable_pages/econ_error.dart';
 import 'package:e_con/src/presentations/widgets/custom_button.dart';
 import 'package:e_con/src/presentations/widgets/custom_shimmer.dart';
 import 'package:e_con/src/presentations/widgets/default_appbar.dart';
+import 'package:e_con/src/presentations/widgets/failed_modal.dart';
 import 'package:e_con/src/presentations/widgets/placeholders/text_placeholder.dart';
 import 'package:e_con/src/presentations/widgets/success_modal.dart';
 import 'package:flutter/material.dart';
@@ -112,6 +113,15 @@ class _AttendanceDetailSectionState extends State<AttendanceDetailSection> {
           context: context,
           builder: (context) {
             return const SuccessAttendanceModal();
+          },
+        );
+      } else if (attendanceProvider.setAttendanceByStudentState ==
+          RequestState.error) {
+        attendanceProvider.init();
+        showDialog(
+          context: context,
+          builder: (context) {
+            return const FailedAttendanceModal();
           },
         );
       }

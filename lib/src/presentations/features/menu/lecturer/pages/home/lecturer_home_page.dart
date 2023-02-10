@@ -4,7 +4,11 @@ import 'package:e_con/core/helpers/reusable_function_helper.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
+import 'package:e_con/src/data/models/final_exam/fe_student.dart';
+import 'package:e_con/src/data/models/final_exam/final_exam_data.dart';
+import 'package:e_con/src/data/models/final_exam/seminar_data.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/pages/home/widgets/lecturer_task_card.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/pages/home/widgets/lecturer_today_seminar_card.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/pages/notif_seminars/widgets/lecturer_seminar_card.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecturer_seminars_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecturer_today_meeting_notifier.dart';
@@ -137,7 +141,7 @@ class _LecturerHomePageState extends State<LecturerHomePage> {
                             shrinkWrap: true,
                             itemCount: getTodaySeminar.length,
                             itemBuilder: (context, index) {
-                              return LecturerSeminarCard(
+                              return TeacherTodaySeminarCard(
                                 seminarData: getTodaySeminar[index],
                               );
                             },

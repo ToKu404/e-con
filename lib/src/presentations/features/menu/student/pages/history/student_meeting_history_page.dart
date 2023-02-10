@@ -34,6 +34,7 @@ class _StudentMeetingHistoryPageState extends State<StudentMeetingHistoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Palette.background,
       appBar: AppBar(
         title: Text(
           '${widget.clazzData.courseData!.courseName!} ${widget.clazzData.name ?? ''}',

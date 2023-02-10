@@ -31,10 +31,15 @@ class StudentSettingPage extends StatelessWidget {
               if (logoutConfirmation) {
                 await context.read<AuthNotifier>()
                   ..logOut();
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  AppRoutes.login,
-                  (route) => false,
+                Future.delayed(
+                  Duration(seconds: 1),
+                  () {
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      AppRoutes.login,
+                      (route) => false,
+                    );
+                  },
                 );
               }
             },
