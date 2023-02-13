@@ -1,16 +1,15 @@
 import 'package:flutter/widgets.dart';
 
-
 class FinalExamObject {
   final String title;
-  final String? message;
+  final String? subtitle;
   final String status;
   final Color color;
   final VoidCallback? onclick;
 
   FinalExamObject(
       {required this.title,
-      this.message,
+      this.subtitle,
       required this.status,
       this.onclick,
       required this.color});

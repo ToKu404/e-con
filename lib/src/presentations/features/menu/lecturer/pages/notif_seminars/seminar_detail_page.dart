@@ -216,7 +216,7 @@ class _LecturerSeminarDetailPageState extends State<LecturerSeminarDetailPage> {
                   ),
                 if (detailSeminar.link != null)
                   Text(
-                    'Online : ${detailSeminar.link!.split(':')[1].trim()}',
+                    'Online : ${detailSeminar.link}',
                     style: kTextHeme.subtitle1,
                   ),
               ])

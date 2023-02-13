@@ -51,7 +51,7 @@ class AuthDataSourceImpl implements AuthDataSource {
         },
         body: json.encode(map),
       );
-      print(responseFE.body);
+      print(basicAuth);
 
       final responseCPL = await client.post(
         Uri.parse('${ApiService.baseUrlCPL}/login'),
@@ -155,21 +155,14 @@ class AuthDataSourceImpl implements AuthDataSource {
     try {
       final credential = await authPreferenceHelper.getUser();
       if (credential != null) {
-        Map<String, dynamic> payload = Jwt.parseJwt(credential.token!);
-
-        final response = await client.get(
-          Uri.parse(
-              '${ApiService.baseUrlFinalExam}/users/logout/${payload['username']}'),
+        await client.get(
+          Uri.parse('${ApiService.baseUrlFinalExam}/users/logout'),
           headers: {
             "Authorization": "Bearer ${credential.token}",
           },
         );
-        print(response.body);
-        if (response == 200) {
-          return authPreferenceHelper.removeUserData();
-        }
       }
-      return false;
+      return authPreferenceHelper.removeUserData();
     } catch (e) {
       throw LocalDatabaseException();
     }

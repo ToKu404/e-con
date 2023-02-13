@@ -285,10 +285,11 @@ class _FinalExamSectionState extends State<_FinalExamSection> {
       return CustomShimmer(
           child: Column(
         children: [
+          AppSize.verticalSpace[4],
           CardPlaceholder(
             height: 100,
           ),
-          AppSize.verticalSpace[2],
+          AppSize.verticalSpace[4],
         ],
       ));
     }
@@ -412,7 +413,7 @@ class HomeFinalExamCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    proposedThesis.message ?? '',
+                    proposedThesis.subtitle ?? '',
                     maxLines: 4,
                     overflow: TextOverflow.ellipsis,
                     style:

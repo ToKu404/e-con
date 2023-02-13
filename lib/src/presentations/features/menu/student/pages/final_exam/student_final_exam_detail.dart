@@ -250,19 +250,19 @@ class __BuildBodyState extends State<_BuildBody> {
                             Divider(
                               color: Palette.disable,
                             ),
-                            if (proposedSeminar.date != null) ...[
-                              Text(
-                                'Hari, Tanggal',
-                                style: kTextHeme.subtitle1?.copyWith(
-                                    color: Palette.disable,
-                                    fontWeight: FontWeight.normal),
-                              ),
-                              Text(
-                                ReusableFunctionHelper.datetimeToString(
-                                    proposedSeminar.date!),
-                                style: kTextHeme.subtitle1,
-                              ),
-                            ],
+                            Text(
+                              'Hari, Tanggal',
+                              style: kTextHeme.subtitle1?.copyWith(
+                                  color: Palette.disable,
+                                  fontWeight: FontWeight.normal),
+                            ),
+                            Text(
+                              proposedSeminar.date != null
+                                  ? ReusableFunctionHelper.datetimeToString(
+                                      proposedSeminar.date!)
+                                  : 'Belum ditentukan',
+                              style: kTextHeme.subtitle1,
+                            ),
                             SizedBox(
                               height: 8,
                             ),
@@ -275,30 +275,39 @@ class __BuildBodyState extends State<_BuildBody> {
                             Text(
                               proposedSeminar.startTime != null
                                   ? '${proposedSeminar.startTime}-${proposedSeminar.endTime} WITA'
-                                  : '-',
+                                  : 'Belum ditentukan',
                               style: kTextHeme.subtitle1,
                             ),
                             SizedBox(
                               height: 8,
                             ),
                             Text(
-                              'Tempat',
+                              'Tempat (Luring)',
                               style: kTextHeme.subtitle1?.copyWith(
                                   color: Palette.disable,
                                   fontWeight: FontWeight.normal),
                             ),
-                            if (proposedSeminar.place != null)
-                              Text(
-                                'Offline : ${proposedSeminar.place}',
-                                style: kTextHeme.subtitle1,
-                              ),
-                            if (proposedSeminar.link != null)
-                              Builder(builder: (context) {
-                                return Text(
-                                  'Online : ${proposedSeminar.link!.trim()}',
-                                  style: kTextHeme.subtitle1,
-                                );
-                              }),
+                            Text(
+                              proposedSeminar.place != null
+                                  ? '${proposedSeminar.place}'
+                                  : 'Belum ditentukan',
+                              style: kTextHeme.subtitle1,
+                            ),
+                            SizedBox(
+                              height: 8,
+                            ),
+                            Text(
+                              'Tempat (Daring)',
+                              style: kTextHeme.subtitle1?.copyWith(
+                                  color: Palette.disable,
+                                  fontWeight: FontWeight.normal),
+                            ),
+                            Text(
+                              proposedSeminar.link != null
+                                  ? '${proposedSeminar.link!.trim()}'
+                                  : 'Belum ditentukan',
+                              style: kTextHeme.subtitle1,
+                            ),
                           ],
                         ),
                       SizedBox(
@@ -316,19 +325,19 @@ class __BuildBodyState extends State<_BuildBody> {
                             Divider(
                               color: Palette.disable,
                             ),
-                            if (resultSeminar.date != null) ...[
-                              Text(
-                                'Hari, Tanggal',
-                                style: kTextHeme.subtitle1?.copyWith(
-                                    color: Palette.disable,
-                                    fontWeight: FontWeight.normal),
-                              ),
-                              Text(
-                                ReusableFunctionHelper.datetimeToString(
-                                    resultSeminar.date!),
-                                style: kTextHeme.subtitle1,
-                              ),
-                            ],
+                            Text(
+                              'Hari, Tanggal',
+                              style: kTextHeme.subtitle1?.copyWith(
+                                  color: Palette.disable,
+                                  fontWeight: FontWeight.normal),
+                            ),
+                            Text(
+                              resultSeminar.date != null
+                                  ? ReusableFunctionHelper.datetimeToString(
+                                      resultSeminar.date!)
+                                  : 'Belum ditentukan',
+                              style: kTextHeme.subtitle1,
+                            ),
                             SizedBox(
                               height: 8,
                             ),
@@ -339,35 +348,48 @@ class __BuildBodyState extends State<_BuildBody> {
                                   fontWeight: FontWeight.normal),
                             ),
                             Text(
-                              '${resultSeminar.startTime}-${resultSeminar.endTime} WITA',
+                              resultSeminar.startTime != null
+                                  ? '${resultSeminar.startTime}-${resultSeminar.endTime} WITA'
+                                  : 'Belum ditentukan',
                               style: kTextHeme.subtitle1,
                             ),
                             SizedBox(
                               height: 8,
                             ),
                             Text(
-                              'Tempat',
+                              'Tempat (Luring)',
                               style: kTextHeme.subtitle1?.copyWith(
                                   color: Palette.disable,
                                   fontWeight: FontWeight.normal),
                             ),
-                            if (resultSeminar.place != null)
-                              Text(
-                                'Offline : ${resultSeminar.place}',
-                                style: kTextHeme.subtitle1,
-                              ),
-                            if (resultSeminar.link != null)
-                              Text(
-                                'Online : ${resultSeminar.link!.trim()}',
-                                style: kTextHeme.subtitle1,
-                              ),
+                            Text(
+                              resultSeminar.place != null
+                                  ? '${resultSeminar.place}'
+                                  : 'Belum ditentukan',
+                              style: kTextHeme.subtitle1,
+                            ),
+                            SizedBox(
+                              height: 8,
+                            ),
+                            Text(
+                              'Tempat (Daring)',
+                              style: kTextHeme.subtitle1?.copyWith(
+                                  color: Palette.disable,
+                                  fontWeight: FontWeight.normal),
+                            ),
+                            Text(
+                              resultSeminar.link != null
+                                  ? '${resultSeminar.link!.trim()}'
+                                  : 'Belum ditentukan',
+                              style: kTextHeme.subtitle1,
+                            ),
                           ],
                         ),
                       if (finalExam != null)
                         BuildFeCard(
                           child: [
                             Text(
-                              'Seminar Hasil',
+                              'Ujian Skripsi',
                               style: kTextHeme.headline5?.copyWith(
                                   fontWeight: FontWeight.w500,
                                   color: Palette.primaryVariant),
@@ -375,19 +397,19 @@ class __BuildBodyState extends State<_BuildBody> {
                             Divider(
                               color: Palette.disable,
                             ),
-                            if (finalExam.date != null) ...[
-                              Text(
-                                'Hari, Tanggal',
-                                style: kTextHeme.subtitle1?.copyWith(
-                                    color: Palette.disable,
-                                    fontWeight: FontWeight.normal),
-                              ),
-                              Text(
-                                ReusableFunctionHelper.datetimeToString(
-                                    finalExam.date!),
-                                style: kTextHeme.subtitle1,
-                              ),
-                            ],
+                            Text(
+                              'Hari, Tanggal',
+                              style: kTextHeme.subtitle1?.copyWith(
+                                  color: Palette.disable,
+                                  fontWeight: FontWeight.normal),
+                            ),
+                            Text(
+                              finalExam.date != null
+                                  ? ReusableFunctionHelper.datetimeToString(
+                                      finalExam.date!)
+                                  : 'Belum ditentukan',
+                              style: kTextHeme.subtitle1,
+                            ),
                             SizedBox(
                               height: 8,
                             ),
@@ -398,28 +420,41 @@ class __BuildBodyState extends State<_BuildBody> {
                                   fontWeight: FontWeight.normal),
                             ),
                             Text(
-                              '${finalExam.startTime}-${finalExam.endTime} WITA',
+                              finalExam.startTime != null
+                                  ? '${finalExam.startTime}-${finalExam.endTime} WITA'
+                                  : 'Belum ditentukan',
                               style: kTextHeme.subtitle1,
                             ),
                             SizedBox(
                               height: 8,
                             ),
                             Text(
-                              'Tempat',
+                              'Tempat (Luring)',
                               style: kTextHeme.subtitle1?.copyWith(
                                   color: Palette.disable,
                                   fontWeight: FontWeight.normal),
                             ),
-                            if (finalExam.place != null)
-                              Text(
-                                'Offline : ${finalExam.place}',
-                                style: kTextHeme.subtitle1,
-                              ),
-                            if (finalExam.link != null)
-                              Text(
-                                'Online : ${finalExam.link!.trim()}',
-                                style: kTextHeme.subtitle1,
-                              ),
+                            Text(
+                              finalExam.place != null
+                                  ? '${finalExam.place}'
+                                  : 'Belum ditentukan',
+                              style: kTextHeme.subtitle1,
+                            ),
+                            SizedBox(
+                              height: 8,
+                            ),
+                            Text(
+                              'Tempat (Daring)',
+                              style: kTextHeme.subtitle1?.copyWith(
+                                  color: Palette.disable,
+                                  fontWeight: FontWeight.normal),
+                            ),
+                            Text(
+                              finalExam.link != null
+                                  ? '${finalExam.link!.trim()}'
+                                  : 'Belum ditentukan',
+                              style: kTextHeme.subtitle1,
+                            ),
                           ],
                         ),
                       SizedBox(

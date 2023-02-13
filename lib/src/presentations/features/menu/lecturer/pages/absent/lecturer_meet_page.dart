@@ -458,6 +458,7 @@ class _CustomAppBarState extends State<_CustomAppBar> {
                 ),
               ),
             ),
+            
             AppSize.verticalSpace[5],
           ],
         ),

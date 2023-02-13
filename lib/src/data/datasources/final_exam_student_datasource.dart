@@ -70,7 +70,7 @@ class FinalExamStudentDataSourceImpl implements FinalExamStudentDataSource {
       final responseData = await client.get(
         Uri.parse(
           '${ApiService.baseUrlFinalExam}/students/${payload['username']}/thesis',
-        ),
+        ).replace(queryParameters: {'statusProposal': 'Diterima'}),
         headers: {
           "Authorization": "Bearer ${credential.token}",
         },
@@ -90,6 +90,7 @@ class FinalExamStudentDataSourceImpl implements FinalExamStudentDataSource {
         throw ServerException();
       }
     } catch (e) {
+      print('error tugas akhir');
       throw ServerException();
     }
   }
@@ -125,6 +126,7 @@ class FinalExamStudentDataSourceImpl implements FinalExamStudentDataSource {
         throw ServerException();
       }
     } catch (e) {
+      print('seminar');
       print(e.toString());
       throw ServerException();
     }
@@ -147,6 +149,7 @@ class FinalExamStudentDataSourceImpl implements FinalExamStudentDataSource {
         },
       );
       print(responseData.body);
+      print('Bearer ${credential.token}');
       if (responseData.statusCode == 200) {
         final dataResponse = DataResponse<Map<String, dynamic>>.fromJson(
                 jsonDecode(responseData.body))
@@ -160,10 +163,9 @@ class FinalExamStudentDataSourceImpl implements FinalExamStudentDataSource {
         throw ServerException();
       }
     } catch (e) {
+      print('trial exam');
       print(e.toString());
       throw ServerException();
     }
   }
-
-  
 }
