@@ -11,6 +11,7 @@ class FeSupervisor extends Equatable {
     return FeSupervisor(
       supervisorPosition: json['ref_posisipmb'],
       lecturer: FeLecturer.fromJson(json['dosen']),
+      
     );
   }
 

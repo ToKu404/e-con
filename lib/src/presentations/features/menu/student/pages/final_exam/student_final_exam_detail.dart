@@ -24,7 +24,6 @@ class StudentFinalExamDetail extends StatefulWidget {
 class _StudentFinalExamDetailState extends State<StudentFinalExamDetail> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Future.microtask(
       () => {
@@ -152,7 +151,7 @@ class __BuildBodyState extends State<_BuildBody> {
                   ExpansionTile(
                     tilePadding: EdgeInsets.symmetric(horizontal: 0),
                     title: Text(
-                      'Dosen Pembimbing dan Penguji',
+                      'Tugas Akhir',
                     ),
                     initiallyExpanded: false,
                     children: [
@@ -207,7 +206,7 @@ class __BuildBodyState extends State<_BuildBody> {
                                       .finalExamData!.listExaminer!.length;
                               i++) ...[
                             Text(
-                              'Penguji ${proposedSeminar.finalExamData!.listExaminer![1].order}',
+                              'Penguji ${proposedSeminar.finalExamData!.listExaminer![i].order}',
                               style: kTextHeme.subtitle1?.copyWith(
                                   color: Palette.disable,
                                   fontWeight: FontWeight.normal),
@@ -224,239 +223,442 @@ class __BuildBodyState extends State<_BuildBody> {
                         ],
                       ),
                       SizedBox(
+                        height: 16,
+                      ),
+                      BuildFeCard(
+                        child: [
+                          Text(
+                            'Status Pengajuan Tugas Akhir',
+                            style: kTextHeme.headline5?.copyWith(
+                                fontWeight: FontWeight.w500,
+                                color: Palette.primaryVariant),
+                          ),
+                          Divider(
+                            color: Palette.disable,
+                          ),
+                          Text(
+                            'Status Permohonan',
+                            style: kTextHeme.subtitle1?.copyWith(
+                                color: Palette.disable,
+                                fontWeight: FontWeight.normal),
+                          ),
+                          ChipBuilder(
+                            status: acceptedThesis!.proposalStatus!,
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            'Status Berkas',
+                            style: kTextHeme.subtitle1?.copyWith(
+                                color: Palette.disable,
+                                fontWeight: FontWeight.normal),
+                          ),
+                          ChipBuilder(
+                            status: acceptedThesis.krsKhsAcceptment!,
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            'Status SK',
+                            style: kTextHeme.subtitle1?.copyWith(
+                                color: Palette.disable,
+                                fontWeight: FontWeight.normal),
+                          ),
+                          Builder(builder: (context) {
+                            String status = '';
+
+                            if (acceptedThesis.examinerSk != null &&
+                                acceptedThesis.supervisorSk != null &&
+                                acceptedThesis.examinerSk!.isNotEmpty &&
+                                acceptedThesis.supervisorSk!.isNotEmpty) {
+                              if (acceptedThesis.supervisorSk!.last.statusSkb ==
+                                      1 &&
+                                  acceptedThesis.examinerSk!.last.statusSkp ==
+                                      1) {
+                                status = 'Diterima';
+                              } else {
+                                status = 'Belum_Diproses';
+                              }
+                            }
+                            return ChipBuilder(
+                              status:
+                                  status.isEmpty ? 'Belum_Diproses' : status,
+                            );
+                          }),
+                          SizedBox(
+                            height: 8,
+                          ),
+                        ],
+                      ),
+                      SizedBox(
                         height: 4,
                       ),
                     ],
                   ),
-                if (proposedSeminar != null ||
-                    resultSeminar != null ||
-                    finalExam != null)
+                if (proposedSeminar != null)
                   ExpansionTile(
                     tilePadding: EdgeInsets.symmetric(horizontal: 0),
                     title: Text(
-                      'Seminar',
+                      'Seminar Proposal',
                     ),
                     initiallyExpanded: false,
                     children: [
-                      if (proposedSeminar != null)
-                        BuildFeCard(
-                          child: [
+                      BuildFeCard(
+                        child: [
+                          Text(
+                            'Status Persetujuan Pembimbing',
+                            style: kTextHeme.headline5?.copyWith(
+                                fontWeight: FontWeight.w500,
+                                color: Palette.primaryVariant),
+                          ),
+                          Divider(
+                            color: Palette.disable,
+                          ),
+                          for (int i = 0;
+                              i <
+                                  proposedSeminar
+                                      .supervisorSeminarStatus!.length;
+                              i++) ...[
                             Text(
-                              'Seminar Proposal',
-                              style: kTextHeme.headline5?.copyWith(
-                                  fontWeight: FontWeight.w500,
-                                  color: Palette.primaryVariant),
-                            ),
-                            Divider(
-                              color: Palette.disable,
-                            ),
-                            Text(
-                              'Hari, Tanggal',
+                              'Pembimbing ${proposedSeminar.supervisorSeminarStatus![i].supervisor!.supervisorPosition}',
                               style: kTextHeme.subtitle1?.copyWith(
                                   color: Palette.disable,
                                   fontWeight: FontWeight.normal),
                             ),
                             Text(
-                              proposedSeminar.date != null
-                                  ? ReusableFunctionHelper.datetimeToString(
-                                      proposedSeminar.date!)
-                                  : 'Belum ditentukan',
+                              proposedSeminar.supervisorSeminarStatus![i]
+                                  .supervisor!.lecturer!.name!,
                               style: kTextHeme.subtitle1,
                             ),
+                            ChipBuilder(
+                                status: proposedSeminar
+                                    .supervisorSeminarStatus![i]
+                                    .proposedStatus!),
                             SizedBox(
                               height: 8,
-                            ),
-                            Text(
-                              'Pukul',
-                              style: kTextHeme.subtitle1?.copyWith(
-                                  color: Palette.disable,
-                                  fontWeight: FontWeight.normal),
-                            ),
-                            Text(
-                              proposedSeminar.startTime != null
-                                  ? '${proposedSeminar.startTime}-${proposedSeminar.endTime} WITA'
-                                  : 'Belum ditentukan',
-                              style: kTextHeme.subtitle1,
-                            ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            Text(
-                              'Tempat (Luring)',
-                              style: kTextHeme.subtitle1?.copyWith(
-                                  color: Palette.disable,
-                                  fontWeight: FontWeight.normal),
-                            ),
-                            Text(
-                              proposedSeminar.place != null
-                                  ? '${proposedSeminar.place}'
-                                  : 'Belum ditentukan',
-                              style: kTextHeme.subtitle1,
-                            ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            Text(
-                              'Tempat (Daring)',
-                              style: kTextHeme.subtitle1?.copyWith(
-                                  color: Palette.disable,
-                                  fontWeight: FontWeight.normal),
-                            ),
-                            Text(
-                              proposedSeminar.link != null
-                                  ? '${proposedSeminar.link!.trim()}'
-                                  : 'Belum ditentukan',
-                              style: kTextHeme.subtitle1,
                             ),
                           ],
-                        ),
+                        ],
+                      ),
                       SizedBox(
                         height: 16,
                       ),
-                      if (resultSeminar != null)
-                        BuildFeCard(
-                          child: [
+                      BuildFeCard(
+                        child: [
+                          Text(
+                            'Informasi Waktu Seminar',
+                            style: kTextHeme.headline5?.copyWith(
+                                fontWeight: FontWeight.w500,
+                                color: Palette.primaryVariant),
+                          ),
+                          Divider(
+                            color: Palette.disable,
+                          ),
+                          Text(
+                            'Hari, Tanggal',
+                            style: kTextHeme.subtitle1?.copyWith(
+                                color: Palette.disable,
+                                fontWeight: FontWeight.normal),
+                          ),
+                          Text(
+                            proposedSeminar.date != null
+                                ? ReusableFunctionHelper.datetimeToString(
+                                    proposedSeminar.date!)
+                                : 'Belum ditentukan',
+                            style: kTextHeme.subtitle1,
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            'Pukul',
+                            style: kTextHeme.subtitle1?.copyWith(
+                                color: Palette.disable,
+                                fontWeight: FontWeight.normal),
+                          ),
+                          Text(
+                            proposedSeminar.startTime != null
+                                ? '${ReusableFunctionHelper.timeFormater(proposedSeminar.startTime!, proposedSeminar.endTime!)} WITA'
+                                : 'Belum ditentukan',
+                            style: kTextHeme.subtitle1,
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            'Tempat (Luring)',
+                            style: kTextHeme.subtitle1?.copyWith(
+                                color: Palette.disable,
+                                fontWeight: FontWeight.normal),
+                          ),
+                          Text(
+                            proposedSeminar.place != null
+                                ? '${proposedSeminar.place}'
+                                : 'Belum ditentukan',
+                            style: kTextHeme.subtitle1,
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            'Tempat (Daring)',
+                            style: kTextHeme.subtitle1?.copyWith(
+                                color: Palette.disable,
+                                fontWeight: FontWeight.normal),
+                          ),
+                          Text(
+                            proposedSeminar.link != null
+                                ? '${proposedSeminar.link!.trim()}'
+                                : 'Belum ditentukan',
+                            style: kTextHeme.subtitle1,
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 4,
+                      ),
+                    ],
+                  ),
+                if (resultSeminar != null)
+                  ExpansionTile(
+                    tilePadding: EdgeInsets.symmetric(horizontal: 0),
+                    title: Text(
+                      'Seminar Hasil',
+                    ),
+                    initiallyExpanded: false,
+                    children: [
+                      BuildFeCard(
+                        child: [
+                          Text(
+                            'Status Persetujuan Pembimbing',
+                            style: kTextHeme.headline5?.copyWith(
+                                fontWeight: FontWeight.w500,
+                                color: Palette.primaryVariant),
+                          ),
+                          Divider(
+                            color: Palette.disable,
+                          ),
+                          for (int i = 0;
+                              i < resultSeminar.supervisorSeminarStatus!.length;
+                              i++) ...[
                             Text(
-                              'Seminar Hasil',
-                              style: kTextHeme.headline5?.copyWith(
-                                  fontWeight: FontWeight.w500,
-                                  color: Palette.primaryVariant),
-                            ),
-                            Divider(
-                              color: Palette.disable,
-                            ),
-                            Text(
-                              'Hari, Tanggal',
+                              'Pembimbing ${resultSeminar.supervisorSeminarStatus![i].supervisor!.supervisorPosition}',
                               style: kTextHeme.subtitle1?.copyWith(
                                   color: Palette.disable,
                                   fontWeight: FontWeight.normal),
                             ),
                             Text(
-                              resultSeminar.date != null
-                                  ? ReusableFunctionHelper.datetimeToString(
-                                      resultSeminar.date!)
-                                  : 'Belum ditentukan',
+                              resultSeminar.supervisorSeminarStatus![i]
+                                  .supervisor!.lecturer!.name!,
                               style: kTextHeme.subtitle1,
                             ),
+                            ChipBuilder(
+                                status: resultSeminar
+                                    .supervisorSeminarStatus![i]
+                                    .proposedStatus!),
                             SizedBox(
                               height: 8,
-                            ),
-                            Text(
-                              'Pukul',
-                              style: kTextHeme.subtitle1?.copyWith(
-                                  color: Palette.disable,
-                                  fontWeight: FontWeight.normal),
-                            ),
-                            Text(
-                              resultSeminar.startTime != null
-                                  ? '${resultSeminar.startTime}-${resultSeminar.endTime} WITA'
-                                  : 'Belum ditentukan',
-                              style: kTextHeme.subtitle1,
-                            ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            Text(
-                              'Tempat (Luring)',
-                              style: kTextHeme.subtitle1?.copyWith(
-                                  color: Palette.disable,
-                                  fontWeight: FontWeight.normal),
-                            ),
-                            Text(
-                              resultSeminar.place != null
-                                  ? '${resultSeminar.place}'
-                                  : 'Belum ditentukan',
-                              style: kTextHeme.subtitle1,
-                            ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            Text(
-                              'Tempat (Daring)',
-                              style: kTextHeme.subtitle1?.copyWith(
-                                  color: Palette.disable,
-                                  fontWeight: FontWeight.normal),
-                            ),
-                            Text(
-                              resultSeminar.link != null
-                                  ? '${resultSeminar.link!.trim()}'
-                                  : 'Belum ditentukan',
-                              style: kTextHeme.subtitle1,
                             ),
                           ],
-                        ),
-                      if (finalExam != null)
-                        BuildFeCard(
-                          child: [
+                        ],
+                      ),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      BuildFeCard(
+                        child: [
+                          Text(
+                            'Informasi Waktu Seminar',
+                            style: kTextHeme.headline5?.copyWith(
+                                fontWeight: FontWeight.w500,
+                                color: Palette.primaryVariant),
+                          ),
+                          Divider(
+                            color: Palette.disable,
+                          ),
+                          Text(
+                            'Hari, Tanggal',
+                            style: kTextHeme.subtitle1?.copyWith(
+                                color: Palette.disable,
+                                fontWeight: FontWeight.normal),
+                          ),
+                          Text(
+                            resultSeminar.date != null
+                                ? ReusableFunctionHelper.datetimeToString(
+                                    resultSeminar.date!)
+                                : 'Belum ditentukan',
+                            style: kTextHeme.subtitle1,
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            'Pukul',
+                            style: kTextHeme.subtitle1?.copyWith(
+                                color: Palette.disable,
+                                fontWeight: FontWeight.normal),
+                          ),
+                          Text(
+                            resultSeminar.startTime != null
+                                ? '${ReusableFunctionHelper.timeFormater(resultSeminar.startTime!, resultSeminar.endTime!)} WITA'
+                                : 'Belum ditentukan',
+                            style: kTextHeme.subtitle1,
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            'Tempat (Luring)',
+                            style: kTextHeme.subtitle1?.copyWith(
+                                color: Palette.disable,
+                                fontWeight: FontWeight.normal),
+                          ),
+                          Text(
+                            resultSeminar.place != null
+                                ? '${resultSeminar.place}'
+                                : 'Belum ditentukan',
+                            style: kTextHeme.subtitle1,
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            'Tempat (Daring)',
+                            style: kTextHeme.subtitle1?.copyWith(
+                                color: Palette.disable,
+                                fontWeight: FontWeight.normal),
+                          ),
+                          Text(
+                            resultSeminar.link != null
+                                ? '${resultSeminar.link!.trim()}'
+                                : 'Belum ditentukan',
+                            style: kTextHeme.subtitle1,
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 4,
+                      ),
+                    ],
+                  ),
+                if (finalExam != null)
+                  ExpansionTile(
+                    tilePadding: EdgeInsets.symmetric(horizontal: 0),
+                    title: Text(
+                      'Ujian Skripsi',
+                    ),
+                    initiallyExpanded: false,
+                    children: [
+                      BuildFeCard(
+                        child: [
+                          Text(
+                            'Status Persetujuan Pembimbing',
+                            style: kTextHeme.headline5?.copyWith(
+                                fontWeight: FontWeight.w500,
+                                color: Palette.primaryVariant),
+                          ),
+                          Divider(
+                            color: Palette.disable,
+                          ),
+                          for (int i = 0;
+                              i < finalExam.supervisorSeminarStatus!.length;
+                              i++) ...[
                             Text(
-                              'Ujian Skripsi',
-                              style: kTextHeme.headline5?.copyWith(
-                                  fontWeight: FontWeight.w500,
-                                  color: Palette.primaryVariant),
-                            ),
-                            Divider(
-                              color: Palette.disable,
-                            ),
-                            Text(
-                              'Hari, Tanggal',
+                              'Pembimbing ${finalExam.supervisorSeminarStatus![i].supervisor!.supervisorPosition}',
                               style: kTextHeme.subtitle1?.copyWith(
                                   color: Palette.disable,
                                   fontWeight: FontWeight.normal),
                             ),
                             Text(
-                              finalExam.date != null
-                                  ? ReusableFunctionHelper.datetimeToString(
-                                      finalExam.date!)
-                                  : 'Belum ditentukan',
+                              finalExam.supervisorSeminarStatus![i].supervisor!
+                                  .lecturer!.name!,
                               style: kTextHeme.subtitle1,
                             ),
+                            ChipBuilder(
+                                status: finalExam.supervisorSeminarStatus![i]
+                                    .proposedStatus!),
                             SizedBox(
                               height: 8,
-                            ),
-                            Text(
-                              'Pukul',
-                              style: kTextHeme.subtitle1?.copyWith(
-                                  color: Palette.disable,
-                                  fontWeight: FontWeight.normal),
-                            ),
-                            Text(
-                              finalExam.startTime != null
-                                  ? '${finalExam.startTime}-${finalExam.endTime} WITA'
-                                  : 'Belum ditentukan',
-                              style: kTextHeme.subtitle1,
-                            ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            Text(
-                              'Tempat (Luring)',
-                              style: kTextHeme.subtitle1?.copyWith(
-                                  color: Palette.disable,
-                                  fontWeight: FontWeight.normal),
-                            ),
-                            Text(
-                              finalExam.place != null
-                                  ? '${finalExam.place}'
-                                  : 'Belum ditentukan',
-                              style: kTextHeme.subtitle1,
-                            ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            Text(
-                              'Tempat (Daring)',
-                              style: kTextHeme.subtitle1?.copyWith(
-                                  color: Palette.disable,
-                                  fontWeight: FontWeight.normal),
-                            ),
-                            Text(
-                              finalExam.link != null
-                                  ? '${finalExam.link!.trim()}'
-                                  : 'Belum ditentukan',
-                              style: kTextHeme.subtitle1,
                             ),
                           ],
-                        ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      BuildFeCard(
+                        child: [
+                          Text(
+                            'Informasi Waktu Seminar',
+                            style: kTextHeme.headline5?.copyWith(
+                                fontWeight: FontWeight.w500,
+                                color: Palette.primaryVariant),
+                          ),
+                          Divider(
+                            color: Palette.disable,
+                          ),
+                          Text(
+                            'Hari, Tanggal',
+                            style: kTextHeme.subtitle1?.copyWith(
+                                color: Palette.disable,
+                                fontWeight: FontWeight.normal),
+                          ),
+                          Text(
+                            finalExam.date != null
+                                ? ReusableFunctionHelper.datetimeToString(
+                                    finalExam.date!)
+                                : 'Belum ditentukan',
+                            style: kTextHeme.subtitle1,
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            'Pukul',
+                            style: kTextHeme.subtitle1?.copyWith(
+                                color: Palette.disable,
+                                fontWeight: FontWeight.normal),
+                          ),
+                          Text(
+                            finalExam.startTime != null
+                                ? '${ReusableFunctionHelper.timeFormater(finalExam.startTime!, finalExam.endTime!)} WITA'
+                                : 'Belum ditentukan',
+                            style: kTextHeme.subtitle1,
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            'Tempat (Luring)',
+                            style: kTextHeme.subtitle1?.copyWith(
+                                color: Palette.disable,
+                                fontWeight: FontWeight.normal),
+                          ),
+                          Text(
+                            finalExam.place != null
+                                ? '${finalExam.place}'
+                                : 'Belum ditentukan',
+                            style: kTextHeme.subtitle1,
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            'Tempat (Daring)',
+                            style: kTextHeme.subtitle1?.copyWith(
+                                color: Palette.disable,
+                                fontWeight: FontWeight.normal),
+                          ),
+                          Text(
+                            finalExam.link != null
+                                ? '${finalExam.link!.trim()}'
+                                : 'Belum ditentukan',
+                            style: kTextHeme.subtitle1,
+                          ),
+                        ],
+                      ),
                       SizedBox(
                         height: 4,
                       ),
@@ -473,30 +675,13 @@ class __BuildBodyState extends State<_BuildBody> {
                       BuildFeCard(
                         child: [
                           Text(
-                            'Status Permohonan',
-                            style: kTextHeme.subtitle1?.copyWith(
-                                color: Palette.disable,
-                                fontWeight: FontWeight.normal),
+                            'Informasi Ujian Sidang',
+                            style: kTextHeme.headline5?.copyWith(
+                                fontWeight: FontWeight.w500,
+                                color: Palette.primaryVariant),
                           ),
-                          Text(
-                            feStatus[trialExam.proposalStatus!] ?? '-',
-                            style: kTextHeme.subtitle1,
-                          ),
-                          SizedBox(
-                            height: 8,
-                          ),
-                          Text(
-                            'Status Validasi Berkas',
-                            style: kTextHeme.subtitle1?.copyWith(
-                                color: Palette.disable,
-                                fontWeight: FontWeight.normal),
-                          ),
-                          Text(
-                            feStatus[trialExam.validationDocStatus!] ?? '-',
-                            style: kTextHeme.subtitle1,
-                          ),
-                          SizedBox(
-                            height: 8,
+                          Divider(
+                            color: Palette.disable,
                           ),
                           Text(
                             'Status Verifikasi Berkas',
@@ -504,26 +689,44 @@ class __BuildBodyState extends State<_BuildBody> {
                                 color: Palette.disable,
                                 fontWeight: FontWeight.normal),
                           ),
+                          ChipBuilder(status: trialExam.verificationDocStatus!),
+                          SizedBox(
+                            height: 8,
+                          ),
                           Text(
-                            feStatus[trialExam.verificationDocStatus!] ?? '-',
-                            style: kTextHeme.subtitle1,
+                            'Status Pembuatan Surat',
+                            style: kTextHeme.subtitle1?.copyWith(
+                                color: Palette.disable,
+                                fontWeight: FontWeight.normal),
+                          ),
+                          ChipBuilder(status: trialExam.validationDocStatus!),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            'Status Penyerahan Surat/Berkas',
+                            style: kTextHeme.subtitle1?.copyWith(
+                                color: Palette.disable,
+                                fontWeight: FontWeight.normal),
+                          ),
+                          ChipBuilder(status: trialExam.proposalStatus!),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            'Status Penandatangan Surat',
+                            style: kTextHeme.subtitle1?.copyWith(
+                                color: Palette.disable,
+                                fontWeight: FontWeight.normal),
+                          ),
+                          ChipBuilder(
+                            status: trialExam.statusTTD == true
+                                ? 'Diterima'
+                                : 'Belum_Diproses',
                           ),
                           SizedBox(
                             height: 8,
                           ),
-                          if (trialExam.skDate != null) ...[
-                            Text(
-                              'Tanggal SK',
-                              style: kTextHeme.subtitle1?.copyWith(
-                                  color: Palette.disable,
-                                  fontWeight: FontWeight.normal),
-                            ),
-                            Text(
-                              ReusableFunctionHelper.datetimeToString(
-                                  trialExam.skDate!),
-                              style: kTextHeme.subtitle1,
-                            ),
-                          ],
                         ],
                       ),
                       SizedBox(
@@ -597,6 +800,44 @@ class BuildFeCard extends StatelessWidget {
           ),
         )
       ],
+    );
+  }
+}
+
+class ChipBuilder extends StatelessWidget {
+  final String status;
+  const ChipBuilder({super.key, required this.status});
+
+  @override
+  Widget build(BuildContext context) {
+    StatusAcceptment statusAcceptment = StatusAcceptment.process;
+    switch (status) {
+      case 'Ditolak':
+        statusAcceptment = StatusAcceptment.reject;
+        break;
+      case 'Belum_Diproses':
+        statusAcceptment = StatusAcceptment.process;
+        break;
+      case 'Diterima':
+        statusAcceptment = StatusAcceptment.accept;
+        break;
+      default:
+    }
+
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(40),
+        color: statusAcceptment == StatusAcceptment.accept
+            ? Palette.success
+            : statusAcceptment == StatusAcceptment.reject
+                ? Palette.danger
+                : Palette.secondary,
+      ),
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      child: Text(
+        '${feStatus[status]}',
+        style: kTextHeme.subtitle2?.copyWith(color: Colors.white),
+      ),
     );
   }
 }

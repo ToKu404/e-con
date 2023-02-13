@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class SkPembimbing extends Equatable {
-  final String? statusSkb;
+  final int? statusSkb;
 
   SkPembimbing({
     this.statusSkb,
@@ -10,7 +10,7 @@ class SkPembimbing extends Equatable {
   // 1 diterima
   factory SkPembimbing.fromJson(Map<String, dynamic> json) {
     return SkPembimbing(
-      statusSkb: json['skb_status'],
+      statusSkb: json['skbStatus'],
     );
   }
 

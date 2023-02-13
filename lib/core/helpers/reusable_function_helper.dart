@@ -104,6 +104,19 @@ class ReusableFunctionHelper {
     }
   }
 
+  /// Convert DateTime to String
+  static String timeFormater(String startTime, String endTime) {
+    final startTimeList = startTime.split(':');
+    final startTime1 = startTimeList.first.padLeft(2, "0");
+    final startTime2 = startTimeList.last.padLeft(2, "0");
+
+    final endTimeList = endTime.split(':');
+    final endTime1 = endTimeList.first.padLeft(2, "0");
+    final endTime2 = endTimeList.last.padLeft(2, "0");
+
+    return '${startTime1}:${startTime2}-${endTime1}:${endTime2}';
+  }
+
   /// check status of meeting
   static List<WeeklyActivity> getWeeklyActivityData() {
     DateTime now = DateTime.now();

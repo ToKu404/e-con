@@ -117,7 +117,7 @@ class StudentFinalExamHelperNotifier extends ChangeNotifier {
           default:
         }
         status =
-            'Verifikasi Berkas ${feStatus[activeTrialExam.verificationDocStatus]}';
+            'Verifikasi Berkas Ujian Sidang ${feStatus[activeTrialExam.verificationDocStatus]}';
 
         if (statusAcceptment == StatusAcceptment.accept) {
           ///(2)
@@ -151,7 +151,7 @@ class StudentFinalExamHelperNotifier extends ChangeNotifier {
               default:
             }
             status =
-                'Penyerahan Surat/Berkas ${feStatus[activeTrialExam.verificationDocStatus]}';
+                'Penyerahan Surat/Berkas ${feStatus[activeTrialExam.proposalStatus]}';
 
             if (statusAcceptment == StatusAcceptment.accept) {
               if (activeTrialExam.statusTTD!) {
@@ -287,6 +287,8 @@ class StudentFinalExamHelperNotifier extends ChangeNotifier {
         status =
             'Pengusulan Judul ${feStatus[listProposedThesis[i].proposalStatus!]}';
 
+        print(listProposedThesis[i].proposalStatus!);
+
         if (statusAcceptment == StatusAcceptment.accept) {
           /// (2) Verifikasi Dokumen
           switch (listProposedThesis[i].krsKhsAcceptment) {
@@ -314,34 +316,24 @@ class StudentFinalExamHelperNotifier extends ChangeNotifier {
                 statusAcceptment = StatusAcceptment.process;
               }
             }
+
+            if (statusAcceptment == StatusAcceptment.accept) {
+              /// (4) Penandatangan SK
+              if (listProposedThesis[i].examinerSk != null &&
+                  listProposedThesis[i].supervisorSk != null) {
+                if (listProposedThesis[i].supervisorSk!.last.statusSkb == 1 &&
+                    listProposedThesis[i].examinerSk!.last.statusSkp == 1) {
+                  status = 'Penandatangan SK Diterima';
+                  statusAcceptment = StatusAcceptment.accept;
+                } else {
+                  status = 'Penandatangan SK Sedang Diproses';
+                  statusAcceptment = StatusAcceptment.process;
+                }
+              }
+            }
           }
         }
 
-        /// (4) Penandatangan SK
-        if (listProposedThesis[i].examinerSk != null &&
-            listProposedThesis[i].supervisorSk != null) {
-          if (listProposedThesis[i].supervisorSk!.last.statusSkb ==
-                  'Diterima' ||
-              listProposedThesis[i].examinerSk!.last.statusSkp == 'Diterima') {
-            status = 'Penandatangan SK Diterima';
-            statusAcceptment = StatusAcceptment.accept;
-          }
-          if (listProposedThesis[i].supervisorSk!.last.statusSkb ==
-                  'Belum_Diproses' ||
-              listProposedThesis[i].examinerSk!.last.statusSkp ==
-                  'Belum_Diproses') {
-            status = 'Penandatangan SK Sedang Diproses';
-            statusAcceptment = StatusAcceptment.process;
-          }
-          if (listProposedThesis[i].examinerSk!.last.statusSkp == 'Ditolak') {
-            status = 'Penandatangan SK Penguji Ditolak';
-            statusAcceptment = StatusAcceptment.reject;
-          }
-          if (listProposedThesis[i].supervisorSk!.last.statusSkb == 'Ditolak') {
-            status = 'Penandatangan SK Pembimbing Ditolak';
-            statusAcceptment = StatusAcceptment.reject;
-          }
-        }
         _homeFinalExamDta.add(FinalExamObject(
           title: title,
           subtitle: subtitle,
