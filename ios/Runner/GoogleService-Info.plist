@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>838209813823-gnk2j3qd68rtvfa5sjs0nmq8kt7jic8o.apps.googleusercontent.com</string>
+	<string>838209813823-7a38mcnte65f84avl7e9ucfnmkjajs8r.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.838209813823-gnk2j3qd68rtvfa5sjs0nmq8kt7jic8o</string>
+	<string>com.googleusercontent.apps.838209813823-7a38mcnte65f84avl7e9ucfnmkjajs8r</string>
 	<key>API_KEY</key>
 	<string>AIzaSyAnuT8q6eqHDGRIHC8Vo5-Xcp794YEcr14</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.eCon</string>
+	<string>com.npedigital.econ</string>
 	<key>PROJECT_ID</key>
 	<string>e-con-127ba</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:838209813823:ios:27748b26693e9a7315678a</string>
+	<string>1:838209813823:ios:b55bf1ad58ee2db415678a</string>
 </dict>
 </plist>

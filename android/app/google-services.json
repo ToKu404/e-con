@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:838209813823:android:5e5fad6b03cabcf315678a",
+        "mobilesdk_app_id": "1:838209813823:android:ee8b75e2c00c0d3215678a",
         "android_client_info": {
-          "package_name": "com.example.e_con"
+          "package_name": "com.npedigital.econ"
         }
       },
       "oauth_client": [
@@ -31,10 +31,10 @@
               "client_type": 3
             },
             {
-              "client_id": "838209813823-gnk2j3qd68rtvfa5sjs0nmq8kt7jic8o.apps.googleusercontent.com",
+              "client_id": "838209813823-7a38mcnte65f84avl7e9ucfnmkjajs8r.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.eCon"
+                "bundle_id": "com.npedigital.econ"
               }
             }
           ]

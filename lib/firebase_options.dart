@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCDLjx4QQ_q61IbuynGu834hA2IW4U01rQ',
-    appId: '1:838209813823:android:5e5fad6b03cabcf315678a',
+    appId: '1:838209813823:android:ee8b75e2c00c0d3215678a',
     messagingSenderId: '838209813823',
     projectId: 'e-con-127ba',
     storageBucket: 'e-con-127ba.appspot.com',
@@ -59,11 +59,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAnuT8q6eqHDGRIHC8Vo5-Xcp794YEcr14',
-    appId: '1:838209813823:ios:27748b26693e9a7315678a',
+    appId: '1:838209813823:ios:b55bf1ad58ee2db415678a',
     messagingSenderId: '838209813823',
     projectId: 'e-con-127ba',
     storageBucket: 'e-con-127ba.appspot.com',
-    iosClientId: '838209813823-gnk2j3qd68rtvfa5sjs0nmq8kt7jic8o.apps.googleusercontent.com',
-    iosBundleId: 'com.example.eCon',
+    iosClientId: '838209813823-7a38mcnte65f84avl7e9ucfnmkjajs8r.apps.googleusercontent.com',
+    iosBundleId: 'com.npedigital.econ',
   );
 }

@@ -90,20 +90,8 @@ class _StudentHomePageState extends State<StudentHomePage> {
                         if (feProvider.proposedThesisState ==
                                 RequestState.loading ||
                             feProvider.seminarsState == RequestState.loading ||
-                            feProvider.trialExamState == RequestState.loading) {
-                          return CustomShimmer(
-                            child: Column(
-                              children: [
-                                AppSize.verticalSpace[5],
-                                CardPlaceholder(
-                                  height: 120,
-                                ),
-                                AppSize.verticalSpace[2],
-                              ],
-                            ),
-                          );
-                        }
-                        if (feProvider.listProposedThesis.isEmpty) {
+                            feProvider.trialExamState == RequestState.loading ||
+                            feProvider.listProposedThesis.isEmpty) {
                           return SizedBox();
                         }
 

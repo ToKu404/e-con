@@ -1,7 +1,6 @@
 import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/utils/request_state.dart';
-import 'package:e_con/src/presentations/blocs/onetime_internet_check/onetime_internet_check_cubit.dart';
 import 'package:e_con/src/presentations/features/menu/widgets/class_card.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecture_courses_notifier.dart';
 import 'package:e_con/src/presentations/reusable_pages/check_internet_onetime.dart';

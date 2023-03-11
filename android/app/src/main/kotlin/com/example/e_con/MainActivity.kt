@@ -1,4 +1,4 @@
-package com.example.e_con
+package com.npedigital.econ
 
 import io.flutter.embedding.android.FlutterActivity
 

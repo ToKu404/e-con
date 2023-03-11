@@ -29,17 +29,13 @@ class LecturerSettingPage extends StatelessWidget {
                   context: context, title: 'Apakah anda serius ingin keluar?');
               if (logoutConfirmation) {
                 await context.read<AuthNotifier>()
-                  ..logOut();
-                Future.delayed(
-                  Duration(seconds: 1),
-                  () {
+                  ..logOut().then((value) {
                     Navigator.pushNamedAndRemoveUntil(
                       context,
                       AppRoutes.login,
                       (route) => false,
                     );
-                  },
-                );
+                  });
               }
             },
             icon: Icon(Icons.exit_to_app),
