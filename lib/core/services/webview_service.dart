@@ -1,3 +1,3 @@
 class WebViewService {
-  static String url = 'https://sifa.npedigihouse.tech/';
+  static String url = 'https://sifa.unhas.ac.id/';
 }
