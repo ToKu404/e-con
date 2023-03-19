@@ -7,7 +7,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   di.init();
 
-  // NotifHelper authHelper = Ge
+  // NotifHelsper authHelper = Ge
   // authHelper.init();s
   // authHelper.generateUserAppId();
 
