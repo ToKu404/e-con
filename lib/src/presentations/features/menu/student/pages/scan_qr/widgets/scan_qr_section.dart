@@ -27,8 +27,8 @@ class _ScanQrSectionState extends State<ScanQrSection> {
     super.reassemble();
     if (Platform.isAndroid) {
       controller?.pauseCamera();
+      controller?.resumeCamera();
     }
-    controller?.resumeCamera();
   }
 
   @override

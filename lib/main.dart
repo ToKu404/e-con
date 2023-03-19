@@ -8,7 +8,7 @@ Future<void> main() async {
   di.init();
 
   // NotifHelper authHelper = Ge
-  // authHelper.init();
+  // authHelper.init();s
   // authHelper.generateUserAppId();
 
   await initializeDateFormatting('id_ID', null)
