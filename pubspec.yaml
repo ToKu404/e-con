@@ -54,9 +54,7 @@ dev_dependencies:
   # dart_style: ^2.2.4
   # flutter_lints: ^2.0.1
 
-flutter:
-  ios: 
-    bundle_identifier: com.npedigital.econ
+flutter:s
   uses-material-design: true
 
   assets:
