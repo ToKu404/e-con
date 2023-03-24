@@ -54,7 +54,7 @@ dev_dependencies:
   # dart_style: ^2.2.4
   # flutter_lints: ^2.0.1
 
-flutter:s
+flutter:
   uses-material-design: true
 
   assets:
