@@ -17,7 +17,7 @@ class UsernameField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Nama Pengguna',
+          'Username atau NIP',
           style: kTextHeme.subtitle1,
         ),
         AppSize.verticalSpace[1],

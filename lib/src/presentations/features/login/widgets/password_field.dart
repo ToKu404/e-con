@@ -26,7 +26,7 @@ class PasswordFieldState extends State<PasswordField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Kata Sandi',
+          'Password',
           style: kTextHeme.subtitle1,
         ),
         AppSize.verticalSpace[1],

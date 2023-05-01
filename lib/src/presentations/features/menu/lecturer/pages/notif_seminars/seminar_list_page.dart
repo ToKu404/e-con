@@ -21,100 +21,102 @@ class LecturerListSeminarPage extends StatefulWidget {
 class _LecturerListSeminarPageState extends State<LecturerListSeminarPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              SizedBox(
-                height: 60,
-              ),
-              Expanded(
-                child: RefreshIndicator(
-                  onRefresh: () async {
-                    await Future.wait([
-                      context
-                          .read<LecturerSeminarNotifier>()
-                          .fetchInvitedSeminars(),
-                    ]);
-                  },
-                  child: CustomScrollView(
-                    keyboardDismissBehavior:
-                        ScrollViewKeyboardDismissBehavior.onDrag,
-                    physics: const AlwaysScrollableScrollPhysics(
-                      parent: ClampingScrollPhysics(),
-                    ),
-                    slivers: [
-                      SliverToBoxAdapter(
-                        child: Builder(builder: (context) {
-                          final provider =
-                              context.watch<LecturerSeminarNotifier>();
-                          return CheckInternetOnetime(child: (context) {
-                            if (provider.state == RequestState.loading) {
-                              return CustomShimmer(
-                                child: Column(
-                                  children: [
-                                    SizedBox(
-                                      height: 12,
-                                    ),
-                                    CardPlaceholder(
-                                      height: 80,
-                                    ),
-                                    AppSize.verticalSpace[3],
-                                    CardPlaceholder(
-                                      height: 100,
-                                    ),
-                                    AppSize.verticalSpace[3],
-                                    CardPlaceholder(
-                                      height: 100,
-                                    ),
-                                    AppSize.verticalSpace[3],
-                                    CardPlaceholder(
-                                      height: 100,
-                                    ),
-                                    AppSize.verticalSpace[3],
-                                    CardPlaceholder(
-                                      height: 100,
-                                    ),
-                                    AppSize.verticalSpace[3],
-                                  ],
-                                ),
-                              );
-                            }
-
-                            if (provider.seminars.isEmpty) {
-                              return EconEmpty(
-                                  emptyMessage: 'Belum ada pemberitahuan');
-                            }
-                            return ListView.builder(
-                              padding: EdgeInsets.only(top: 12),
-                              shrinkWrap: true,
-                              itemCount: provider.seminars.length,
-                              itemBuilder: (context, index) {
-                                return LecturerSeminarCard(
-                                  seminarData: provider.seminars[index],
-                                );
-                              },
-                            );
-                          });
-                        }),
+    return SafeArea(
+      child: Scaffold(
+        body: Stack(
+          children: [
+            Column(
+              children: [
+                SizedBox(
+                  height: 60,
+                ),
+                Expanded(
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      await Future.wait([
+                        context
+                            .read<LecturerSeminarNotifier>()
+                            .fetchInvitedSeminars(),
+                      ]);
+                    },
+                    child: CustomScrollView(
+                      keyboardDismissBehavior:
+                          ScrollViewKeyboardDismissBehavior.onDrag,
+                      physics: const AlwaysScrollableScrollPhysics(
+                        parent: ClampingScrollPhysics(),
                       ),
-                    ],
+                      slivers: [
+                        SliverToBoxAdapter(
+                          child: Builder(builder: (context) {
+                            final provider =
+                                context.watch<LecturerSeminarNotifier>();
+                            return CheckInternetOnetime(child: (context) {
+                              if (provider.state == RequestState.loading) {
+                                return CustomShimmer(
+                                  child: Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 12,
+                                      ),
+                                      CardPlaceholder(
+                                        height: 80,
+                                      ),
+                                      AppSize.verticalSpace[3],
+                                      CardPlaceholder(
+                                        height: 100,
+                                      ),
+                                      AppSize.verticalSpace[3],
+                                      CardPlaceholder(
+                                        height: 100,
+                                      ),
+                                      AppSize.verticalSpace[3],
+                                      CardPlaceholder(
+                                        height: 100,
+                                      ),
+                                      AppSize.verticalSpace[3],
+                                      CardPlaceholder(
+                                        height: 100,
+                                      ),
+                                      AppSize.verticalSpace[3],
+                                    ],
+                                  ),
+                                );
+                              }
+
+                              if (provider.seminars.isEmpty) {
+                                return EconEmpty(
+                                    emptyMessage: 'Belum ada pemberitahuan');
+                              }
+                              return ListView.builder(
+                                padding: EdgeInsets.only(top: 12),
+                                shrinkWrap: true,
+                                itemCount: provider.seminars.length,
+                                itemBuilder: (context, index) {
+                                  return LecturerSeminarCard(
+                                    seminarData: provider.seminars[index],
+                                  );
+                                },
+                              );
+                            });
+                          }),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          DefaultAppBar(
-            title: 'Jadwal Seminar',
-            leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: Icon(Icons.arrow_back),
+              ],
             ),
-          ),
-        ],
+            DefaultAppBar(
+              title: 'Jadwal Seminar',
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: Icon(Icons.arrow_back),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

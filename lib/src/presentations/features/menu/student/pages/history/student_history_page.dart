@@ -119,7 +119,7 @@ class _BodySectionState extends State<_BodySection> {
       shrinkWrap: true,
       itemBuilder: (context, index) {
         return ClassCard(
-          clazzData: listClazzData![index],
+          clazzData: listClazzData[index],
           onTap: () => Navigator.pushNamed(
             context,
             AppRoutes.listStudentClasses,

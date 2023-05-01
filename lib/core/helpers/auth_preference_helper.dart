@@ -114,7 +114,8 @@ class AuthPreferenceHelper {
 
       return true;
     } catch (e) {
-      return false;
+      pr!.clear();
+      return true;
     }
   }
 }

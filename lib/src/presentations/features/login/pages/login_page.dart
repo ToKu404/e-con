@@ -1,5 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:e_con/core/constants/color_const.dart';
+import 'package:e_con/core/constants/size_const.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
@@ -10,6 +11,7 @@ import 'package:e_con/src/presentations/features/login/widgets/username_field.da
 import 'package:e_con/src/presentations/reusable_pages/check_internet_realtime.dart';
 import 'package:e_con/src/presentations/widgets/custom_button.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
+import 'package:e_con/src/presentations/widgets/grid_painter.dart';
 import 'package:e_con/src/presentations/widgets/header_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -92,72 +94,171 @@ class _LoginPageState extends State<LoginPage> {
             backgroundColor: Palette.white,
             body: SafeArea(
               child: CheckInternetRealtime(
-                child: CustomScrollView(
-                  slivers: [
-                    SliverFillRemaining(
-                      hasScrollBody: false,
-                      child: Padding(
-                        padding: const EdgeInsets.all(24.0),
-                        child: Builder(builder: (context) {
-                          return Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Center(
-                                child: HeaderLogo(
-                                  bgColor: Palette.primaryVariant.withOpacity(
-                                    .07,
-                                  ),
-                                ),
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  RichText(
-                                    text: TextSpan(
-                                      text: 'Selamat',
-                                      style: kTextHeme.headline2?.copyWith(
-                                        color: Palette.onPrimary,
-                                      ),
+                child: Stack(
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: AppSize.getAppHeight(context),
+                      child: CustomPaint(painter: GridPainter()),
+                    ),
+                    Positioned.fill(
+                      child: CustomScrollView(
+                        slivers: [
+                          SliverFillRemaining(
+                            hasScrollBody: false,
+                            child: Padding(
+                              padding: const EdgeInsets.all(24.0),
+                              child: Builder(builder: (context) {
+                                return Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
                                       children: [
-                                        TextSpan(
-                                          text: ' Datang',
-                                          style: kTextHeme.headline2?.copyWith(
-                                            color: Palette.primary,
-                                          ),
+                                        Image.asset(
+                                          'assets/logo/unhas_logo.png',
+                                          height: 40,
                                         ),
+                                        SizedBox(
+                                          width: 16,
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Accredited By',
+                                              style: kTextHeme.overline
+                                                  ?.copyWith(
+                                                      color: Palette.black),
+                                            ),
+                                            SizedBox(
+                                              height: 2,
+                                            ),
+                                            Row(
+                                              children: [
+                                                Image.asset(
+                                                  'assets/logo/asiin.png',
+                                                  height: 30,
+                                                ),
+                                                SizedBox(
+                                                  width: 16,
+                                                ),
+                                                Image.asset(
+                                                  'assets/logo/lamkes.png',
+                                                  height: 30,
+                                                )
+                                              ],
+                                            )
+                                          ],
+                                        )
                                       ],
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  UsernameField(
-                                    controller: usernameController,
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  PasswordField(
-                                    controller: passwordController,
-                                  ),
-                                  const SizedBox(
-                                    height: 28,
-                                  ),
-                                  Builder(builder: (context) {
-                                    return CustomButton(
-                                      text: 'Masuk',
-                                      onTap: () =>
-                                          _onPressedSignInButton(context),
-                                    );
-                                  }),
-                                ],
-                              ),
-                              SizedBox.shrink()
-                            ],
-                          );
-                        }),
+                                    SizedBox(
+                                      height: 40,
+                                    ),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          RichText(
+                                            text: TextSpan(
+                                              text: 'Selamat',
+                                              style:
+                                                  kTextHeme.headline2?.copyWith(
+                                                color: Palette.onPrimary,
+                                              ),
+                                              children: [
+                                                TextSpan(
+                                                  text: ' Datang',
+                                                  style: kTextHeme.headline2
+                                                      ?.copyWith(
+                                                    color: Palette.primary,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          RichText(
+                                            text: TextSpan(
+                                              text: 'di Aplikasi',
+                                              style:
+                                                  kTextHeme.subtitle2
+                                                      ?.copyWith(
+                                                          color: Palette.black
+                                                              .withOpacity(.9),
+                                                          height: 1.2,
+                                                          fontWeight:
+                                                              FontWeight.w100),
+                                              children: [
+                                                TextSpan(
+                                                    text: ' E-Con ',
+                                                    style: kTextHeme.subtitle2
+                                                        ?.copyWith(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color: Palette.black
+                                                                .withOpacity(
+                                                                    .9),
+                                                            height: 1.2)),
+                                                TextSpan(
+                                                  text:
+                                                      'bagian dari Sistem Informasi Farmasi (SIFA) Universitas Hasanuddin',
+                                                  style: kTextHeme.subtitle2
+                                                      ?.copyWith(
+                                                          color: Palette.black
+                                                              .withOpacity(.9),
+                                                          height: 1.2,
+                                                          fontWeight:
+                                                              FontWeight.w100),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+                                          UsernameField(
+                                            controller: usernameController,
+                                          ),
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+                                          PasswordField(
+                                            controller: passwordController,
+                                          ),
+                                          const SizedBox(
+                                            height: 28,
+                                          ),
+                                          Builder(builder: (context) {
+                                            return CustomButton(
+                                              text: 'Masuk',
+                                              onTap: () =>
+                                                  _onPressedSignInButton(
+                                                      context),
+                                            );
+                                          }),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox.shrink(),
+                                    HeaderLogo(
+                                      bgColor:
+                                          Palette.primaryVariant.withOpacity(
+                                        .07,
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              }),
+                            ),
+                          ),
+                        ],
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),

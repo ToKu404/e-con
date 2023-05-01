@@ -4,7 +4,6 @@ import 'dart:convert';
 
 import 'package:e_con/core/helpers/auth_preference_helper.dart';
 import 'package:e_con/core/helpers/notif_helper.dart';
-import 'package:e_con/core/helpers/password_encrypt.dart';
 import 'package:e_con/core/utils/exception.dart';
 import 'package:e_con/core/responses/data_response.dart';
 import 'package:e_con/core/responses/session.dart';
@@ -35,8 +34,12 @@ class AuthDataSourceImpl implements AuthDataSource {
   /// Tugas Akhir : https://api.sifa.npedigihouse.tech/docs/#/default/post_api_v0_users_login
   /// POST
   @override
-  Future<UserCredential> signIn(String username, String password) async {
+  Future<UserCredential> signIn(String u, String password) async {
     try {
+      String username = u.trim();
+
+      await authPreferenceHelper.removeUserData();
+
       final userNotifId = await notifHelper.generateUserAppId();
 
       final map = {
@@ -158,10 +161,11 @@ class AuthDataSourceImpl implements AuthDataSource {
             "Authorization": "Bearer ${credential.token}",
           },
         );
+        await authPreferenceHelper.removeUserData();
       }
-      return authPreferenceHelper.removeUserData();
+      return true;
     } catch (e) {
-      throw LocalDatabaseException();
+      return false;
     }
   }
 
