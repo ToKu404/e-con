@@ -44,127 +44,173 @@ class _StudentMeetingHistoryPageState extends State<StudentMeetingHistoryPage> {
           ),
         ),
       ),
-      body: SafeArea(child: CheckInternetOnetime(child: (context) {
-        final provider = context.watch<AttendanceHistoryNotifier>();
-
-        if (provider.studentAttendanceState == RequestState.loading ||
-            provider.listStudentAttendance == null) {
-          return CustomShimmer(
-              child: Column(
-            children: [
-              AppSize.verticalSpace[3],
-              CardPlaceholder(
-                height: 70,
-                horizontalPadding: AppSize.space[3],
-              ),
-              AppSize.verticalSpace[3],
-              CardPlaceholder(
-                height: 70,
-                horizontalPadding: AppSize.space[3],
-              ),
-              AppSize.verticalSpace[3],
-              CardPlaceholder(
-                height: 70,
-                horizontalPadding: AppSize.space[3],
-              ),
-            ],
-          ));
-        }
-        if (provider.listStudentAttendance!.isEmpty) {
-          return EconEmpty(
-            emptyMessage: 'Belum ada riwayat pertemuan',
-          );
-        }
-
-        final listAttendanceData =
-            ReusableFunctionHelper.getListStudentAttendanceHistory(
-                provider.listStudentAttendance ?? []);
-
-        return ListView.builder(
-          padding: EdgeInsets.all(
-            AppSize.space[3],
-          ),
-          itemCount: listAttendanceData.length,
-          itemBuilder: (context, index) {
-            return Container(
-              margin: EdgeInsets.only(
-                bottom: AppSize.space[2],
-              ),
-              width: AppSize.getAppWidth(context),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(
-                  AppSize.space[3],
+      body: SafeArea(
+        child: CheckInternetOnetime(
+          child: (context) {
+            return RefreshIndicator(
+              onRefresh: () async {
+                Provider.of<AttendanceHistoryNotifier>(context, listen: false)
+                    .fetchListStudentAttendance(classId: widget.clazzData.id!);
+              },
+              child: CustomScrollView(
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
+                physics: const AlwaysScrollableScrollPhysics(
+                  parent: ClampingScrollPhysics(),
                 ),
-              ),
-              child: Padding(
-                padding: EdgeInsets.all(
-                  AppSize.space[4],
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            ReusableFunctionHelper.datetimeToString(
-                                listAttendanceData[index].meetingData!.date!),
-                            style: kTextHeme.subtitle2?.copyWith(
-                              color: Palette.disable,
-                            ),
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: Builder(
+                      builder: (context) {
+                        final provider =
+                            context.watch<AttendanceHistoryNotifier>();
+                        if (provider.studentAttendanceState ==
+                                RequestState.loading ||
+                            provider.listStudentAttendance == null) {
+                          return CustomShimmer(
+                              child: Column(
+                            children: [
+                              AppSize.verticalSpace[3],
+                              CardPlaceholder(
+                                height: 70,
+                                horizontalPadding: AppSize.space[3],
+                              ),
+                              AppSize.verticalSpace[3],
+                              CardPlaceholder(
+                                height: 70,
+                                horizontalPadding: AppSize.space[3],
+                              ),
+                              AppSize.verticalSpace[3],
+                              CardPlaceholder(
+                                height: 70,
+                                horizontalPadding: AppSize.space[3],
+                              ),
+                            ],
+                          ));
+                        }
+                        if (provider.listStudentAttendance!.isEmpty) {
+                          return EconEmpty(
+                            emptyMessage: 'Belum ada riwayat pertemuan',
+                          );
+                        }
+
+                        final listAttendanceData = ReusableFunctionHelper
+                            .getListStudentAttendanceHistory(
+                                provider.listStudentAttendance ?? []);
+
+                        return ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          padding: EdgeInsets.all(
+                            AppSize.space[3],
                           ),
-                          Text(
-                            'Pertemuan ${index + 1}',
-                            style: kTextHeme.subtitle1?.copyWith(
-                              color: Palette.primary,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            listAttendanceData[index].meetingData!.topics!,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: kTextHeme.subtitle2?.copyWith(
-                              color: Palette.onPrimary,
-                            ),
-                          ),
-                        ],
-                      ),
+                          itemCount: listAttendanceData.length,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              margin: EdgeInsets.only(
+                                bottom: AppSize.space[2],
+                              ),
+                              width: AppSize.getAppWidth(context),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(
+                                  AppSize.space[3],
+                                ),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.all(
+                                  AppSize.space[4],
+                                ),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            ReusableFunctionHelper
+                                                .datetimeToString(
+                                                    listAttendanceData[index]
+                                                        .meetingData!
+                                                        .date!),
+                                            style:
+                                                kTextHeme.subtitle2?.copyWith(
+                                              color: Palette.disable,
+                                            ),
+                                          ),
+                                          Text(
+                                            'Pertemuan ${index + 1}',
+                                            style:
+                                                kTextHeme.subtitle1?.copyWith(
+                                              color: Palette.primary,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text(
+                                            listAttendanceData[index]
+                                                .meetingData!
+                                                .topics!,
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style:
+                                                kTextHeme.subtitle2?.copyWith(
+                                              color: Palette.onPrimary,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Container(
+                                      width: 50,
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: AppSize.space[0],
+                                        vertical: AppSize.space[2],
+                                      ),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                          AppSize.space[4],
+                                        ),
+                                        color: ReusableFunctionHelper
+                                                .getAttendanceColor(
+                                                    listAttendanceData[index]
+                                                        .attendanceType!
+                                                        .id!)
+                                            .withOpacity(.2),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          listAttendanceData[index]
+                                                  .attendanceType
+                                                  ?.name ??
+                                              '',
+                                          style: kTextHeme.subtitle2?.copyWith(
+                                            color: ReusableFunctionHelper
+                                                .getAttendanceColor(
+                                                    listAttendanceData[index]
+                                                        .attendanceType!
+                                                        .id!),
+                                            height: 1,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
                     ),
-                    Container(
-                      width: 50,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: AppSize.space[0],
-                        vertical: AppSize.space[2],
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                          AppSize.space[4],
-                        ),
-                        color: ReusableFunctionHelper.getAttendanceColor(
-                                listAttendanceData[index].attendanceType!.id!)
-                            .withOpacity(.2),
-                      ),
-                      child: Center(
-                        child: Text(
-                          listAttendanceData[index].attendanceType?.name ?? '',
-                          style: kTextHeme.subtitle2?.copyWith(
-                            color: ReusableFunctionHelper.getAttendanceColor(
-                                listAttendanceData[index].attendanceType!.id!),
-                            height: 1,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  )
+                ],
               ),
             );
           },
-        );
-      })),
+        ),
+      ),
     );
   }
 }

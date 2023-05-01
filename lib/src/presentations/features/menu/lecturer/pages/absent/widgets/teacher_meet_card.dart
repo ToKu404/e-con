@@ -7,7 +7,9 @@ import 'package:e_con/src/data/models/attendance/helpers/attendance_value.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/meeting_data.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/statistic_data.dart';
+import 'package:e_con/src/presentations/features/menu/lecturer/providers/meeting_course_notifier.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TeacherMeetCard extends StatefulWidget {
   final MeetingData meetingData;
@@ -31,6 +33,10 @@ class _TeacherMeetCardState extends State<TeacherMeetCard> {
           'meetingId': widget.meetingData.id,
           'classData': widget.classData,
           'meetingNumber': widget.meetingData.meetingNumber,
+        }).then((value) async {
+          context
+              .read<MeetingCourseNotifier>()
+              .getListMeeting(classId: widget.classData.id!);
         });
       },
       child: Container(

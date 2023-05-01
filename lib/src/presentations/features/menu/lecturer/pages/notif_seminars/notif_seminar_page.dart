@@ -29,59 +29,78 @@ class _LecturerNotifSeminarPageState extends State<LecturerNotifSeminarPage> {
               height: 60,
             ),
             Expanded(
-              child: Builder(builder: (context) {
-                return Builder(builder: (context) {
-                  final provider = context.watch<LecturerSeminarNotifier>();
-                  return CheckInternetOnetime(child: (context) {
-                    
-                    if (provider.state == RequestState.loading) {
-                      return CustomShimmer(
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              height: 12,
-                            ),
-                            CardPlaceholder(
-                              height: 80,
-                            ),
-                            AppSize.verticalSpace[3],
-                            CardPlaceholder(
-                              height: 100,
-                            ),
-                            AppSize.verticalSpace[3],
-                            CardPlaceholder(
-                              height: 100,
-                            ),
-                            AppSize.verticalSpace[3],
-                            CardPlaceholder(
-                              height: 100,
-                            ),
-                            AppSize.verticalSpace[3],
-                            CardPlaceholder(
-                              height: 100,
-                            ),
-                            AppSize.verticalSpace[3],
-                          ],
-                        ),
-                      );
-                    }
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  await Future.wait([
+                    context
+                        .read<LecturerSeminarNotifier>()
+                        .fetchInvitedSeminars(),
+                  ]);
+                },
+                child: CustomScrollView(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  physics: const AlwaysScrollableScrollPhysics(
+                    parent: ClampingScrollPhysics(),
+                  ),
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: Builder(builder: (context) {
+                        final provider =
+                            context.watch<LecturerSeminarNotifier>();
+                        return CheckInternetOnetime(child: (context) {
+                          if (provider.state == RequestState.loading) {
+                            return CustomShimmer(
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    height: 12,
+                                  ),
+                                  CardPlaceholder(
+                                    height: 80,
+                                  ),
+                                  AppSize.verticalSpace[3],
+                                  CardPlaceholder(
+                                    height: 100,
+                                  ),
+                                  AppSize.verticalSpace[3],
+                                  CardPlaceholder(
+                                    height: 100,
+                                  ),
+                                  AppSize.verticalSpace[3],
+                                  CardPlaceholder(
+                                    height: 100,
+                                  ),
+                                  AppSize.verticalSpace[3],
+                                  CardPlaceholder(
+                                    height: 100,
+                                  ),
+                                  AppSize.verticalSpace[3],
+                                ],
+                              ),
+                            );
+                          }
 
-                    if (provider.seminars.isEmpty) {
-                      return EconEmpty(emptyMessage: 'Belum ada pemberitahuan');
-                    }
-                    return ListView.builder(
-                      padding: EdgeInsets.only(top: 12),
-                      shrinkWrap: true,
-                      itemCount: provider.seminars.length,
-                      itemBuilder: (context, index) {
-                        return LecturerSeminarCard(
-                          seminarData: provider.seminars[index],
-                        );
-                      },
-                    );
-                  });
-                });
-              }),
+                          if (provider.seminars.isEmpty) {
+                            return EconEmpty(
+                                emptyMessage: 'Belum ada pemberitahuan');
+                          }
+                          return ListView.builder(
+                            padding: EdgeInsets.only(top: 12),
+                            shrinkWrap: true,
+                            itemCount: provider.seminars.length,
+                            itemBuilder: (context, index) {
+                              return LecturerSeminarCard(
+                                seminarData: provider.seminars[index],
+                              );
+                            },
+                          );
+                        });
+                      }),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ],
         ),

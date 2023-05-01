@@ -29,6 +29,8 @@ class StudentHomePage extends StatefulWidget {
 }
 
 class _StudentHomePageState extends State<StudentHomePage> {
+  final ValueNotifier<WeeklyActivity> selectWeekly =
+      ValueNotifier(ReusableFunctionHelper.getTodayActivityData());
   @override
   void initState() {
     super.initState();
@@ -73,56 +75,66 @@ class _StudentHomePageState extends State<StudentHomePage> {
           ),
         ],
       ),
-      body: CustomScrollView(
-        slivers: [
-          SliverFillRemaining(
-            child: CheckInternetOnetime(child: (context) {
-              return CustomScrollView(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                slivers: [
-                  SliverToBoxAdapter(
-                    child: Builder(
-                      builder: (context) {
-                        final feProvider =
-                            context.watch<StudentFinalExamNotifier>();
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await Future.wait([
+            Provider.of<StudentActivityNotifier>(context, listen: false)
+                .fetchAllMeetingByDate(date: selectWeekly.value.date),
+          ]);
+        },
+        child: CustomScrollView(
+          slivers: [
+            SliverFillRemaining(
+              child: CheckInternetOnetime(child: (context) {
+                return CustomScrollView(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: Builder(
+                        builder: (context) {
+                          final feProvider =
+                              context.watch<StudentFinalExamNotifier>();
 
-                        if (feProvider.proposedThesisState ==
-                                RequestState.loading ||
-                            feProvider.seminarsState == RequestState.loading ||
-                            feProvider.trialExamState == RequestState.loading ||
-                            feProvider.listProposedThesis.isEmpty) {
-                          return SizedBox();
-                        }
-
-                        return _FinalExamSection(
-                          proposedThesis: feProvider.listProposedThesis,
-                          seminars: feProvider.listSeminar,
-                          thesisTrialExam: feProvider.thesisTrialExam,
-                        );
-                      },
+                          if (feProvider.proposedThesisState ==
+                                  RequestState.loading ||
+                              feProvider.seminarsState ==
+                                  RequestState.loading ||
+                              feProvider.trialExamState ==
+                                  RequestState.loading ||
+                              feProvider.listProposedThesis.isEmpty) {
+                            return SizedBox();
+                          }
+                          return _FinalExamSection(
+                            proposedThesis: feProvider.listProposedThesis,
+                            seminars: feProvider.listSeminar,
+                            thesisTrialExam: feProvider.thesisTrialExam,
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                  _ActivitySection(),
-                ],
-              );
-            }),
-          )
-        ],
+                    _ActivitySection(
+                      selectWeekly: selectWeekly,
+                    ),
+                  ],
+                );
+              }),
+            )
+          ],
+        ),
       ),
     );
   }
 }
 
 class _ActivitySection extends StatelessWidget {
-  const _ActivitySection();
+  final ValueNotifier<WeeklyActivity> selectWeekly;
+  const _ActivitySection({required this.selectWeekly});
 
   @override
   Widget build(BuildContext context) {
     final listWeekly = ReusableFunctionHelper.getWeeklyActivityData();
 
-    final ValueNotifier<WeeklyActivity> selectWeekly =
-        ValueNotifier(ReusableFunctionHelper.getTodayActivityData());
     final ValueNotifier<bool?> isRightSwap = ValueNotifier(null);
 
     return ValueListenableBuilder(
@@ -268,8 +280,10 @@ class _FinalExamSectionState extends State<_FinalExamSection> {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<StudentFinalExamHelperNotifier>();
-    if (provider.state == RequestState.loading ||
-        provider.homeFinalExamDta.isEmpty) {
+    if (provider.homeFinalExamDta.isEmpty) {
+      return SizedBox();
+    }
+    if (provider.state == RequestState.loading) {
       return CustomShimmer(
           child: Column(
         children: [

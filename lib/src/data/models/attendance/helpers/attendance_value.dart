@@ -44,7 +44,7 @@ class AttendanceValueHelper {
         status: 'Hadir'),
   ];
   static AttendanceValue getAttendanceValue(int id) {
-    return _dataAttendance[id - 1];
+    return _dataAttendance.firstWhere((element) => element.id == id);
   }
 
   static List<AttendanceValue> getAllAttendance() {

@@ -45,7 +45,7 @@ class _LecturerMeetDetailPageState extends State<LecturerMeetDetailPage> {
       // Provider.of<AttendanceNotifier>(context, listen: false)
       //   ..fetchListAttendance(meetingId: meetingId);
       BlocProvider.of<AttendanceCubit>(context, listen: false)
-          ..onFetchAttendance(meetingId: meetingId);
+        ..onFetchAttendance(meetingId: meetingId);
       Provider.of<MeetingCourseNotifier>(context, listen: false)
         ..getMeetingData(meetingId: meetingId);
     });
@@ -64,8 +64,8 @@ class _LecturerMeetDetailPageState extends State<LecturerMeetDetailPage> {
     final meetingData = meetingProvider.meetingData!;
     return WillPopScope(
       onWillPop: () async {
-        final prov = context.read<MeetingCourseNotifier>();
-        await prov.getListMeeting(classId: classData.id!);
+        // final prov = context.read<MeetingCourseNotifier>();
+        // await prov.getListMeeting(classId: classData.id!);
         return true;
       },
       child: GestureDetector(
@@ -76,8 +76,8 @@ class _LecturerMeetDetailPageState extends State<LecturerMeetDetailPage> {
           appBar: AppBar(
             leading: IconButton(
               onPressed: () async {
-                final prov = context.read<MeetingCourseNotifier>();
-                await prov.getListMeeting(classId: classData.id!);
+                // final prov = context.read<MeetingCourseNotifier>();
+                // await prov.getListMeeting(classId: classData.id!);
                 Navigator.pop(context);
               },
               icon: const Icon(
@@ -158,156 +158,171 @@ class _LecturerMeetDetailPageState extends State<LecturerMeetDetailPage> {
           body: CheckInternetOnetime(child: (context) {
             return Stack(
               children: [
-                CustomScrollView(
-                  slivers: [
-                    SliverToBoxAdapter(
-                      child: Container(
-                        padding: EdgeInsets.all(
-                          AppSize.space[3],
-                        ),
-                        color: Palette.background,
+                RefreshIndicator(
+                  onRefresh: () async {
+                    await Future.wait([
+                      BlocProvider.of<AttendanceCubit>(context, listen: false)
+                          .onFetchAttendance(meetingId: meetingId),
+                      Provider.of<MeetingCourseNotifier>(context, listen: false)
+                          .getMeetingData(meetingId: meetingId),
+                    ]);
+                  },
+                  child: CustomScrollView(
+                    keyboardDismissBehavior:
+                        ScrollViewKeyboardDismissBehavior.onDrag,
+                    physics: const AlwaysScrollableScrollPhysics(
+                      parent: ClampingScrollPhysics(),
+                    ),
+                    slivers: [
+                      SliverToBoxAdapter(
                         child: Container(
-                          padding: EdgeInsets.all(AppSize.space[3]),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                              AppSize.space[3],
-                            ),
-                            color: Colors.white,
-                            border: Border.all(
-                              color: Palette.field,
-                            ),
+                          padding: EdgeInsets.all(
+                            AppSize.space[3],
                           ),
-                          child: _StatisticSection(
-                            meetingId: meetingId,
+                          color: Palette.background,
+                          child: Container(
+                            padding: EdgeInsets.all(AppSize.space[3]),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                AppSize.space[3],
+                              ),
+                              color: Colors.white,
+                              border: Border.all(
+                                color: Palette.field,
+                              ),
+                            ),
+                            child: _StatisticSection(
+                              meetingId: meetingId,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    _CustomAppBar(
-                      meetingId: meetingId,
-                    ),
-                    SliverPadding(
-                      padding: EdgeInsets.all(
-                        AppSize.space[4],
+                      _CustomAppBar(
+                        meetingId: meetingId,
                       ),
-                      sliver: BlocBuilder<AttendanceCubit, AttendanceState>(
-                        builder: (context, state) {
-                          if (state is AttendanceLoading ||
-                              state is AttendanceInitial) {
-                            return SliverToBoxAdapter(
-                              child: CustomShimmer(
-                                  child: Column(
-                                children: [
-                                  CardPlaceholder(
-                                    height: 80,
-                                    horizontalPadding: 0,
-                                  ),
-                                  AppSize.verticalSpace[4],
-                                  CardPlaceholder(
-                                    height: 80,
-                                    horizontalPadding: 0,
-                                  ),
-                                  AppSize.verticalSpace[4],
-                                  CardPlaceholder(
-                                    height: 80,
-                                    horizontalPadding: 0,
-                                  )
-                                ],
-                              )),
-                            );
-                          }
-                          if (state is FetchAttendanceSuccess) {
-                            final listAttendance = state.attendanceData;
-
-                            if (listAttendance.isEmpty) {
+                      SliverPadding(
+                        padding: EdgeInsets.all(
+                          AppSize.space[4],
+                        ),
+                        sliver: BlocBuilder<AttendanceCubit, AttendanceState>(
+                          builder: (context, state) {
+                            if (state is AttendanceLoading ||
+                                state is AttendanceInitial) {
                               return SliverToBoxAdapter(
-                                child: SizedBox.shrink(),
+                                child: CustomShimmer(
+                                    child: Column(
+                                  children: [
+                                    CardPlaceholder(
+                                      height: 80,
+                                      horizontalPadding: 0,
+                                    ),
+                                    AppSize.verticalSpace[4],
+                                    CardPlaceholder(
+                                      height: 80,
+                                      horizontalPadding: 0,
+                                    ),
+                                    AppSize.verticalSpace[4],
+                                    CardPlaceholder(
+                                      height: 80,
+                                      horizontalPadding: 0,
+                                    )
+                                  ],
+                                )),
+                              );
+                            }
+                            if (state is FetchAttendanceSuccess) {
+                              final listAttendance = state.attendanceData;
+
+                              if (listAttendance.isEmpty) {
+                                return SliverToBoxAdapter(
+                                  child: SizedBox.shrink(),
+                                );
+                              }
+
+                              return SliverList(
+                                delegate: SliverChildBuilderDelegate(
+                                    childCount: listAttendance.length,
+                                    (context, index) {
+                                  return Column(
+                                    children: [
+                                      AttedanceStudentCard(
+                                        attendanceData: listAttendance[index],
+                                      ),
+                                      SizedBox(
+                                        height: (index == 9) ? 66 : 8,
+                                      )
+                                    ],
+                                  );
+                                }),
                               );
                             }
 
-                            return SliverList(
-                              delegate: SliverChildBuilderDelegate(
-                                  childCount: listAttendance.length,
-                                  (context, index) {
-                                return Column(
-                                  children: [
-                                    AttedanceStudentCard(
-                                      attendanceData: listAttendance[index],
-                                    ),
-                                    SizedBox(
-                                      height: (index == 9) ? 66 : 8,
-                                    )
-                                  ],
-                                );
-                              }),
+                            if (state is FetchAttendanceFailure) {
+                              return EconError(errorMessage: state.message);
+                            }
+                            return SliverToBoxAdapter(
+                              child: SizedBox.shrink(),
                             );
-                          }
+                          },
+                        ),
+                      )
+                      // SliverPadding(
+                      //   padding: EdgeInsets.all(AppSize.space[4]),
+                      //   sliver: Builder(builder: (context) {
+                      //     final attendanceProvider =
+                      //         context.watch<AttendanceNotifier>();
+                      //     if (attendanceProvider.state == RequestState.loading) {
+                      //       return SliverToBoxAdapter(
+                      //         child: CustomShimmer(
+                      //             child: Column(
+                      //           children: [
+                      //             CardPlaceholder(
+                      //               height: 80,
+                      //               horizontalPadding: 0,
+                      //             ),
+                      //             AppSize.verticalSpace[4],
+                      //             CardPlaceholder(
+                      //               height: 80,
+                      //               horizontalPadding: 0,
+                      //             ),
+                      //             AppSize.verticalSpace[4],
+                      //             CardPlaceholder(
+                      //               height: 80,
+                      //               horizontalPadding: 0,
+                      //             )
+                      //           ],
+                      //         )),
+                      //       );
+                      //     }
+                      //     final listAttendance =
+                      //         attendanceProvider.listAttendanceData;
 
-                          if (state is FetchAttendanceFailure) {
-                            return EconError(errorMessage: state.message);
-                          }
-                          return SliverToBoxAdapter(
-                            child: SizedBox.shrink(),
-                          );
-                        },
-                      ),
-                    )
-                    // SliverPadding(
-                    //   padding: EdgeInsets.all(AppSize.space[4]),
-                    //   sliver: Builder(builder: (context) {
-                    //     final attendanceProvider =
-                    //         context.watch<AttendanceNotifier>();
-                    //     if (attendanceProvider.state == RequestState.loading) {
-                    //       return SliverToBoxAdapter(
-                    //         child: CustomShimmer(
-                    //             child: Column(
-                    //           children: [
-                    //             CardPlaceholder(
-                    //               height: 80,
-                    //               horizontalPadding: 0,
-                    //             ),
-                    //             AppSize.verticalSpace[4],
-                    //             CardPlaceholder(
-                    //               height: 80,
-                    //               horizontalPadding: 0,
-                    //             ),
-                    //             AppSize.verticalSpace[4],
-                    //             CardPlaceholder(
-                    //               height: 80,
-                    //               horizontalPadding: 0,
-                    //             )
-                    //           ],
-                    //         )),
-                    //       );
-                    //     }
-                    //     final listAttendance =
-                    //         attendanceProvider.listAttendanceData;
+                      //     if (listAttendance.isEmpty) {
+                      //       return SliverToBoxAdapter(
+                      //         child: SizedBox.shrink(),
+                      //       );
+                      //     }
 
-                    //     if (listAttendance.isEmpty) {
-                    //       return SliverToBoxAdapter(
-                    //         child: SizedBox.shrink(),
-                    //       );
-                    //     }
-
-                    //     return SliverList(
-                    //       delegate: SliverChildBuilderDelegate(
-                    //           childCount: listAttendance.length,
-                    //           (context, index) {
-                    //         return Column(
-                    //           children: [
-                    //             AttedanceStudentCard(
-                    //               attendanceData: listAttendance[index],
-                    //             ),
-                    //             SizedBox(
-                    //               height: (index == 9) ? 66 : 8,
-                    //             )
-                    //           ],
-                    //         );
-                    //       }),
-                    //     );
-                    //   }),
-                    // ),
-                  ],
+                      //     return SliverList(
+                      //       delegate: SliverChildBuilderDelegate(
+                      //           childCount: listAttendance.length,
+                      //           (context, index) {
+                      //         return Column(
+                      //           children: [
+                      //             AttedanceStudentCard(
+                      //               attendanceData: listAttendance[index],
+                      //             ),
+                      //             SizedBox(
+                      //               height: (index == 9) ? 66 : 8,
+                      //             )
+                      //           ],
+                      //         );
+                      //       }),
+                      //     );
+                      //   }),
+                      // ),
+                    ],
+                  ),
                 ),
                 Positioned(
                   bottom: 0,

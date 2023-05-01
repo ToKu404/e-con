@@ -25,7 +25,24 @@ class StudentHistoryPage extends StatelessWidget {
             ),
             Expanded(
               child: CheckInternetOnetime(child: (context) {
-                return _BodySection();
+                return RefreshIndicator(
+                  onRefresh: () async {
+                    Provider.of<AttendanceHistoryNotifier>(context,
+                            listen: false)
+                        .fetchListStudentClasses();
+                  },
+                  child: CustomScrollView(
+                      keyboardDismissBehavior:
+                          ScrollViewKeyboardDismissBehavior.onDrag,
+                      physics: const AlwaysScrollableScrollPhysics(
+                        parent: ClampingScrollPhysics(),
+                      ),
+                      slivers: [
+                        SliverToBoxAdapter(
+                          child: _BodySection(),
+                        ),
+                      ]),
+                );
               }),
             ),
           ],
@@ -97,7 +114,9 @@ class _BodySectionState extends State<_BodySection> {
       padding: EdgeInsets.symmetric(
         vertical: AppSize.space[4],
       ),
-      itemCount: listClazzData?.length,
+      itemCount: listClazzData.length,
+      physics: NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
       itemBuilder: (context, index) {
         return ClassCard(
           clazzData: listClazzData![index],

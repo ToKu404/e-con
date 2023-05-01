@@ -28,7 +28,24 @@ class StudentNotifPage extends StatelessWidget {
             ),
             Expanded(
               child: CheckInternetOnetime(child: (context) {
-                return _BodySection();
+                return RefreshIndicator(
+                  onRefresh: () async {
+                    await Future.wait([
+                      Provider.of<UserNotifNotifier>(context, listen: false)
+                          .fetchNotifications(),
+                    ]);
+                  },
+                  child: CustomScrollView(
+                    keyboardDismissBehavior:
+                        ScrollViewKeyboardDismissBehavior.onDrag,
+                    physics: const AlwaysScrollableScrollPhysics(
+                      parent: ClampingScrollPhysics(),
+                    ),
+                    slivers: [
+                      SliverToBoxAdapter(child: _BodySection()),
+                    ],
+                  ),
+                );
               }),
             ),
           ],
@@ -95,6 +112,8 @@ class _BodySectionState extends State<_BodySection> {
       return EconEmpty(emptyMessage: 'Belum ada notifikasi');
     }
     return ListView.builder(
+      physics: NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
       itemCount: provider.listNotif.length,
       itemBuilder: (context, index) {
         return _StudentNotifCard(
@@ -109,8 +128,7 @@ class _StudentNotifCard extends StatelessWidget {
   final NotificationModel notif;
   const _StudentNotifCard({
     required this.notif,
-    Key? key,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

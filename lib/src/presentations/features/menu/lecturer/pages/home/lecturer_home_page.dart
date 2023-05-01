@@ -35,129 +35,154 @@ class _LecturerHomePageState extends State<LecturerHomePage> {
             ),
             Expanded(
               child: CheckInternetOnetime(child: (context) {
-                return SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 16,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Pengingat Harian',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Palette.black,
-                                height: 1.2,
-                              ),
-                            ),
-                            Text(
-                              ReusableFunctionHelper.datetimeToString(
-                                  DateTime.now()),
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.normal,
-                                color: Palette.black,
-                              ),
-                            ),
-                          ],
+                return RefreshIndicator(
+                  onRefresh: () async {
+                    print("tes");
+                    await Future.wait([
+                      context
+                          .read<LecturerTodayMeetingNotifier>()
+                          .fetchAllMeetingByDate(),
+                      context
+                          .read<LecturerSeminarNotifier>()
+                          .fetchInvitedSeminars(),
+                    ]);
+                  },
+                  child: CustomScrollView(
+                    keyboardDismissBehavior:
+                        ScrollViewKeyboardDismissBehavior.onDrag,
+                    physics: const AlwaysScrollableScrollPhysics(
+                      parent: ClampingScrollPhysics(),
+                    ),
+                    slivers: [
+                      SliverToBoxAdapter(
+                        child: SizedBox(
+                          height: 16,
                         ),
                       ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      Divider(
-                        color: Palette.disable,
-                      ),
-                      Builder(builder: (context) {
-                        final provider =
-                            context.watch<LecturerTodayMeetingNotifier>();
-                        final seminarNotifier =
-                            context.watch<LecturerSeminarNotifier>();
-
-                        if (provider.state == RequestState.loading ||
-                            provider.listMeetingData == null) {
-                          return CustomShimmer(
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  height: 12,
+                      SliverPadding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        sliver: SliverToBoxAdapter(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Pengingat Harian',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Palette.black,
+                                  height: 1.2,
                                 ),
-                                CardPlaceholder(
-                                  height: 80,
-                                ),
-                                AppSize.verticalSpace[3],
-                                CardPlaceholder(
-                                  height: 100,
-                                ),
-                                AppSize.verticalSpace[3],
-                                CardPlaceholder(
-                                  height: 100,
-                                ),
-                                AppSize.verticalSpace[3],
-                                CardPlaceholder(
-                                  height: 100,
-                                ),
-                                AppSize.verticalSpace[3],
-                                CardPlaceholder(
-                                  height: 100,
-                                ),
-                                AppSize.verticalSpace[3],
-                              ],
-                            ),
-                          );
-                        }
-
-                        final getTodaySeminar =
-                            ReusableFunctionHelper.getTodayListSeminar(
-                                seminarNotifier.seminars);
-
-                        if (provider.listMeetingData!.isEmpty &&
-                            getTodaySeminar.isEmpty) {
-                          return Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Text(
-                              'Belum ada aktivitas yang dijadwalkan hari ini',
-                              style: TextStyle(
-                                color: Palette.disable,
                               ),
-                            ),
-                          );
-                        }
+                              Text(
+                                ReusableFunctionHelper.datetimeToString(
+                                    DateTime.now()),
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.normal,
+                                  color: Palette.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SliverToBoxAdapter(
+                        child: SizedBox(
+                          height: 8,
+                        ),
+                      ),
+                      SliverToBoxAdapter(
+                        child: Divider(
+                          color: Palette.disable,
+                        ),
+                      ),
+                      SliverToBoxAdapter(
+                        child: Builder(builder: (context) {
+                          final provider =
+                              context.watch<LecturerTodayMeetingNotifier>();
+                          final seminarNotifier =
+                              context.watch<LecturerSeminarNotifier>();
 
-                        if (getTodaySeminar.isNotEmpty)
-                          return ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            padding: EdgeInsets.only(top: 12),
-                            shrinkWrap: true,
-                            itemCount: getTodaySeminar.length,
-                            itemBuilder: (context, index) {
-                              return TeacherTodaySeminarCard(
-                                seminarData: getTodaySeminar[index],
-                              );
-                            },
-                          );
+                          if (provider.state == RequestState.loading ||
+                              provider.listMeetingData == null) {
+                            return CustomShimmer(
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    height: 12,
+                                  ),
+                                  CardPlaceholder(
+                                    height: 80,
+                                  ),
+                                  AppSize.verticalSpace[3],
+                                  CardPlaceholder(
+                                    height: 100,
+                                  ),
+                                  AppSize.verticalSpace[3],
+                                  CardPlaceholder(
+                                    height: 100,
+                                  ),
+                                  AppSize.verticalSpace[3],
+                                  CardPlaceholder(
+                                    height: 100,
+                                  ),
+                                  AppSize.verticalSpace[3],
+                                  CardPlaceholder(
+                                    height: 100,
+                                  ),
+                                  AppSize.verticalSpace[3],
+                                ],
+                              ),
+                            );
+                          }
 
-                        if (provider.listMeetingData!.isNotEmpty)
-                          return ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            padding: EdgeInsets.only(top: 12),
-                            shrinkWrap: true,
-                            itemCount: provider.listMeetingData?.length,
-                            itemBuilder: (context, index) {
-                              return TeacherTaskCard(
-                                meetingData: provider.listMeetingData![index],
-                              );
-                            },
-                          );
+                          final getTodaySeminar =
+                              ReusableFunctionHelper.getTodayListSeminar(
+                                  seminarNotifier.seminars);
 
-                        return SizedBox.shrink();
-                      }),
+                          if (provider.listMeetingData!.isEmpty &&
+                              getTodaySeminar.isEmpty) {
+                            return Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Text(
+                                'Belum ada aktivitas yang dijadwalkan hari ini',
+                                style: TextStyle(
+                                  color: Palette.disable,
+                                ),
+                              ),
+                            );
+                          }
+
+                          if (getTodaySeminar.isNotEmpty)
+                            return ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              padding: EdgeInsets.only(top: 12),
+                              shrinkWrap: true,
+                              itemCount: getTodaySeminar.length,
+                              itemBuilder: (context, index) {
+                                return TeacherTodaySeminarCard(
+                                  seminarData: getTodaySeminar[index],
+                                );
+                              },
+                            );
+
+                          if (provider.listMeetingData!.isNotEmpty)
+                            return ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              padding: EdgeInsets.only(top: 12),
+                              shrinkWrap: true,
+                              itemCount: provider.listMeetingData?.length,
+                              itemBuilder: (context, index) {
+                                return TeacherTaskCard(
+                                  meetingData: provider.listMeetingData![index],
+                                );
+                              },
+                            );
+
+                          return SizedBox.shrink();
+                        }),
+                      ),
                     ],
                   ),
                 );

@@ -147,21 +147,54 @@ class _LecturerCourseDetailPageState extends State<LecturerCourseDetailPage> {
                                     ? EconEmpty(
                                         emptyMessage:
                                             'Silahkan buat meeting terlebih dahulu!')
-                                    : ListView.builder(
-                                        itemCount: listMeeting.length,
-                                        padding: EdgeInsets.all(
-                                          AppSize.space[3],
-                                        ),
-                                        itemBuilder: (context, index) {
-                                          final meetingData =
-                                              listMeeting[index];
-                                          meetingData.setMeetingNumber =
-                                              index + 1;
-                                          return TeacherMeetCard(
-                                            meetingData: meetingData,
-                                            classData: widget.clazzData,
-                                          );
+                                    : RefreshIndicator(
+                                        onRefresh: () async {
+                                          await Future.wait([
+                                            Provider.of<CourseStudentNotifier>(
+                                                    context,
+                                                    listen: false)
+                                                .getListStudent(
+                                                    widget.clazzData.id!),
+                                            Provider.of<MeetingCourseNotifier>(
+                                                    context,
+                                                    listen: false)
+                                                .getListMeeting(
+                                                    classId:
+                                                        widget.clazzData.id!)
+                                          ]);
                                         },
+                                        child: CustomScrollView(
+                                          keyboardDismissBehavior:
+                                              ScrollViewKeyboardDismissBehavior
+                                                  .onDrag,
+                                          physics:
+                                              const AlwaysScrollableScrollPhysics(
+                                            parent: ClampingScrollPhysics(),
+                                          ),
+                                          slivers: [
+                                            SliverToBoxAdapter(
+                                              child: ListView.builder(
+                                                physics:
+                                                    NeverScrollableScrollPhysics(),
+                                                shrinkWrap: true,
+                                                itemCount: listMeeting.length,
+                                                padding: EdgeInsets.all(
+                                                  AppSize.space[3],
+                                                ),
+                                                itemBuilder: (context, index) {
+                                                  final meetingData =
+                                                      listMeeting[index];
+                                                  meetingData.setMeetingNumber =
+                                                      index + 1;
+                                                  return TeacherMeetCard(
+                                                    meetingData: meetingData,
+                                                    classData: widget.clazzData,
+                                                  );
+                                                },
+                                              ),
+                                            )
+                                          ],
+                                        ),
                                       ),
                               ),
                             ],

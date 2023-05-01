@@ -50,51 +50,75 @@ class _LecturerCourseMemberState extends State<LecturerCourseMember> {
           ),
         ),
       ),
-      body: Builder(builder: (context) {
-        final studentCourseProvider = context.watch<CourseStudentNotifier>();
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await Future.wait([
+            context
+                .read<CourseStudentNotifier>()
+                .getListStudent(widget.classId),
+          ]);
+        },
+        child: CustomScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            physics: const AlwaysScrollableScrollPhysics(
+              parent: ClampingScrollPhysics(),
+            ),
+            slivers: [
+              SliverToBoxAdapter(
+                child: Builder(builder: (context) {
+                  final studentCourseProvider =
+                      context.watch<CourseStudentNotifier>();
 
-        if (studentCourseProvider.state == RequestState.loading) {
-          return Padding(
-            padding: EdgeInsets.all(AppSize.space[4]),
-            child: CustomShimmer(
-                child: Column(
-              children: [
-                CardPlaceholder(
-                  height: 65,
-                  horizontalPadding: 0,
-                ),
-                AppSize.verticalSpace[4],
-                CardPlaceholder(
-                  height: 65,
-                  horizontalPadding: 0,
-                ),
-                AppSize.verticalSpace[4],
-                CardPlaceholder(
-                  height: 65,
-                  horizontalPadding: 0,
-                )
-              ],
-            )),
-          );
-        } else if (studentCourseProvider.state == RequestState.error ||
-            studentCourseProvider.listStudent == null) {
-          return EconError(
-            errorMessage: studentCourseProvider.error,
-          );
-        } else if (studentCourseProvider.listStudent!.isEmpty) {
-          return EconEmpty(
-              emptyMessage: 'Data peserta matakuliah belum ditambahkan');
-        }
+                  if (studentCourseProvider.state == RequestState.loading) {
+                    return Padding(
+                      padding: EdgeInsets.all(AppSize.space[4]),
+                      child: CustomShimmer(
+                          child: Column(
+                        children: [
+                          CardPlaceholder(
+                            height: 65,
+                            horizontalPadding: 0,
+                          ),
+                          AppSize.verticalSpace[4],
+                          CardPlaceholder(
+                            height: 65,
+                            horizontalPadding: 0,
+                          ),
+                          AppSize.verticalSpace[4],
+                          CardPlaceholder(
+                            height: 65,
+                            horizontalPadding: 0,
+                          )
+                        ],
+                      )),
+                    );
+                  } else if (studentCourseProvider.state ==
+                          RequestState.error ||
+                      studentCourseProvider.listStudent == null) {
+                    return EconError(
+                      errorMessage: studentCourseProvider.error,
+                    );
+                  } else if (studentCourseProvider.listStudent!.isEmpty) {
+                    return EconEmpty(
+                        emptyMessage:
+                            'Data peserta matakuliah belum ditambahkan');
+                  }
 
-        final listStudent = studentCourseProvider.listStudent!;
-        return ListView.builder(
-          itemCount: listStudent.length,
-          padding: EdgeInsets.all(AppSize.space[4]),
-          itemBuilder: (context, index) {
-            return CourseParticipantCard(studentData: listStudent[index]);
-          },
-        );
-      }),
+                  final listStudent = studentCourseProvider.listStudent!;
+                  return ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: listStudent.length,
+                    padding: EdgeInsets.all(AppSize.space[4]),
+                    itemBuilder: (context, index) {
+                      return CourseParticipantCard(
+                          studentData: listStudent[index]);
+                    },
+                  );
+                }),
+              ),
+            ]),
+      ),
     );
   }
 }

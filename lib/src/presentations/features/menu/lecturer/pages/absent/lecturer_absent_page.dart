@@ -57,19 +57,38 @@ class _LecturerAbsentPageState extends State<LecturerAbsentPage> {
                         emptyMessage: 'Belum ada kelas yang diampuh');
                   }
 
-                  return ListView.builder(
-                    padding: EdgeInsets.symmetric(vertical: AppSize.space[4]),
-                    shrinkWrap: true,
-                    itemCount: courseProvider.listClazz?.length,
-                    itemBuilder: (context, index) {
-                      final data = courseProvider.listClazz!.elementAt(index);
-                      return ClassCard(
-                        clazzData: data,
-                        onTap: () => Navigator.pushNamed(
-                            context, AppRoutes.detailCourse,
-                            arguments: data),
-                      );
+                  return RefreshIndicator(
+                    onRefresh: () async {
+                      await Future.wait([
+                        context.read<LectureCourseNotifier>().getListCourses(),
+                      ]);
                     },
+                    child: CustomScrollView(
+                        keyboardDismissBehavior:
+                            ScrollViewKeyboardDismissBehavior.onDrag,
+                        physics: const AlwaysScrollableScrollPhysics(
+                          parent: ClampingScrollPhysics(),
+                        ),
+                        slivers: [
+                          SliverToBoxAdapter(
+                            child: ListView.builder(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: AppSize.space[4]),
+                              shrinkWrap: true,
+                              itemCount: courseProvider.listClazz?.length,
+                              itemBuilder: (context, index) {
+                                final data =
+                                    courseProvider.listClazz!.elementAt(index);
+                                return ClassCard(
+                                  clazzData: data,
+                                  onTap: () => Navigator.pushNamed(
+                                      context, AppRoutes.detailCourse,
+                                      arguments: data),
+                                );
+                              },
+                            ),
+                          ),
+                        ]),
                   );
                 });
               }),
