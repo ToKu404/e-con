@@ -58,7 +58,6 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
               jsonDecode(responseData.body))
           .data;
       final userCredential = ClazzContent.fromJson(dataResponse);
-      print(userCredential.listClazz!.length);
 
       return userCredential;
     } else if (responseData.statusCode == 401) {
@@ -131,8 +130,6 @@ class CplLecturerDataSourceImpl implements CplLecturerDataSource {
       },
       body: json.encode(map),
     );
-    print(classId);
-
     return response.statusCode == 200;
   }
 

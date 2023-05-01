@@ -21,7 +21,7 @@ class StudentFinalExamHelperNotifier extends ChangeNotifier {
   RequestState _trialExamState = RequestState.init;
   RequestState get trialExamState => _trialExamState;
 
-  final List<FinalExamObject> _homeFinalExamDta = [];
+  List<FinalExamObject> _homeFinalExamDta = [];
   List<FinalExamObject> get homeFinalExamDta => _homeFinalExamDta;
 
   FeProposedThesis? _acceptedThesis;
@@ -61,7 +61,6 @@ class StudentFinalExamHelperNotifier extends ChangeNotifier {
     notifyListeners();
     if (listSeminar.isNotEmpty) {
       for (var element in listSeminar) {
-        print("exam ${element.examType}");
         if (element.examType == 'Ujian_Skripsi') {
           _finalExam = element;
         } else if (element.examType == 'Seminar_Hasil') {
@@ -260,7 +259,7 @@ class StudentFinalExamHelperNotifier extends ChangeNotifier {
       return;
     } else {
       // Saat kedunya masih diproses
-      for (int i = 0; i < listProposedThesis.length;) {
+      for (int i = 0; i < listProposedThesis.length; i++) {
         //status permohonan
         StatusAcceptment statusAcceptment = StatusAcceptment.process;
         String title = '';
@@ -286,8 +285,6 @@ class StudentFinalExamHelperNotifier extends ChangeNotifier {
             listProposedThesis[i].title ?? '');
         status =
             'Pengusulan Judul ${feStatus[listProposedThesis[i].proposalStatus!]}';
-
-        print(listProposedThesis[i].proposalStatus!);
 
         if (statusAcceptment == StatusAcceptment.accept) {
           /// (2) Verifikasi Dokumen
@@ -339,7 +336,13 @@ class StudentFinalExamHelperNotifier extends ChangeNotifier {
           subtitle: subtitle,
           status: status,
           onclick: () {
-            Navigator.pushNamed(context, AppRoutes.studentDetailFinalExam);
+            if (status == 'Pengusulan Judul Ditolak') {
+              return;
+            }
+            Navigator.pushNamed(
+              context,
+              AppRoutes.studentDetailFinalExam,
+            );
           },
           color: statusAcceptment == StatusAcceptment.accept
               ? Palette.success
@@ -347,11 +350,26 @@ class StudentFinalExamHelperNotifier extends ChangeNotifier {
                   ? Palette.danger
                   : Palette.secondary,
         ));
+
         _state = RequestState.success;
         notifyListeners();
-        return;
       }
     }
+    final List<FinalExamObject> temp = <FinalExamObject>[];
+    for (var hfe in _homeFinalExamDta) {
+      if (hfe.status != 'Pengusulan Judul Ditolak') {
+        temp.add(hfe);
+      }
+    }
+
+    _homeFinalExamDta.forEach((element) {
+      if (!temp.contains(element)) {
+        temp.add(element);
+      }
+    });
+    _homeFinalExamDta.clear();
+    _homeFinalExamDta.addAll(temp);
+
     _state = RequestState.success;
     notifyListeners();
   }

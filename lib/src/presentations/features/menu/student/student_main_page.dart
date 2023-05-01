@@ -141,7 +141,7 @@ class _StudentMainPageState extends State<StudentMainPage>
         onTap: (int i) async {
           if (i == 2) {
             final status = await _getCameraPermission();
-            print(status);
+         
             if (!mounted) return;
             if (status.isGranted) {
               Navigator.pushNamed(

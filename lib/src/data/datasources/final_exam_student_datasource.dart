@@ -55,7 +55,6 @@ class FinalExamStudentDataSourceImpl implements FinalExamStudentDataSource {
         throw ServerException();
       }
     } catch (e) {
-      print(e.toString());
       throw ServerException();
     }
   }
@@ -90,7 +89,6 @@ class FinalExamStudentDataSourceImpl implements FinalExamStudentDataSource {
         throw ServerException();
       }
     } catch (e) {
-      print('error tugas akhir');
       throw ServerException();
     }
   }
@@ -110,7 +108,6 @@ class FinalExamStudentDataSourceImpl implements FinalExamStudentDataSource {
           "Authorization": "Bearer ${credential.token}",
         },
       );
-      print(responseData.body);
       if (responseData.statusCode == 200) {
         Iterable dataResponse =
             DataResponse<List<dynamic>>.fromJson(jsonDecode(responseData.body))
@@ -126,8 +123,6 @@ class FinalExamStudentDataSourceImpl implements FinalExamStudentDataSource {
         throw ServerException();
       }
     } catch (e) {
-      print('seminar');
-      print(e.toString());
       throw ServerException();
     }
   }
@@ -148,8 +143,6 @@ class FinalExamStudentDataSourceImpl implements FinalExamStudentDataSource {
           "Authorization": "Bearer ${credential.token}",
         },
       );
-      print(responseData.body);
-      print('Bearer ${credential.token}');
       if (responseData.statusCode == 200) {
         final dataResponse = DataResponse<Map<String, dynamic>>.fromJson(
                 jsonDecode(responseData.body))
@@ -163,8 +156,6 @@ class FinalExamStudentDataSourceImpl implements FinalExamStudentDataSource {
         throw ServerException();
       }
     } catch (e) {
-      print('trial exam');
-      print(e.toString());
       throw ServerException();
     }
   }

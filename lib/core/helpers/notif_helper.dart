@@ -21,7 +21,7 @@ class NotifHelper {
 
   Future<String?> generateUserAppId() async {
     final status = await OneSignal.shared.getDeviceState();
-    print(status?.userId);
+
     return status?.userId;
   }
 }

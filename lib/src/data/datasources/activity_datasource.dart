@@ -40,8 +40,6 @@ class ActivityDataSourceImpl implements ActivityDataSource {
         },
       );
 
-      print(responseData.body);
-
       if (responseData.statusCode == 200) {
         Iterable dataResponse =
             DataResponse<List<dynamic>>.fromJson(jsonDecode(responseData.body))

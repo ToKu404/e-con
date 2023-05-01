@@ -1,3 +1,4 @@
+import 'package:e_con/core/helpers/password_encrypt.dart';
 import 'package:e_con/src/data/models/user/user_credential.dart';
 import 'package:e_con/src/data/models/user/user_role.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,13 +32,18 @@ class AuthPreferenceHelper {
   static const userSessionKey = 'USER_SESSION';
   static const userRoleKey = 'USER_ROLE';
   static const userAppId = 'USER_APP_ID';
+  static const userName = 'USER_NAME';
+  static const userPassword = 'USER_PASSWORD';
 
   /// For Save User Credential Data
-  Future<bool> setUserData(UserCredential user) async {
+  Future<bool> setUserData(
+      UserCredential user, String username, String password) async {
     final pr = await preferences;
     try {
       pr!.setString(userTokenKey, user.token ?? '');
       pr.setString(userSessionKey, user.session ?? '');
+      pr.setString(userName, username);
+      pr.setString(userPassword, PasswordEncrypt.encrypt(password));
       pr.setInt(userRoleKey, user.role!.id);
       return true;
     } catch (e) {
@@ -63,6 +69,18 @@ class AuthPreferenceHelper {
     } else {
       return null;
     }
+  }
+
+  Future<Map<String, String>> getCredential() async {
+    Map<String, String> credential = {};
+    final pr = await preferences;
+
+    credential['username'] =
+        pr!.containsKey(userName) ? pr.getString(userName) ?? '' : '';
+    credential['password'] =
+        pr.containsKey(userPassword) ? pr.getString(userPassword) ?? '' : '';
+
+    return credential;
   }
 
   /// For Get Use Credential Data
@@ -91,6 +109,8 @@ class AuthPreferenceHelper {
       pr.remove(userSessionKey);
       pr.remove(userRoleKey);
       pr.remove(userAppId);
+      pr.remove(userName);
+      pr.remove(userPassword);
 
       return true;
     } catch (e) {

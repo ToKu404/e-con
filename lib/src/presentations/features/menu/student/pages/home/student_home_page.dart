@@ -8,6 +8,7 @@ import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/data/models/final_exam/fe_exam.dart';
 import 'package:e_con/src/data/models/final_exam/fe_proposed_thesis.dart';
 import 'package:e_con/src/data/models/final_exam/fe_seminar.dart';
+import 'package:e_con/src/presentations/features/login/provider/get_user_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/home/widgets/student_task_card.dart';
 import 'package:e_con/src/presentations/features/menu/student/providers/student_activity_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/student/providers/student_final_exam_helper_notifier.dart';
@@ -41,38 +42,46 @@ class _StudentHomePageState extends State<StudentHomePage> {
             ..getSeminars(),
           Provider.of<StudentFinalExamNotifier>(context, listen: false)
             ..getThesisTrialExam(),
+          context.read<GetUserNotifier>()..getCredential(),
         });
   }
 
   @override
   Widget build(BuildContext context) {
+    final userNotifer = context.watch<GetUserNotifier>();
+
     return Scaffold(
       appBar: AppBar(
         elevation: 1,
         shadowColor: Colors.black38,
         title: const HeaderLogo(),
         actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton.icon(
-              label: Text(
-                'Buka SIFA',
-                style: kTextHeme.subtitle1?.copyWith(color: Palette.white),
-              ),
-              style: ElevatedButton.styleFrom(
-                elevation: 0,
-                backgroundColor: Palette.primaryVariant.withOpacity(.7),
-              ),
-              onPressed: () {
-                Navigator.pushNamed(context, AppRoutes.cplWebview);
-              },
-              icon: const Icon(
-                Icons.open_in_new,
-                size: 16,
-                color: Palette.white,
+          if (userNotifer.credential.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton.icon(
+                label: Text(
+                  'Buka SIFA',
+                  style: kTextHeme.subtitle1?.copyWith(color: Palette.white),
+                ),
+                style: ElevatedButton.styleFrom(
+                  elevation: 0,
+                  backgroundColor: Palette.primaryVariant.withOpacity(.7),
+                ),
+                onPressed: () async {
+                  final data = userNotifer.credential;
+                  Navigator.pushNamed(context, AppRoutes.cplWebview,
+                      arguments: {
+                        'credential': data,
+                      });
+                },
+                icon: const Icon(
+                  Icons.open_in_new,
+                  size: 16,
+                  color: Palette.white,
+                ),
               ),
             ),
-          ),
         ],
       ),
       body: RefreshIndicator(
@@ -227,7 +236,6 @@ class _ActivitySection extends StatelessWidget {
                               ? listWeekly[listWeekly.indexOf(val) - 1]
                               : listWeekly[listWeekly.indexOf(val) + 1];
                           isRightSwap.value = null;
-                          print(selectWeekly.value.dateName);
                           Provider.of<StudentActivityNotifier>(context,
                               listen: false)
                             ..fetchAllMeetingByDate(
@@ -296,6 +304,7 @@ class _FinalExamSectionState extends State<_FinalExamSection> {
       ));
     }
     final listFeObject = provider.homeFinalExamDta;
+
     return Padding(
       padding: EdgeInsets.symmetric(vertical: AppSize.space[4]),
       child: Column(

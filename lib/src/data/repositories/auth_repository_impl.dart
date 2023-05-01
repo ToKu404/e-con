@@ -48,4 +48,16 @@ class AuthRepositoryImpl implements AuthRepository {
       return const Left(AuthFailure('Proses login bermasalah'));
     }
   }
+
+  @override
+  Future<Either<Failure, Map<String, String>>> getCredential() async {
+    try {
+      final result = await authDataSource.getCredential();
+      return Right(result);
+    } on LocalDatabaseException {
+      return const Left(AuthFailure('Terdapat masalah pada data user'));
+    } on AuthException {
+      return const Left(AuthFailure('Proses login bermasalah'));
+    }
+  }
 }

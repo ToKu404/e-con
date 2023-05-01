@@ -152,10 +152,7 @@ class ReusableFunctionHelper {
       }
       listWeekly.add(WeeklyActivity(date: date, dateName: dayName[i - 1]));
     }
-    for (var element in listWeekly) {
-      print(
-          '${element.dateName} ${DateFormat('dd MMMM yyyy', "id_ID").format(element.date)}');
-    }
+
     return listWeekly;
   }
 

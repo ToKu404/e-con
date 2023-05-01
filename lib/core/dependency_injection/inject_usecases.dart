@@ -23,6 +23,7 @@ import 'package:e_con/src/domain/usecases/profile_usecases/get_lecture_data.dart
 import 'package:e_con/src/domain/usecases/profile_usecases/get_notifications.dart';
 import 'package:e_con/src/domain/usecases/profile_usecases/get_profile_picture.dart';
 import 'package:e_con/src/domain/usecases/profile_usecases/get_student_data.dart';
+import 'package:e_con/src/domain/usecases/user_usecases/get_credential.dart';
 import 'package:e_con/src/domain/usecases/user_usecases/get_user.dart';
 import 'package:e_con/src/domain/usecases/user_usecases/log_out.dart';
 import 'package:e_con/src/domain/usecases/user_usecases/sign_in.dart';
@@ -190,6 +191,11 @@ void injectUsecases(GetIt locator) {
   locator.registerLazySingleton(
     () => GetNotifications(
       profileRepository: locator(),
+    ),
+  );
+  locator.registerLazySingleton(
+    () => GetCredential(
+      authRepository: locator(),
     ),
   );
 }

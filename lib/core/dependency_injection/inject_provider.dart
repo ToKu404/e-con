@@ -31,6 +31,7 @@ void injectProvider(GetIt locator) {
   locator.registerFactory(
     () => GetUserNotifier(
       getUserUsecase: locator(),
+      getCredentialUsecase: locator(),
     ),
   );
   locator.registerFactory(

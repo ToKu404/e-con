@@ -85,7 +85,6 @@ class FinalExamLecturerDataSourceImpl implements FinalExamLecturerDataSource {
         throw ServerException();
       }
     } catch (e) {
-      print(e.toString());
       throw ServerException();
     }
   }

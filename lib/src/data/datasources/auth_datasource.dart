@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:e_con/core/helpers/auth_preference_helper.dart';
 import 'package:e_con/core/helpers/notif_helper.dart';
+import 'package:e_con/core/helpers/password_encrypt.dart';
 import 'package:e_con/core/utils/exception.dart';
 import 'package:e_con/core/responses/data_response.dart';
 import 'package:e_con/core/responses/session.dart';
@@ -16,6 +17,7 @@ abstract class AuthDataSource {
   Future<UserCredential> signIn(String username, String password);
   Future<UserCredential?> getUser();
   Future<bool> logOut();
+  Future<Map<String, String>> getCredential();
 }
 
 class AuthDataSourceImpl implements AuthDataSource {
@@ -51,7 +53,6 @@ class AuthDataSourceImpl implements AuthDataSource {
         },
         body: json.encode(map),
       );
-      print(basicAuth);
 
       final responseCPL = await client.post(
         Uri.parse('${ApiService.baseUrlCPL}/login'),
@@ -59,7 +60,6 @@ class AuthDataSourceImpl implements AuthDataSource {
           "Authorization": basicAuth,
         },
       );
-      print(responseCPL.body);
 
       String? cookie = Session.getCookie(responseCPL.headers);
 
@@ -75,7 +75,7 @@ class AuthDataSourceImpl implements AuthDataSource {
         if (userCredential.role!.id != 4 && userCredential.role!.id != 5) {
           throw UnauthenticateException();
         }
-        authPreferenceHelper.setUserData(userCredential);
+        authPreferenceHelper.setUserData(userCredential, username, password);
         return userCredential;
       } else if (responseFE.statusCode == 401 &&
           responseCPL.statusCode == 401) {
@@ -87,7 +87,6 @@ class AuthDataSourceImpl implements AuthDataSource {
         throw AuthException();
       }
     } catch (e) {
-      print(e.toString());
       throw AuthException();
     }
   }
@@ -128,8 +127,6 @@ class AuthDataSourceImpl implements AuthDataSource {
           );
         }
 
-        print("Bearer ${credential.token}");
-
         if (responseData.statusCode == 200 && response.statusCode == 200) {
           // instance notif;
           await notifHelper.init();
@@ -163,6 +160,16 @@ class AuthDataSourceImpl implements AuthDataSource {
         );
       }
       return authPreferenceHelper.removeUserData();
+    } catch (e) {
+      throw LocalDatabaseException();
+    }
+  }
+
+  @override
+  Future<Map<String, String>> getCredential() async {
+    try {
+      final credential = await authPreferenceHelper.getCredential();
+      return credential;
     } catch (e) {
       throw LocalDatabaseException();
     }

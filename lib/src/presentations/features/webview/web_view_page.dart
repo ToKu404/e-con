@@ -1,24 +1,27 @@
 import 'package:e_con/core/constants/color_const.dart';
+import 'package:e_con/core/helpers/password_encrypt.dart';
 import 'package:e_con/core/services/webview_service.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewPage extends StatefulWidget {
-  const WebViewPage({super.key});
+  final Map args;
+  const WebViewPage({super.key, required this.args});
 
   @override
   State<WebViewPage> createState() => _WebViewPageState();
 }
 
 class _WebViewPageState extends State<WebViewPage> {
+  late Map<String, String> credential;
   late WebViewController controller;
   final ValueNotifier<bool> isLoading = ValueNotifier(false);
 
   @override
   void initState() {
     super.initState();
-
+    credential = widget.args['credential'];
     controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(Palette.background)
@@ -37,8 +40,43 @@ class _WebViewPageState extends State<WebViewPage> {
             });
           },
           onPageStarted: (String url) {},
-          onPageFinished: (String url) {},
-          onWebResourceError: (WebResourceError error) {},
+          onPageFinished: (String url) {
+            if (!isLoading.value)
+              Future.delayed(Duration(seconds: 2), () {
+                final username = credential['username'];
+                final password =
+                    PasswordEncrypt.decrypt(credential['password'] ?? '');
+
+                controller.runJavaScript('''
+                if(window.location.href==="https://sifa.unhas.ac.id/login"){
+                  function setNativeValue(element, value) {
+                    let lastValue = element.value;
+                    element.value = value;
+                    let event = new Event("input", { target: element, bubbles: true });
+                    // React 15
+                    event.simulated = true;
+                    // React 16
+                    let tracker = element._valueTracker;
+                    if (tracker) {
+                        tracker.setValue(lastValue);
+                    }
+                    element.dispatchEvent(event);
+                  }
+
+                  var input1 = document.getElementsByTagName('input')[0];
+                  setNativeValue(input1, "$username");
+                  var input2 = document.getElementsByTagName('input')[1];
+                  setNativeValue(input2, "$password");
+
+                  document.getElementsByTagName('button')[0].click();
+                }
+                
+              ''');
+              });
+          },
+          onWebResourceError: (WebResourceError error) {
+            debugPrint(error.description);
+          },
           onNavigationRequest: (NavigationRequest request) {
             return NavigationDecision.navigate;
           },

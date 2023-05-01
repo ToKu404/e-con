@@ -87,7 +87,9 @@ Route? routesHandler(RouteSettings settings) {
       );
     case AppRoutes.cplWebview:
       return MaterialPageRoute(
-        builder: (_) => const WebViewPage(),
+        builder: (_) => WebViewPage(
+          args: settings.arguments as Map,
+        ),
       );
     case AppRoutes.lecturerSeminarsNotif:
       return MaterialPageRoute(

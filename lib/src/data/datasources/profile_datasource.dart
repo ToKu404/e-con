@@ -122,7 +122,6 @@ class ProfileDataSourceImpl implements ProfileDataSource {
   Future<List<NotificationModel>> getNotification() async {
     try {
       final credential = await authPreferenceHelper.getUser();
-      
 
       final responseData = await client.get(
         Uri.parse(
@@ -132,7 +131,6 @@ class ProfileDataSourceImpl implements ProfileDataSource {
           "Authorization": "Bearer ${credential!.token}",
         },
       );
-      print(responseData.body);
       if (responseData.statusCode == 200) {
         Iterable dataResponse =
             DataResponse<List<dynamic>>.fromJson(jsonDecode(responseData.body))
@@ -148,7 +146,6 @@ class ProfileDataSourceImpl implements ProfileDataSource {
         throw ServerException();
       }
     } catch (e) {
-      print(e.toString());
       throw ServerException();
     }
   }

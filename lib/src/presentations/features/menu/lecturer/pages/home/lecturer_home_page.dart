@@ -4,6 +4,7 @@ import 'package:e_con/core/helpers/reusable_function_helper.dart';
 import 'package:e_con/core/routes/app_routes.dart';
 import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
+import 'package:e_con/src/presentations/features/login/provider/get_user_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/pages/home/widgets/lecturer_task_card.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/pages/home/widgets/lecturer_today_seminar_card.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/lecturer_seminars_notifier.dart';
@@ -25,6 +26,15 @@ class LecturerHomePage extends StatefulWidget {
 
 class _LecturerHomePageState extends State<LecturerHomePage> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.microtask(() {
+      context.read<GetUserNotifier>()..getCredential();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
@@ -37,7 +47,7 @@ class _LecturerHomePageState extends State<LecturerHomePage> {
               child: CheckInternetOnetime(child: (context) {
                 return RefreshIndicator(
                   onRefresh: () async {
-                    print("tes");
+                
                     await Future.wait([
                       context
                           .read<LecturerTodayMeetingNotifier>()
@@ -192,27 +202,37 @@ class _LecturerHomePageState extends State<LecturerHomePage> {
         ),
         DefaultAppBar(
           title: '',
-          action: Padding(
-            padding: EdgeInsets.only(right: AppSize.space[2]),
-            child: ElevatedButton.icon(
-              label: Text(
-                'Buka SIFA',
-                style: kTextHeme.subtitle1?.copyWith(color: Palette.white),
-              ),
-              style: ElevatedButton.styleFrom(
-                elevation: 0,
-                backgroundColor: Palette.primaryVariant,
-              ),
-              onPressed: () {
-                Navigator.pushNamed(context, AppRoutes.cplWebview);
-              },
-              icon: const Icon(
-                Icons.open_in_new,
-                size: 16,
-                color: Palette.white,
-              ),
-            ),
-          ),
+          action: Builder(builder: (context) {
+            final userNotifer = context.watch<GetUserNotifier>();
+
+            if (userNotifer.credential.isNotEmpty)
+              return Padding(
+                padding: EdgeInsets.only(right: AppSize.space[2]),
+                child: ElevatedButton.icon(
+                  label: Text(
+                    'Buka SIFA',
+                    style: kTextHeme.subtitle1?.copyWith(color: Palette.white),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    elevation: 0,
+                    backgroundColor: Palette.primaryVariant,
+                  ),
+                  onPressed: () async {
+                    final data = userNotifer.credential;
+                    Navigator.pushNamed(context, AppRoutes.cplWebview,
+                        arguments: {
+                          'credential' : data,
+                        });
+                  },
+                  icon: const Icon(
+                    Icons.open_in_new,
+                    size: 16,
+                    color: Palette.white,
+                  ),
+                ),
+              );
+            return SizedBox();
+          }),
           leading: Padding(
             padding: EdgeInsets.only(left: AppSize.space[2]),
             child: HeaderLogo(),

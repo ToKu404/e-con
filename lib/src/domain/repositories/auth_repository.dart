@@ -12,4 +12,5 @@ abstract class AuthRepository {
 
   Future<Either<Failure, bool>> logOut();
 
+  Future<Either<Failure, Map<String, String>>> getCredential();
 }
