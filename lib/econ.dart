@@ -5,6 +5,7 @@ import 'package:e_con/core/utils/observer.dart';
 import 'package:e_con/core/dependency_injection/init.dart' as di;
 import 'package:e_con/src/presentations/features/login/provider/auth_notifier.dart';
 import 'package:e_con/src/presentations/features/login/provider/get_user_notifier.dart';
+import 'package:e_con/src/presentations/features/menu/bloc/cubit/attendance_cubit.dart';
 import 'package:e_con/src/presentations/features/menu/providers/attendance_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/history/provider/attendance_history_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/student/pages/scan_qr/provider/qr_notifier.dart';
@@ -105,6 +106,9 @@ class EconApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => di.locator<UserNotifNotifier>(),
+        ),
+        BlocProvider(
+          create: (_) => di.locator<AttendanceCubit>(),
         ),
       ],
       child: MaterialApp(

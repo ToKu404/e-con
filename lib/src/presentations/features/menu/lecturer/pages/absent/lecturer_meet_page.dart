@@ -6,16 +6,19 @@ import 'package:e_con/core/themes/text_theme.dart';
 import 'package:e_con/core/utils/request_state.dart';
 import 'package:e_con/src/data/models/attendance/helpers/attendance_value.dart';
 import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
+import 'package:e_con/src/presentations/features/menu/bloc/cubit/attendance_cubit.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/pages/absent/widgets/attendance_student_card.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/meeting_course_notifier.dart';
 import 'package:e_con/src/presentations/features/menu/providers/attendance_notifier.dart';
 import 'package:e_con/src/presentations/reusable_pages/check_internet_onetime.dart';
+import 'package:e_con/src/presentations/reusable_pages/econ_error.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
 import 'package:e_con/src/presentations/widgets/custom_button.dart';
 import 'package:e_con/src/presentations/widgets/custom_shimmer.dart';
 import 'package:e_con/src/presentations/widgets/dialog/show_confirmation.dart';
 import 'package:e_con/src/presentations/widgets/placeholders/card_placeholder.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -39,8 +42,10 @@ class _LecturerMeetDetailPageState extends State<LecturerMeetDetailPage> {
     meetingNumber = widget.args['meetingNumber'];
     classData = widget.args['classData'];
     Future.microtask(() {
-      Provider.of<AttendanceNotifier>(context, listen: false)
-        ..fetchListAttendance(meetingId: meetingId);
+      // Provider.of<AttendanceNotifier>(context, listen: false)
+      //   ..fetchListAttendance(meetingId: meetingId);
+      BlocProvider.of<AttendanceCubit>(context, listen: false)
+          ..onFetchAttendance(meetingId: meetingId);
       Provider.of<MeetingCourseNotifier>(context, listen: false)
         ..getMeetingData(meetingId: meetingId);
     });
@@ -182,60 +187,126 @@ class _LecturerMeetDetailPageState extends State<LecturerMeetDetailPage> {
                       meetingId: meetingId,
                     ),
                     SliverPadding(
-                      padding: EdgeInsets.all(AppSize.space[4]),
-                      sliver: Builder(builder: (context) {
-                        final attendanceProvider =
-                            context.watch<AttendanceNotifier>();
-                        if (attendanceProvider.state == RequestState.loading) {
-                          return SliverToBoxAdapter(
-                            child: CustomShimmer(
-                                child: Column(
-                              children: [
-                                CardPlaceholder(
-                                  height: 80,
-                                  horizontalPadding: 0,
-                                ),
-                                AppSize.verticalSpace[4],
-                                CardPlaceholder(
-                                  height: 80,
-                                  horizontalPadding: 0,
-                                ),
-                                AppSize.verticalSpace[4],
-                                CardPlaceholder(
-                                  height: 80,
-                                  horizontalPadding: 0,
-                                )
-                              ],
-                            )),
-                          );
-                        }
-                        final listAttendance =
-                            attendanceProvider.listAttendanceData;
+                      padding: EdgeInsets.all(
+                        AppSize.space[4],
+                      ),
+                      sliver: BlocBuilder<AttendanceCubit, AttendanceState>(
+                        builder: (context, state) {
+                          if (state is AttendanceLoading ||
+                              state is AttendanceInitial) {
+                            return SliverToBoxAdapter(
+                              child: CustomShimmer(
+                                  child: Column(
+                                children: [
+                                  CardPlaceholder(
+                                    height: 80,
+                                    horizontalPadding: 0,
+                                  ),
+                                  AppSize.verticalSpace[4],
+                                  CardPlaceholder(
+                                    height: 80,
+                                    horizontalPadding: 0,
+                                  ),
+                                  AppSize.verticalSpace[4],
+                                  CardPlaceholder(
+                                    height: 80,
+                                    horizontalPadding: 0,
+                                  )
+                                ],
+                              )),
+                            );
+                          }
+                          if (state is FetchAttendanceSuccess) {
+                            final listAttendance = state.attendanceData;
 
-                        if (listAttendance.isEmpty) {
+                            if (listAttendance.isEmpty) {
+                              return SliverToBoxAdapter(
+                                child: SizedBox.shrink(),
+                              );
+                            }
+
+                            return SliverList(
+                              delegate: SliverChildBuilderDelegate(
+                                  childCount: listAttendance.length,
+                                  (context, index) {
+                                return Column(
+                                  children: [
+                                    AttedanceStudentCard(
+                                      attendanceData: listAttendance[index],
+                                    ),
+                                    SizedBox(
+                                      height: (index == 9) ? 66 : 8,
+                                    )
+                                  ],
+                                );
+                              }),
+                            );
+                          }
+
+                          if (state is FetchAttendanceFailure) {
+                            return EconError(errorMessage: state.message);
+                          }
                           return SliverToBoxAdapter(
                             child: SizedBox.shrink(),
                           );
-                        }
+                        },
+                      ),
+                    )
+                    // SliverPadding(
+                    //   padding: EdgeInsets.all(AppSize.space[4]),
+                    //   sliver: Builder(builder: (context) {
+                    //     final attendanceProvider =
+                    //         context.watch<AttendanceNotifier>();
+                    //     if (attendanceProvider.state == RequestState.loading) {
+                    //       return SliverToBoxAdapter(
+                    //         child: CustomShimmer(
+                    //             child: Column(
+                    //           children: [
+                    //             CardPlaceholder(
+                    //               height: 80,
+                    //               horizontalPadding: 0,
+                    //             ),
+                    //             AppSize.verticalSpace[4],
+                    //             CardPlaceholder(
+                    //               height: 80,
+                    //               horizontalPadding: 0,
+                    //             ),
+                    //             AppSize.verticalSpace[4],
+                    //             CardPlaceholder(
+                    //               height: 80,
+                    //               horizontalPadding: 0,
+                    //             )
+                    //           ],
+                    //         )),
+                    //       );
+                    //     }
+                    //     final listAttendance =
+                    //         attendanceProvider.listAttendanceData;
 
-                        return SliverList(
-                          delegate: SliverChildBuilderDelegate(
-                              childCount: listAttendance.length,
-                              (context, index) {
-                            return Column(
-                              children: [
-                                AttedanceStudentCard(
-                                  attendanceData: listAttendance[index],
-                                ),
-                                SizedBox(
-                                  height: (index == 9) ? 66 : 8,
-                                )
-                              ],
-                            );
-                          }),
-                        );
-                      }),
-                    ),
+                    //     if (listAttendance.isEmpty) {
+                    //       return SliverToBoxAdapter(
+                    //         child: SizedBox.shrink(),
+                    //       );
+                    //     }
+
+                    //     return SliverList(
+                    //       delegate: SliverChildBuilderDelegate(
+                    //           childCount: listAttendance.length,
+                    //           (context, index) {
+                    //         return Column(
+                    //           children: [
+                    //             AttedanceStudentCard(
+                    //               attendanceData: listAttendance[index],
+                    //             ),
+                    //             SizedBox(
+                    //               height: (index == 9) ? 66 : 8,
+                    //             )
+                    //           ],
+                    //         );
+                    //       }),
+                    //     );
+                    //   }),
+                    // ),
                   ],
                 ),
                 Positioned(
@@ -458,7 +529,6 @@ class _CustomAppBarState extends State<_CustomAppBar> {
                 ),
               ),
             ),
-            
             AppSize.verticalSpace[5],
           ],
         ),
