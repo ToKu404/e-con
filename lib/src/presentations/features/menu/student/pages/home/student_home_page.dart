@@ -89,6 +89,12 @@ class _StudentHomePageState extends State<StudentHomePage> {
           await Future.wait([
             Provider.of<StudentActivityNotifier>(context, listen: false)
                 .fetchAllMeetingByDate(date: selectWeekly.value.date),
+            Provider.of<StudentFinalExamNotifier>(context, listen: false)
+                .getProposedThesis(),
+            Provider.of<StudentFinalExamNotifier>(context, listen: false)
+                .getSeminars(),
+            Provider.of<StudentFinalExamNotifier>(context, listen: false)
+                .getThesisTrialExam(),
           ]);
         },
         child: CustomScrollView(
@@ -112,7 +118,17 @@ class _StudentHomePageState extends State<StudentHomePage> {
                               feProvider.trialExamState ==
                                   RequestState.loading ||
                               feProvider.listProposedThesis.isEmpty) {
-                            return SizedBox();
+                            return CustomShimmer(
+                                child: Column(
+                              children: [
+                                AppSize.verticalSpace[6],
+                                AppSize.verticalSpace[6],
+                                CardPlaceholder(
+                                  height: 100,
+                                ),
+                                AppSize.verticalSpace[4],
+                              ],
+                            ));
                           }
                           return _FinalExamSection(
                             proposedThesis: feProvider.listProposedThesis,
@@ -216,7 +232,7 @@ class _ActivitySection extends StatelessWidget {
             SliverToBoxAdapter(
               child: SizedBox(height: AppSize.space[2]),
             ),
-            SliverToBoxAdapter(
+            SliverFillRemaining(
               child: ValueListenableBuilder(
                   valueListenable: isRightSwap,
                   builder: (context, isRight, _) {
@@ -474,32 +490,34 @@ class _ActivityBodyState extends State<ActivityBody> {
   Widget build(BuildContext context) {
     final provider = context.watch<StudentActivityNotifier>();
     if (provider.state == RequestState.loading) {
-      return CustomShimmer(
-          child: Column(
-        children: [
-          AppSize.verticalSpace[3],
-          CardPlaceholder(
-            height: 70,
-            horizontalPadding: AppSize.space[4],
-          ),
-          AppSize.verticalSpace[3],
-          CardPlaceholder(
-            height: 70,
-            horizontalPadding: AppSize.space[4],
-          ),
-          AppSize.verticalSpace[3],
-          CardPlaceholder(
-            height: 70,
-            horizontalPadding: AppSize.space[4],
-          ),
-          AppSize.verticalSpace[3],
-          CardPlaceholder(
-            height: 70,
-            horizontalPadding: AppSize.space[4],
-          ),
-          AppSize.verticalSpace[3],
-        ],
-      ));
+      return SingleChildScrollView(
+        child: CustomShimmer(
+            child: Column(
+          children: [
+            AppSize.verticalSpace[3],
+            CardPlaceholder(
+              height: 70,
+              horizontalPadding: AppSize.space[4],
+            ),
+            AppSize.verticalSpace[3],
+            CardPlaceholder(
+              height: 70,
+              horizontalPadding: AppSize.space[4],
+            ),
+            AppSize.verticalSpace[3],
+            CardPlaceholder(
+              height: 70,
+              horizontalPadding: AppSize.space[4],
+            ),
+            AppSize.verticalSpace[3],
+            CardPlaceholder(
+              height: 70,
+              horizontalPadding: AppSize.space[4],
+            ),
+            AppSize.verticalSpace[3],
+          ],
+        )),
+      );
     }
 
     final listMeeting = provider.listMeetingData;
@@ -508,20 +526,17 @@ class _ActivityBodyState extends State<ActivityBody> {
       return EconEmpty(emptyMessage: 'Belum ada kegiatan untuk hari ini');
     }
 
-    return ConstrainedBox(
-      constraints: BoxConstraints(minHeight: 490),
-      child: Builder(builder: (context) {
-        return ListView.builder(
-          itemCount: listMeeting.length,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemBuilder: (context, index) {
-            return StudentTaskCard(
-              meetingData: listMeeting[index],
-            );
-          },
-        );
-      }),
-    );
+    return Builder(builder: (context) {
+      return ListView.builder(
+        itemCount: listMeeting.length,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: (context, index) {
+          return StudentTaskCard(
+            meetingData: listMeeting[index],
+          );
+        },
+      );
+    });
   }
 }

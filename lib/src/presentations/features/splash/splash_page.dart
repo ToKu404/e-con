@@ -105,7 +105,7 @@ class _SplashPageState extends State<SplashPage> {
                         width: AppSize.getAppWidth(context),
                         alignment: Alignment.center,
                         child: Text(
-                          'Versi 1.3.10',
+                          'Versi 1.0.0+4',
                           style: kTextHeme.subtitle1
                               ?.copyWith(color: Palette.white),
                         ),

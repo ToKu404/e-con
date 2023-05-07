@@ -88,7 +88,7 @@ class _TeacherMainPageState extends State<TeacherMainPage>
       backgroundColor: Palette.background,
       body: Padding(
         padding: EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top),
-        child: listMenu[selectIndex],
+        child: IndexedStack(children: listMenu, index: selectIndex),
       ),
       bottomNavigationBar: Container(
         color: Palette.white,

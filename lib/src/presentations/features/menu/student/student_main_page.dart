@@ -27,7 +27,7 @@ class _StudentMainPageState extends State<StudentMainPage>
   final listMenu = [
     const StudentHomePage(),
     const StudentNotifPage(),
-    null,
+    SizedBox.shrink(),
     const StudentHistoryPage(),
     const StudentSettingPage()
   ];
@@ -48,11 +48,8 @@ class _StudentMainPageState extends State<StudentMainPage>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Palette.background,
-      body: SafeArea(
-        child: listMenu[selectIndex] != null
-            ? listMenu[selectIndex]!
-            : const SizedBox.shrink(),
-      ),
+      body:
+          SafeArea(child: IndexedStack(children: listMenu, index: selectIndex)),
       bottomNavigationBar: ConvexAppBar(
         backgroundColor: Colors.white,
         controller: tabController,
@@ -141,7 +138,7 @@ class _StudentMainPageState extends State<StudentMainPage>
         onTap: (int i) async {
           if (i == 2) {
             final status = await _getCameraPermission();
-         
+
             if (!mounted) return;
             if (status.isGranted) {
               Navigator.pushNamed(
