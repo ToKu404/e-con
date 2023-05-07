@@ -503,8 +503,8 @@ class _CustomAppBarState extends State<_CustomAppBar> {
               child: TextField(
                 controller: searchController,
                 onChanged: (value) {
-                  context.read<AttendanceNotifier>()
-                    ..fetchListAttendance(
+                  BlocProvider.of<AttendanceCubit>(context, listen: false)
+                    ..onFetchAttendance(
                         meetingId: widget.meetingId, query: value);
                 },
                 keyboardType: TextInputType.text,
