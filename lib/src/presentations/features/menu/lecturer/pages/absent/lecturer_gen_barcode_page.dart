@@ -28,7 +28,6 @@ class _LecturerGenBarcodePageState extends State<LecturerGenBarcodePage> {
   late bool isEdit;
   final TextEditingController dateController = TextEditingController();
   DateTime? dateTime;
-  bool isNeedLocation = false;
 
   @override
   void initState() {
@@ -130,29 +129,7 @@ class _LecturerGenBarcodePageState extends State<LecturerGenBarcodePage> {
                             initialDate: meetingData.date,
                             controller: dateController,
                             hintText: 'Berlaku Hingga'),
-                        // AppSize.verticalSpace[2],
-                        // DecoratedBox(
-                        //   decoration: BoxDecoration(
-                        //     borderRadius: BorderRadius.circular(12),
-                        //     color: Colors.white,
-                        //   ),
-                        //   child: CheckboxListTile(
-                        //       title: Text(
-                        //         'Deteksi Lokasi',
-                        //         style: kTextHeme.subtitle1?.copyWith(
-                        //           color: Palette.primary,
-                        //         ),
-                        //       ),
-                        //       checkColor: Palette.primary,
-                        //       shape: RoundedRectangleBorder(
-                        //         borderRadius: BorderRadius.circular(12.0),
-                        //       ),
-                        //       checkboxShape: RoundedRectangleBorder(
-                        //         borderRadius: BorderRadius.circular(4.0),
-                        //       ),
-                        //       value: isNeedLocation,
-                        //       onChanged: (val) {}),
-                        // ),
+                       
                         AppSize.verticalSpace[3],
                         CustomButton(
                           text: isEdit ? 'Simpan Perubahan' : 'Lanjutkan',

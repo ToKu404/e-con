@@ -66,6 +66,7 @@ DEPENDENCIES:
   - image_gallery_saver (from `.symlinks/plugins/image_gallery_saver/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - onesignal_flutter (from `.symlinks/plugins/onesignal_flutter/ios`)
+  - OneSignalXCFramework (< 4.0, >= 3.4.3)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/ios`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - qr_code_scanner (from `.symlinks/plugins/qr_code_scanner/ios`)
@@ -140,6 +141,6 @@ SPEC CHECKSUMS:
   url_launcher_ios: fb12c43172927bb5cf75aeebd073f883801f1993
   webview_flutter_wkwebview: d08f59cde5e8402c345c0bdda35ac0031352dcae
 
-PODFILE CHECKSUM: 5f169f839aaf39cc0a99d0ba40d920ba31d59bcb
+PODFILE CHECKSUM: 4eaf101f8355bb2a6b03e2beb5012653dc5b9d40
 
 COCOAPODS: 1.11.3
