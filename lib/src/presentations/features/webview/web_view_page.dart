@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:e_con/core/constants/color_const.dart';
 import 'package:e_con/core/helpers/password_encrypt.dart';
 import 'package:e_con/core/services/webview_service.dart';
@@ -46,8 +48,9 @@ class _WebViewPageState extends State<WebViewPage> {
                 final username = credential['username'];
                 final password =
                     PasswordEncrypt.decrypt(credential['password'] ?? '');
-
-                controller.runJavaScript('''
+                print(password);
+                try {
+                  controller.runJavaScript('''
                 if(window.location.href==="https://sifa.unhas.ac.id/login"){
                   function setNativeValue(element, value) {
                     let lastValue = element.value;
@@ -72,6 +75,9 @@ class _WebViewPageState extends State<WebViewPage> {
                 }
                 
               ''');
+                } catch (e) {
+                  print('JavaScript Evaluation Error: $e');
+                }
               });
           },
           onWebResourceError: (WebResourceError error) {

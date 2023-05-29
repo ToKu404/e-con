@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:encrypt/encrypt.dart';
 
 class PasswordEncrypt {
@@ -7,7 +9,7 @@ class PasswordEncrypt {
 
   static String encrypt(String password) {
     final enc = _encrypter.encrypt('${password}@sifa.unhas.ac.id', iv: _iv);
-    return enc.base64;
+    return base64Encode(enc.bytes);
   }
 
   static String decrypt(String password) {

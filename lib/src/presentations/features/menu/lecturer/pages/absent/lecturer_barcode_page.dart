@@ -216,16 +216,20 @@ class _LecturerBarcodePageState extends State<LecturerBarcodePage> {
                 if (byte == null || byte.isEmpty) {
                   throw Exception('Capture image failed');
                 } else {
-                  takePicture(byte);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      backgroundColor: Colors.green,
-                      content: Text(
-                        'Qr code successfully saved in the gallery',
-                        style: TextStyle(color: Colors.white),
+                  bool isSuccess = await takePicture(byte);
+                  if (isSuccess) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        backgroundColor: Colors.green,
+                        content: Text(
+                          'Qr code successfully saved in the gallery',
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
-                    ),
-                  );
+                    );
+                  } else {
+                    throw Exception('Capture image failed');
+                  }
                 }
               },
               icon: Icons.download_rounded,
