@@ -70,11 +70,10 @@ class _LecturerAbsentPageState extends State<LecturerAbsentPage> {
                           parent: ClampingScrollPhysics(),
                         ),
                         slivers: [
-                          SliverToBoxAdapter(
-                            child: ListView.builder(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: AppSize.space[4]),
-                              shrinkWrap: true,
+                          SliverPadding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: AppSize.space[4]),
+                            sliver: SliverList.builder(
                               itemCount: courseProvider.listClazz?.length,
                               itemBuilder: (context, index) {
                                 final data =

@@ -9,7 +9,6 @@ import 'package:e_con/src/data/models/cpl_lecturer/class_data.dart';
 import 'package:e_con/src/presentations/features/menu/bloc/cubit/attendance_cubit.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/pages/absent/widgets/attendance_student_card.dart';
 import 'package:e_con/src/presentations/features/menu/lecturer/providers/meeting_course_notifier.dart';
-import 'package:e_con/src/presentations/features/menu/providers/attendance_notifier.dart';
 import 'package:e_con/src/presentations/reusable_pages/check_internet_onetime.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_error.dart';
 import 'package:e_con/src/presentations/reusable_pages/econ_loading.dart';
