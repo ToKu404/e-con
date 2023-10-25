@@ -27,7 +27,6 @@ class LecturerHomePage extends StatefulWidget {
 class _LecturerHomePageState extends State<LecturerHomePage> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Future.microtask(() {
       context.read<GetUserNotifier>()..getCredential();
@@ -47,7 +46,6 @@ class _LecturerHomePageState extends State<LecturerHomePage> {
               child: CheckInternetOnetime(child: (context) {
                 return RefreshIndicator(
                   onRefresh: () async {
-                
                     await Future.wait([
                       context
                           .read<LecturerTodayMeetingNotifier>()
